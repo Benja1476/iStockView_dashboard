@@ -122,27 +122,109 @@ function updateChart(id,type,data){
 
   charts[id]=new Chart(ctx,{
     type:type,
-    data:cfg,
-    options:{
-      responsive:true,
-      plugins:{
-        legend:{position:'bottom'},
-        tooltip:{enabled:true},
-        datalabels:{
-          anchor:'end',align:'top',
-          color:'#000',font:{weight:'bold'},
-          formatter:v=>v
-        }
-      }
-    },
-    plugins:[ChartDataLabels]
-  });
+import React, { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  CartesianGrid,
+  LabelList,
+} from "recharts";
+import data from "./data_all_dashboards.json";
+
+export default function App() {
+  const [dashboard1, setDashboard1] = useState([]);
+  const [dashboard2, setDashboard2] = useState([]);
+  const [dashboard3, setDashboard3] = useState([]);
+
+  useEffect(() => {
+    setDashboard1(data["1"]);
+    setDashboard2(data["2"]);
+    setDashboard3(data["3"]);
+  }, []);
+
+  return (
+    <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2 xl:grid-cols-3">
+      {/* Dashboard 1 */}
+      <Card className="bg-white shadow-lg rounded-2xl p-4">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold text-blue-700">
+            🛡️ Strategic Inventory Health & Risk
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={dashboard1}>
+              <XAxis dataKey="item" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="qty" fill="#8884d8">
+                <LabelList dataKey="recommendation" position="top" />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      {/* Dashboard 2 */}
+      <Card className="bg-white shadow-lg rounded-2xl p-4">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold text-green-700">
+            📈 Planning Accuracy & Demand Risk
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={dashboard2}>
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+              <Line type="monotone" dataKey="accuracy" stroke="#82ca9d" />
+              <Line type="monotone" dataKey="mape" stroke="#8884d8" />
+              <Line type="monotone" dataKey="bias" stroke="#ffc658" />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      {/* Dashboard 3 */}
+      <Card className="bg-white shadow-lg rounded-2xl p-4">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold text-red-700">
+            🎯 Strategic Action & Impact
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={dashboard3}>
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="value" fill="#00c49f" />
+              <Bar dataKey="impact" fill="#ff8042">
+                <LabelList dataKey="action" position="top" />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }
 
-/***** HOOK EVENTS *****/
-dashSel.addEventListener('change',()=>loadData());
-dateSel.addEventListener('change',e=>updateDashboard(e.target.value));
-refreshBtn.addEventListener('click',loadData);
-
-/***** INIT *****/
-loadData();
