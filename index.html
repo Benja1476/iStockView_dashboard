@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>iStockView Strategic Inventory Intelligence - Interactive</title>
+  <title>iStockView Multi-Dashboard Grid</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -12,29 +12,8 @@
     <h1>iStockView Strategic Inventory Intelligence</h1>
   </header>
 
-  <main>
-    <section class="controls">
-      <label for="dashboardSelect">เลือก Dashboard:</label>
-      <select id="dashboardSelect">
-        <option value="1">Strategic Inventory Health & Risk</option>
-        <option value="2">Planning Accuracy & Demand Risk</option>
-        <option value="3">Strategic Action & Impact</option>
-      </select>
-
-      <label for="dateSelect">เลือกวันที่:</label>
-      <select id="dateSelect"></select>
-    </section>
-
-    <section id="dashboardContainer" class="dashboard-window">
-      <h2 id="dashboardTitle"></h2>
-      <canvas id="chartCanvas"></canvas>
-      <div class="table-container">
-        <table id="dataTable">
-          <thead id="tableHead"></thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-    </section>
+  <main id="dashboardGrid">
+    <!-- Dashboards จะถูกสร้างโดย JS -->
   </main>
 
   <script src="app.js"></script>
