@@ -308,27 +308,64 @@ function renderDashboard3(data) {
     <canvas id="chart3" style="margin-top:1rem; max-height:300px;"></canvas>
   `;
   dashboardContainer.innerHTML = cards;
+const dashboardSelect = document.getElementById('dashboardSelect');
+const dateSelect = document.getElementById('dateSelect');
+const refreshButton = document.getElementById('refreshButton');
+const container = document.getElementById('dashboardContainer');
+let allData = {};
 
-  const ctx = document.getElementById('chart3').getContext('2d');
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Impact', 'Remaining'],
-      datasets: [{
-        data: [data[0].impact, 100 - data[0].impact],
-        backgroundColor: ['#38bdf8', '#e5e7eb']
-      }]
-    }
+fetch('data_all_dashboards.json')
+  .then(res => res.json())
+  .then(data => {
+    allData = data;
+    populateDateOptions(dashboardSelect.value);
+  });
+
+dashboardSelect.addEventListener('change', () => {
+  populateDateOptions(dashboardSelect.value);
+});
+
+refreshButton.addEventListener('click', () => {
+  const dashboardId = dashboardSelect.value;
+  const selectedDate = dateSelect.value;
+  const dashboardData = allData[dashboardId].filter(item => item.date === selectedDate);
+  renderDashboard(dashboardId, dashboardData);
+});
+
+function populateDateOptions(dashboardId) {
+  dateSelect.innerHTML = '';
+  const dates = [...new Set(allData[dashboardId].map(item => item.date))];
+  dates.forEach(date => {
+    const option = document.createElement('option');
+    option.value = date;
+    option.textContent = date;
+    dateSelect.appendChild(option);
   });
 }
 
-// Event Listeners
-dashboardSelect.addEventListener('change', () => {
-  updateDateOptions();
-  renderDashboard();
-});
-refreshButton.addEventListener('click', renderDashboard);
-
-// Start
-loadData();
+function renderDashboard(id, data) {
+  container.innerHTML = '';
+  if (id === "1") {
+    const table = document.createElement('table');
+    table.innerHTML = `
+      <tr><th>Item</th><th>Qty</th><th>Recommendation</th></tr>
+      ${data.map(d => `<tr><td>${d.item}</td><td>${d.qty}</td><td>${d.recommendation}</td></tr>`).join('')}
+    `;
+    container.appendChild(table);
+  } else if (id === "2") {
+    const table = document.createElement('table');
+    table.innerHTML = `
+      <tr><th>Accuracy (%)</th><th>MAPE</th><th>Bias</th></tr>
+      ${data.map(d => `<tr><td>${d.accuracy}</td><td>${d.mape}</td><td>${d.bias}</td></tr>`).join('')}
+    `;
+    container.appendChild(table);
+  } else if (id === "3") {
+    const table = document.createElement('table');
+    table.innerHTML = `
+      <tr><th>Value</th><th>Impact (%)</th><th>Action</th></tr>
+      ${data.map(d => `<tr><td>${d.value}</td><td>${d.impact}</td><td>${d.action}</td></tr>`).join('')}
+    `;
+    container.appendChild(table);
+  }
+}
 
