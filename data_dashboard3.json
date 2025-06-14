@@ -1,93 +1,30 @@
 [
   {
-    "date": "2025-06",
-    "dashboardSubName": "Inventory Value",
-    "chartType": "bar",
-    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    "datasets": [{
-      "label": "Inventory Value (ล้านบาท)",
-      "data": [120, 115, 110, 108, 105, 100],
-      "backgroundColor": "#007bff"
-    }]
+    "date": "2025-Q1",
+    "InventoryValueKPI": 320000,
+    "OverstockPercent": 18,
+    "DOIKPI": 25,
+    "AccuracyAbove80Percent": 70,
+    "BeforeAfterComparison": "Improved",
+    "ActionLog": [
+      {"actionDate": "2025-01-15", "description": "ลดสต๊อก SKU005", "impact": "ลดทุนจม 5%"},
+      {"actionDate": "2025-02-10", "description": "ปรับ Forecast SKU010", "impact": "เพิ่มความแม่นยำ 3%"}
+    ],
+    "ImpactSummary": "ทุนจมลดลง 7% ในไตรมาสนี้",
+    "ExecutiveScorecard": {"KPI1": 85, "KPI2": 90, "KPI3": 75}
   },
   {
-    "date": "2025-06",
-    "dashboardSubName": "Overstock %",
-    "chartType": "line",
-    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    "datasets": [{
-      "label": "Overstock %",
-      "data": [25, 22, 20, 18, 15, 12],
-      "borderColor": "#fd7e14",
-      "fill": false
-    }]
-  },
-  {
-    "date": "2025-06",
-    "dashboardSubName": "DOI",
-    "chartType": "bar",
-    "labels": ["1-30", "31-60", "61-90", "90+"],
-    "datasets": [{
-      "label": "Days of Inventory",
-      "data": [40, 30, 20, 10],
-      "backgroundColor": "#20c997"
-    }]
-  },
-  {
-    "date": "2025-06",
-    "dashboardSubName": "Accuracy ≥80%",
-    "chartType": "pie",
-    "labels": ["≥80%", "<80%"],
-    "datasets": [{
-      "data": [75, 25],
-      "backgroundColor": ["#198754", "#dc3545"]
-    }]
-  },
-  {
-    "date": "2025-06",
-    "dashboardSubName": "Before vs After",
-    "tableHeaders": ["KPI", "Before", "After", "Change"],
-    "tableData": [
-      ["Inventory Value", "120M", "100M", "-20M"],
-      ["Overstock %", "25%", "12%", "-13%"],
-      ["DOI", "45", "40", "-5"],
-      ["Accuracy", "75%", "85%", "+10%"]
-    ]
-  },
-  {
-    "date": "2025-06",
-    "dashboardSubName": "Action Log",
-    "tableHeaders": ["Date", "Action", "Status", "Impact"],
-    "tableData": [
-      ["2025-05-01", "ปรับ Safety Stock", "เสร็จสิ้น", "+5% Accuracy"],
-      ["2025-05-15", "ปรับแผนจัดซื้อ", "ระหว่างดำเนินการ", "-10% Overstock"],
-      ["2025-06-01", "วิเคราะห์ Risk", "รอดำเนินการ", "Pending"]
-    ]
-  },
-  {
-    "date": "2025-06",
-    "dashboardSubName": "Top Improvement Items",
-    "tableHeaders": ["Item", "Impact", "Priority"],
-    "tableData": [
-      ["Item A", "+10% Accuracy", "High"],
-      ["Item B", "-5% Overstock", "Medium"],
-      ["Item C", "+3% Fill Rate", "Low"]
-    ]
-  },
-  {
-    "date": "2025-06",
-    "dashboardSubName": "Risk vs Action Correlation",
-    "chartType": "scatter",
-    "labels": [],  // scatter ใช้ datasets แสดงค่า x,y
-    "datasets": [{
-      "label": "Items",
-      "data": [
-        { "x": 90, "y": 5 },
-        { "x": 75, "y": 10 },
-        { "x": 60, "y": 15 },
-        { "x": 45, "y": 20 }
-      ],
-      "backgroundColor": "#007bff"
-    }]
+    "date": "2025-Q2",
+    "InventoryValueKPI": 300000,
+    "OverstockPercent": 15,
+    "DOIKPI": 22,
+    "AccuracyAbove80Percent": 75,
+    "BeforeAfterComparison": "Improved",
+    "ActionLog": [
+      {"actionDate": "2025-04-05", "description": "เพิ่มตรวจสอบสต๊อก SKU015", "impact": "ลดของเสีย 4%"},
+      {"actionDate": "2025-05-20", "description": "อบรมทีมจัดซื้อ", "impact": "ลดข้อผิดพลาด 6%"}
+    ],
+    "ImpactSummary": "ทุนจมลดลง 9% ในไตรมาสนี้",
+    "ExecutiveScorecard": {"KPI1": 88, "KPI2": 92, "KPI3": 78}
   }
 ]
