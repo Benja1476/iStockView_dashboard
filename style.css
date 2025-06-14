@@ -1,101 +1,85 @@
 body {
+  background: #121212;
+  color: white;
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
-  padding: 1rem;
-  background-color: #f9fafb;
-  color: #111827;
+  padding: 20px;
 }
-
-h1 {
-  text-align: center;
-  margin-bottom: 1rem;
-  color: #1f2937;
-}
-
 .controls {
   display: flex;
+  gap: 10px;
   justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
-
 select, button {
-  padding: 0.5rem 1rem;
+  padding: 8px 12px;
   font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background-color: white;
+  border: none;
+  border-radius: 5px;
 }
-
 button {
-  background-color: #3b82f6;
+  background: #00bcd4;
   color: white;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
-button:hover {
-  background-color: #2563eb;
-}
+button:hover { background: #0097a7; }
 
-/* Dashboard Container */
-#dashboard {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
+.window {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+  margin-bottom: 20px;
 }
-
-/* Card */
-.card {
-  background-color: white;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-  text-align: center;
-  font-size: 1.2rem;
+.window-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #2d2d30;
+}
+.circle {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #f44336;
+}
+.circle.yellow { background: #ffeb3b; }
+.circle.green { background: #4caf50; }
+.window-header h2 {
+  color: white;
+  margin: 0;
+  font-size: 1.1rem;
   font-weight: 500;
 }
+.window-content {
+  padding: 16px;
+}
 
-/* Table */
+/* card layout & table */
+.card {
+  background: #2a2a2a;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+.card h3, .card p {
+  margin: 4px 0;
+}
 table {
   width: 100%;
   border-collapse: collapse;
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  margin-top: 8px;
 }
 th, td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border: 1px solid #444;
+  padding: 8px;
   text-align: left;
 }
 th {
-  background-color: #f3f4f6;
-  font-weight: 600;
+  background: #333;
 }
-
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-}
-
 canvas {
+  margin-top: 12px;
+  max-height: 260px;
   width: 100% !important;
-  height: auto !important;
-  max-height: 300px;
 }
-
-/* Responsive */
-@media (max-width: 768px) {
-  .card-grid {
-    grid-template-columns: repeat(1, 1fr);
-  }
-  .controls {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
