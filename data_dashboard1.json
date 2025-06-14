@@ -1,8 +1,8 @@
 [
   {
-    "date": "2025-06-01",
+    "date": "2025-06",
     "item": "SKU001",
-    "product_name": "Product A",
+    "product_name": "Product A",
     "category_ABC": "A",
     "category_FSN": "Fast",
     "turnover_rate": 55,
@@ -14,9 +14,9 @@
     "inventory_value": 24000
   },
   {
-    "date": "2025-06-01",
+    "date": "2025-06",
     "item": "SKU002",
-    "product_name": "Product B",
+    "product_name": "Product B",
     "category_ABC": "B",
     "category_FSN": "Slow",
     "turnover_rate": 30,
@@ -26,48 +26,5 @@
     "recommendation": "ตรวจสอบสต็อก",
     "stock_qty": 80,
     "inventory_value": 16000
-  },
-  {
-    "date": "2025-06-01",
-    "item": "SKU003",
-    "product_name": "Product C",
-    "category_ABC": "C",
-    "category_FSN": "Non-Moving",
-    "turnover_rate": 5,
-    "DOI": 120,
-    "composite_risk_score": 20,
-    "urgency_level": "Low",
-    "recommendation": "ระงับการสั่งซื้อ",
-    "stock_qty": 200,
-    "inventory_value": 10000
-  },
-  {
-    "date": "2025-07-01",
-    "item": "SKU001",
-    "product_name": "Product A",
-    "category_ABC": "A",
-    "category_FSN": "Fast",
-    "turnover_rate": 60,
-    "DOI": 20,
-    "composite_risk_score": 90,
-    "urgency_level": "High",
-    "recommendation": "สั่งซื้อด่วน",
-    "stock_qty": 110,
-    "inventory_value": 22000
-  },
-  {
-    "date": "2025-07-01",
-    "item": "SKU002",
-    "product_name": "Product B",
-    "category_ABC": "B",
-    "category_FSN": "Slow",
-    "turnover_rate": 35,
-    "DOI": 55,
-    "composite_risk_score": 55,
-    "urgency_level": "Medium",
-    "recommendation": "ตรวจสอบสต็อก",
-    "stock_qty": 85,
-    "inventory_value": 17000
   }
 ]
-
