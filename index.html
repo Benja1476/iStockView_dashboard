@@ -1,113 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventory Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      margin: 20px;
-    }
-    .dashboard {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-    }
-    canvas {
-      max-width: 100%;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventory Strategy Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Inventory Dashboard</h1>
-  <div class="dashboard">
-    <div class="card">
-      <h3>Total Inventory Value</h3>
-      <p>$1,200,000</p>
+  <div style="padding: 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: bold;">📊 Inventory Strategy Dashboard</h1>
+
+    <!-- Dashboard Selector -->
+    <div style="margin-top: 1rem;">
+      <label for="dashboardSelect"><strong>เลือก Dashboard:</strong></label>
+      <select id="dashboardSelect">
+        <option value="1">Strategic Inventory Health & Risk</option>
+        <option value="2">Planning Accuracy & Demand Risk</option>
+        <option value="3">Strategic Action & Impact</option>
+      </select>
     </div>
-    <div class="card">
-      <h3>Forecast Accuracy</h3>
-      <canvas id="gaugeChart"></canvas>
+
+    <!-- Date Selector -->
+    <div style="margin-top: 1rem;">
+      <label for="dateSelect"><strong>เลือกวันที่:</strong></label>
+      <select id="dateSelect">
+        <!-- วันที่จะถูกโหลดโดย JS -->
+      </select>
     </div>
-    <div class="card">
-      <h3>Turnover Rate</h3>
-      <canvas id="lineChart"></canvas>
+
+    <!-- Refresh Button -->
+    <div style="margin-top: 1rem;">
+      <button id="refreshButton" style="padding: 0.5rem 1rem; background-color: #2563eb; color: white; border: none; border-radius: 0.5rem;">
+        🔄 Refresh
+      </button>
     </div>
-    <div class="card">
-      <h3>ABC × FSN Matrix</h3>
-      <canvas id="barChart"></canvas>
-    </div>
-    <div class="card">
-      <h3>Inventory by Category</h3>
-      <canvas id="donutChart"></canvas>
+
+    <!-- Dashboard Display -->
+    <div id="dashboard" class="dashboard-container" style="margin-top: 2rem;">
+      <!-- Cards & Charts will load here -->
     </div>
   </div>
-  <script>
-    const lineChart = new Chart(document.getElementById("lineChart"), {
-      type: 'line',
-      data: {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-        datasets: [{
-          label: 'Turnover Rate',
-          data: [20, 25, 22, 28, 30],
-          borderColor: '#4CAF50',
-          fill: false
-        }]
-      }
-    });
 
-    const barChart = new Chart(document.getElementById("barChart"), {
-      type: 'bar',
-      data: {
-        labels: ['A-Fast', 'A-Slow', 'B-Fast', 'C-Non-Moving'],
-        datasets: [{
-          label: 'SKU Count',
-          data: [10, 5, 7, 3],
-          backgroundColor: ['#2196F3', '#FFC107', '#8BC34A', '#FF5722']
-        }]
-      }
-    });
-
-    const donutChart = new Chart(document.getElementById("donutChart"), {
-      type: 'doughnut',
-      data: {
-        labels: ['A', 'B', 'C'],
-        datasets: [{
-          data: [50, 30, 20],
-          backgroundColor: ['#3F51B5', '#009688', '#FF9800']
-        }]
-      }
-    });
-
-    const gaugeChart = new Chart(document.getElementById("gaugeChart"), {
-      type: 'doughnut',
-      data: {
-        labels: ['Accuracy', 'Remaining'],
-        datasets: [{
-          data: [82, 18],
-          backgroundColor: ['#4CAF50', '#E0E0E0'],
-          borderWidth: 0
-        }]
-      },
-      options: {
-        circumference: 180,
-        rotation: -90,
-        cutout: '70%',
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: false }
-        }
-      }
-    });
-  </script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
+
