@@ -204,27 +204,131 @@ export default function App() {
 
       {/* Dashboard 3 */}
       <Card className="bg-white shadow-lg rounded-2xl p-4">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-red-700">
-            🎯 Strategic Action & Impact
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={dashboard3}>
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="value" fill="#00c49f" />
-              <Bar dataKey="impact" fill="#ff8042">
-                <LabelList dataKey="action" position="top" />
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-    </div>
-  );
+import Chart from 'https://cdn.jsdelivr.net/npm/chart.js';
+
+const dashboardSelect = document.getElementById('dashboardSelect');
+const dateSelect = document.getElementById('dateSelect');
+const refreshButton = document.getElementById('refreshButton');
+const dashboardContainer = document.getElementById('dashboard');
+
+let rawData = {};
+
+// Load JSON Data
+async function loadData() {
+  const response = await fetch('data_all_dashboards.json');
+  rawData = await response.json();
+  updateDateOptions(); // Fill in date dropdown
+  renderDashboard();   // Initial render
 }
+
+// Fill date dropdown from current dashboard data
+function updateDateOptions() {
+  const selectedDashboard = dashboardSelect.value;
+  const data = rawData[selectedDashboard] || [];
+
+  // Get unique dates
+  const dates = [...new Set(data.map(d => d.date))];
+  dateSelect.innerHTML = dates
+    .map(date => `<option value="${date}">${date}</option>`)
+    .join('');
+}
+
+// Render dashboard view
+function renderDashboard() {
+  const selectedDashboard = dashboardSelect.value;
+  const selectedDate = dateSelect.value;
+  const data = (rawData[selectedDashboard] || []).filter(d => d.date === selectedDate);
+
+  dashboardContainer.innerHTML = ''; // Clear previous
+
+  if (selectedDashboard === '1') renderDashboard1(data);
+  else if (selectedDashboard === '2') renderDashboard2(data);
+  else if (selectedDashboard === '3') renderDashboard3(data);
+}
+
+// === Dashboard 1: Inventory Health ===
+function renderDashboard1(data) {
+  if (!data.length) return;
+
+  const table = `
+    <table>
+      <thead><tr><th>Item</th><th>Qty</th><th>Recommendation</th></tr></thead>
+      <tbody>
+        ${data.map(d => `
+          <tr>
+            <td>${d.item}</td>
+            <td>${d.qty}</td>
+            <td>${d.recommendation}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+  dashboardContainer.innerHTML = table;
+}
+
+// === Dashboard 2: Forecast Accuracy ===
+function renderDashboard2(data) {
+  if (!data.length) return;
+
+  const cards = `
+    <div class="card-grid">
+      <div class="card">📈 Accuracy: <strong>${data[0].accuracy}%</strong></div>
+      <div class="card">📉 MAPE: <strong>${data[0].mape}%</strong></div>
+      <div class="card">⚖️ Bias: <strong>${data[0].bias}</strong></div>
+    </div>
+    <canvas id="chart2" style="margin-top:1rem; max-height:300px;"></canvas>
+  `;
+  dashboardContainer.innerHTML = cards;
+
+  const ctx = document.getElementById('chart2').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Accuracy', 'MAPE', 'Bias'],
+      datasets: [{
+        label: 'Planning Metrics',
+        data: [data[0].accuracy, data[0].mape, data[0].bias],
+        backgroundColor: ['#4ade80', '#60a5fa', '#facc15']
+      }]
+    }
+  });
+}
+
+// === Dashboard 3: Strategic Action ===
+function renderDashboard3(data) {
+  if (!data.length) return;
+
+  const cards = `
+    <div class="card-grid">
+      <div class="card">💰 Value: <strong>${data[0].value.toLocaleString()}</strong></div>
+      <div class="card">📊 Impact: <strong>${data[0].impact}%</strong></div>
+      <div class="card">🎯 Action: <strong>${data[0].action}</strong></div>
+    </div>
+    <canvas id="chart3" style="margin-top:1rem; max-height:300px;"></canvas>
+  `;
+  dashboardContainer.innerHTML = cards;
+
+  const ctx = document.getElementById('chart3').getContext('2d');
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Impact', 'Remaining'],
+      datasets: [{
+        data: [data[0].impact, 100 - data[0].impact],
+        backgroundColor: ['#38bdf8', '#e5e7eb']
+      }]
+    }
+  });
+}
+
+// Event Listeners
+dashboardSelect.addEventListener('change', () => {
+  updateDateOptions();
+  renderDashboard();
+});
+refreshButton.addEventListener('click', renderDashboard);
+
+// Start
+loadData();
 
