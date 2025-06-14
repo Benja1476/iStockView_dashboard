@@ -1,22 +1,172 @@
 {
-  "forecastAccuracy": {
-    "labels": ["Jan", "Feb", "Mar"],
-    "data": [85, 82, 88]
-  },
-  "mapeTrend": {
-    "labels": ["Jan", "Feb", "Mar"],
-    "data": [15, 18, 12]
-  },
-  "biasIndex": {
-    "labels": ["Jan", "Feb", "Mar"],
-    "data": [5, -3, 2]
-  },
-  "fillRate": {
-    "labels": ["Filled", "Unfilled"],
-    "data": [90, 10]
-  },
-  "demandRisk": {
-    "labels": ["High", "Medium", "Low"],
-    "data": [20, 50, 30]
-  }
+  "subDashboards": [
+    {
+      "name": "Forecast Accuracy",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Forecast A", "qty": 85},
+            {"item": "Forecast B", "qty": 90},
+            {"item": "Forecast C", "qty": 88}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Forecast A", "qty": 80},
+            {"item": "Forecast B", "qty": 89},
+            {"item": "Forecast C", "qty": 87}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "MAPE",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Item A", "qty": 5.2},
+            {"item": "Item B", "qty": 4.5},
+            {"item": "Item C", "qty": 6.0}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Item A", "qty": 5.5},
+            {"item": "Item B", "qty": 4.8},
+            {"item": "Item C", "qty": 6.2}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bias",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Item A", "qty": -1.2},
+            {"item": "Item B", "qty": 0.3},
+            {"item": "Item C", "qty": -0.8}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Item A", "qty": -1.0},
+            {"item": "Item B", "qty": 0.2},
+            {"item": "Item C", "qty": -0.7}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Fill Rate",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Item A", "qty": 95},
+            {"item": "Item B", "qty": 97},
+            {"item": "Item C", "qty": 94}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Item A", "qty": 96},
+            {"item": "Item B", "qty": 95},
+            {"item": "Item C", "qty": 93}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Demand Risk by Month",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "January", "qty": 20},
+            {"item": "February", "qty": 30},
+            {"item": "March", "qty": 50}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "January", "qty": 25},
+            {"item": "February", "qty": 35},
+            {"item": "March", "qty": 40}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Dynamic Date Slicer",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "2024-12", "qty": 100},
+            {"item": "2025-01", "qty": 110},
+            {"item": "2025-02", "qty": 115}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "2025-01", "qty": 110},
+            {"item": "2025-02", "qty": 115},
+            {"item": "2025-03", "qty": 120}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Drill-Down Time Hierarchy",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "2025", "qty": 1000},
+            {"item": "2025-Q1", "qty": 400},
+            {"item": "2025-01", "qty": 100}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "2025", "qty": 1050},
+            {"item": "2025-Q1", "qty": 450},
+            {"item": "2025-02", "qty": 110}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KPI Summary",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Accuracy", "qty": 85},
+            {"item": "Fill Rate", "qty": 90},
+            {"item": "MAPE", "qty": 5}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Accuracy", "qty": 88},
+            {"item": "Fill Rate", "qty": 92},
+            {"item": "MAPE", "qty": 4}
+          ]
+        }
+      ]
+    }
+  ]
 }
