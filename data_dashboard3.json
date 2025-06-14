@@ -1,30 +1,64 @@
 [
   {
-    "date": "2025-Q1",
-    "InventoryValueKPI": 320000,
-    "OverstockPercent": 18,
-    "DOIKPI": 25,
-    "AccuracyAbove80Percent": 70,
-    "BeforeAfterComparison": "Improved",
-    "ActionLog": [
-      {"actionDate": "2025-01-15", "description": "ลดสต๊อก SKU005", "impact": "ลดทุนจม 5%"},
-      {"actionDate": "2025-02-10", "description": "ปรับ Forecast SKU010", "impact": "เพิ่มความแม่นยำ 3%"}
-    ],
-    "ImpactSummary": "ทุนจมลดลง 7% ในไตรมาสนี้",
-    "ExecutiveScorecard": {"KPI1": 85, "KPI2": 90, "KPI3": 75}
+    "date": "2025-06-01",
+    "kpi": "Inventory Value",
+    "before": 1500000,
+    "after": 1300000,
+    "change_percent": -13.3,
+    "target_met": true,
+    "notes": "ลดสินค้าคงคลังส่วนเกินได้ดี"
   },
   {
-    "date": "2025-Q2",
-    "InventoryValueKPI": 300000,
-    "OverstockPercent": 15,
-    "DOIKPI": 22,
-    "AccuracyAbove80Percent": 75,
-    "BeforeAfterComparison": "Improved",
-    "ActionLog": [
-      {"actionDate": "2025-04-05", "description": "เพิ่มตรวจสอบสต๊อก SKU015", "impact": "ลดของเสีย 4%"},
-      {"actionDate": "2025-05-20", "description": "อบรมทีมจัดซื้อ", "impact": "ลดข้อผิดพลาด 6%"}
-    ],
-    "ImpactSummary": "ทุนจมลดลง 9% ในไตรมาสนี้",
-    "ExecutiveScorecard": {"KPI1": 88, "KPI2": 92, "KPI3": 78}
+    "date": "2025-06-01",
+    "kpi": "Overstock %",
+    "before": 20,
+    "after": 15,
+    "change_percent": -25,
+    "target_met": true,
+    "notes": "บริหารสินค้าคงคลังได้มีประสิทธิภาพขึ้น"
+  },
+  {
+    "date": "2025-06-01",
+    "kpi": "DOI (Days of Inventory)",
+    "before": 45,
+    "after": 38,
+    "change_percent": -15.6,
+    "target_met": true,
+    "notes": "ลดระยะเวลาคงคลังได้ตามเป้า"
+  },
+  {
+    "date": "2025-06-01",
+    "kpi": "Forecast Accuracy ≥80%",
+    "before": 70,
+    "after": 82,
+    "change_percent": 17.1,
+    "target_met": true,
+    "notes": "ปรับปรุงความแม่นยำของพยากรณ์"
+  },
+  {
+    "date": "2025-06-01",
+    "action_log": [
+      {
+        "action_date": "2025-05-15",
+        "action": "ปรับปรุงระบบจัดซื้อ",
+        "responsible": "ฝ่ายจัดซื้อ",
+        "status": "Completed",
+        "impact": "ลดทุนจม 10%"
+      },
+      {
+        "action_date": "2025-05-20",
+        "action": "ตรวจสอบสต็อกเก่า",
+        "responsible": "ฝ่ายคลังสินค้า",
+        "status": "In Progress",
+        "impact": "คาดว่าลด DOI ได้ 5 วัน"
+      },
+      {
+        "action_date": "2025-05-25",
+        "action": "อบรมทีมวางแผน",
+        "responsible": "ฝ่ายวางแผน",
+        "status": "Completed",
+        "impact": "เพิ่มความแม่นยำ Forecast 5%"
+      }
+    ]
   }
 ]
