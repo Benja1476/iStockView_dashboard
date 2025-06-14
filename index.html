@@ -3,300 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <title>iStockView - Strategic Inventory Intelligence</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f7fa;
-      margin: 20px;
-      color: #333;
-    }
-    h1, h2, h3 {
-      text-align: center;
-      color: #2c3e50;
-      margin-bottom: 0.5rem;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .controls {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    select {
-      padding: 8px 12px;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      margin-left: 10px;
-      min-width: 150px;
-      cursor: pointer;
-    }
-    select:hover {
-      border-color: #2980b9;
-      box-shadow: 0 0 8px rgba(41, 128, 185, 0.3);
-    }
-    #dashboardContainer {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 20px;
-    }
-    .dashboard-sub {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-      padding: 15px 20px;
-      margin-bottom: 25px;
-    }
-    .dashboard-sub h3 {
-      margin-bottom: 15px;
-      font-weight: 600;
-      color: #34495e;
-    }
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-    }
-    table.data-table th, table.data-table td {
-      border: 1px solid #ddd;
-      padding: 8px 10px;
-      text-align: center;
-    }
-    table.data-table th {
-      background-color: #2980b9;
-      color: white;
-      font-weight: 600;
-    }
-    table.data-table tbody tr:nth-child(even) {
-      background-color: #f2f6fb;
-    }
-    canvas {
-      width: 100% !important;
-      max-height: 300px;
-      display: block;
-      margin: 0 auto 10px auto;
-    }
-  </style>
 </head>
 <body>
-  <div class="container">
+  <header>
     <h1>iStockView</h1>
     <h2>Strategic Inventory Intelligence</h2>
+  </header>
 
-    <div class="controls">
-      <label for="dashboardSelector">เลือก Dashboard ใหญ่:</label>
-      <select id="dashboardSelector">
-        <option value="dashboard1">1️⃣ Strategic Inventory Health & Risk</option>
-        <option value="dashboard2">2️⃣ Planning Accuracy & Demand Risk</option>
-        <option value="dashboard3">3️⃣ Strategic Action & Impact (Executive Scorecard)</option>
-      </select>
+  <section class="controls">
+    <label for="dashboardSelect">เลือก Dashboard ใหญ่:</label>
+    <select id="dashboardSelect">
+      <option value="1">1️⃣ Strategic Inventory Health & Risk</option>
+      <option value="2">2️⃣ Planning Accuracy & Demand Risk</option>
+      <option value="3">3️⃣ Strategic Action & Impact</option>
+    </select>
 
-      <label for="dateSelector">เลือกเดือน/วันที่:</label>
-      <select id="dateSelector"></select>
-    </div>
+    <label for="dateSelect">เลือกวันที่ (เดือน):</label>
+    <select id="dateSelect"></select>
 
-    <div id="dashboardContainer">
-      <!-- Dashboard ย่อยจะแสดงที่นี่ -->
-    </div>
-  </div>
+    <button id="refreshBtn">🔄 Refresh</button>
+  </section>
 
-<script>
-  const dashboardConfigs = {
-    dashboard1: {
-      name: 'Strategic Inventory Health & Risk',
-      dataFile: 'data_dashboard1.json',
-      subDashboards: [
-        {id:'sub1', title:'ABC Analysis', type:'doughnut', labels:['A','B','C']},
-        {id:'sub2', title:'FSN Category', type:'pie', labels:['Fast','Slow','Non-Moving']},
-        {id:'sub3', title:'Turnover Rate', type:'line', labels:['Jan', 'Feb', 'Mar']},
-        {id:'sub4', title:'DOI Distribution', type:'bar', labels:['1-30', '31-60', '61-90', '90+']},
-        {id:'sub5', title:'Composite Risk Score', type:'bar', labels:['Low','Medium','High']},
-        {id:'sub6', title:'Urgency Level', type:'pie', labels:['Normal','Warning','Critical']},
-        {id:'sub7', title:'Inventory Value', type:'line', labels:['Jan', 'Feb', 'Mar']},
-        {id:'sub8', title:'Top 10 Risk Items', type:'table'}
-      ]
-    },
-    dashboard2: {
-      name: 'Planning Accuracy & Demand Risk',
-      dataFile: 'data_dashboard2.json',
-      subDashboards: [
-        {id:'sub1', title:'Forecast Accuracy', type:'line', labels:['Week1','Week2','Week3','Week4']},
-        {id:'sub2', title:'MAPE', type:'line', labels:['Week1','Week2','Week3','Week4']},
-        {id:'sub3', title:'Bias', type:'bar', labels:['Positive','Neutral','Negative']},
-        {id:'sub4', title:'Fill Rate', type:'pie', labels:['Complete','Partial','Fail']},
-        {id:'sub5', title:'Demand Risk Over Time', type:'line', labels:['Jan','Feb','Mar']},
-        {id:'sub6', title:'Dynamic Date Slicer', type:'table'},
-        {id:'sub7', title:'Drill-Down Time Hierarchy', type:'table'},
-        {id:'sub8', title:'KPI Summary', type:'table'}
-      ]
-    },
-    dashboard3: {
-      name: 'Strategic Action & Impact (Executive Scorecard)',
-      dataFile: 'data_dashboard3.json',
-      subDashboards: [
-        {id:'sub1', title:'Inventory Value KPI', type:'line', labels:['Q1','Q2','Q3','Q4']},
-        {id:'sub2', title:'Overstock %', type:'pie', labels:['Overstock','Normal']},
-        {id:'sub3', title:'DOI KPI', type:'bar', labels:['0-30','31-60','61-90','90+']},
-        {id:'sub4', title:'Accuracy >= 80%', type:'pie', labels:['Above 80%','Below 80%']},
-        {id:'sub5', title:'Before vs After Comparison', type:'bar', labels:['Before','After']},
-        {id:'sub6', title:'Action Log', type:'table'},
-        {id:'sub7', title:'Impact Summary', type:'table'},
-        {id:'sub8', title:'Executive Scorecard', type:'table'}
-      ]
-    }
-  };
+  <section id="dashboardContainer">
+    <!-- Dashboard ย่อยจะแสดงที่นี่ -->
+  </section>
 
-  let rawData = [];
-  let charts = {};
-  const dashboardSelector = document.getElementById('dashboardSelector');
-  const dateSelector = document.getElementById('dateSelector');
-  const dashboardContainer = document.getElementById('dashboardContainer');
-
-  dashboardSelector.addEventListener('change', () => {
-    loadData();
-  });
-
-  dateSelector.addEventListener('change', () => {
-    updateDashboard();
-  });
-
-  async function loadData() {
-    const dashId = dashboardSelector.value;
-    const config = dashboardConfigs[dashId];
-    try {
-      const res = await fetch(config.dataFile);
-      rawData = await res.json();
-
-      // โหลดวันที่จากข้อมูล (สมมติ field "date")
-      const dates = [...new Set(rawData.map(d => d.date))].sort();
-      dateSelector.innerHTML = '';
-      dates.forEach(date => {
-        const opt = document.createElement('option');
-        opt.value = date;
-        opt.textContent = date;
-        dateSelector.appendChild(opt);
-      });
-      if(dates.length) dateSelector.value = dates[0];
-
-      renderDashboardSubs(config.subDashboards);
-      updateDashboard();
-
-    } catch (err) {
-      alert('โหลดข้อมูลไม่สำเร็จ: ' + err);
-    }
-  }
-
-  function renderDashboardSubs(subs) {
-    dashboardContainer.innerHTML = '';
-    subs.forEach(s => {
-      let html = '';
-      if(s.type === 'table') {
-        html = `
-          <div class="dashboard-sub">
-            <h3>${s.title}</h3>
-            <table class="data-table" id="${s.id}-table">
-              <thead></thead>
-              <tbody></tbody>
-            </table>
-          </div>`;
-      } else {
-        html = `
-          <div class="dashboard-sub">
-            <h3>${s.title}</h3>
-            <canvas id="${s.id}-chart"></canvas>
-          </div>`;
-      }
-      dashboardContainer.insertAdjacentHTML('beforeend', html);
-    });
-  }
-
-  function updateDashboard() {
-    const dashId = dashboardSelector.value;
-    const config = dashboardConfigs[dashId];
-    const selectedDate = dateSelector.value;
-    const filteredData = rawData.filter(d => d.date === selectedDate);
-
-    config.subDashboards.forEach(s => {
-      if(s.type === 'table') {
-        updateTable(s.id, filteredData);
-      } else {
-        updateChart(s.id, s.type, s.labels, filteredData);
-      }
-    });
-  }
-
-  function updateTable(id, data) {
-    const table = document.getElementById(id + '-table');
-    if(!table) return;
-
-    // ตัวอย่างหัวตารางและข้อมูลสมมติ (ปรับตามข้อมูลจริง)
-    let theadHTML = '<tr>';
-    if(data.length > 0) {
-      Object.keys(data[0]).forEach(key => {
-        theadHTML += `<th>${key}</th>`;
-      });
-    }
-    theadHTML += '</tr>';
-
-    let tbodyHTML = '';
-    data.forEach(row => {
-      tbodyHTML += '<tr>';
-      Object.values(row).forEach(val => {
-        tbodyHTML += `<td>${val}</td>`;
-      });
-      tbodyHTML += '</tr>';
-    });
-
-    table.querySelector('thead').innerHTML = theadHTML;
-    table.querySelector('tbody').innerHTML = tbodyHTML;
-  }
-
-  function updateChart(id, type, labels, data) {
-    // ตัวอย่างสมมติแปลงข้อมูลเป็นจำนวน item per label
-    // ปรับ logic ให้เหมาะกับข้อมูลจริง
-    const counts = labels.map(label => {
-      // นับจำนวนข้อมูลที่ match label (สมมติมีฟิลด์ category)
-      return data.filter(d => d.category === label).length;
-    });
-
-    const chartData = {
-      labels,
-      datasets: [{
-        label: 'จำนวน',
-        data: counts,
-        backgroundColor: [
-          '#007bff', '#28a745', '#ffc107', '#dc3545',
-          '#6f42c1', '#20c997', '#fd7e14', '#6c757d'
-        ].slice(0, labels.length),
-        borderColor: '#fff',
-        borderWidth: 1
-      }]
-    };
-
-    if(charts[id]) {
-      charts[id].data = chartData;
-      charts[id].update();
-    } else {
-      const ctx = document.getElementById(id + '-chart').getContext('2d');
-      charts[id] = new Chart(ctx, {
-        type,
-        data: chartData,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: true, position: 'bottom' },
-            tooltip: { enabled: true }
-          }
-        }
-      });
-    }
-  }
-
-  // โหลดข้อมูลครั้งแรก
-  loadData();
-</script>
-
+  <script src="app.js"></script>
 </body>
 </html>
