@@ -1,43 +1,67 @@
 [
   {
-    "date": "2025-01",
-    "week": "Week1",
-    "ForecastAccuracy": 88,
+    "date": "2025-06-01",
+    "product_group": "กลุ่มสินค้า A",
+    "forecast_accuracy": 85,
     "MAPE": 12,
-    "Bias": "Positive",
-    "FillRate": "Complete",
-    "DemandRisk": 25,
-    "Category": "Positive"
+    "bias": -5,
+    "fill_rate": 92,
+    "demand_risk_level": "Low",
+    "forecast_qty": 1000,
+    "actual_qty": 950,
+    "forecast_month": "2025-06",
+    "notes": "Seasonal increase"
   },
   {
-    "date": "2025-01",
-    "week": "Week2",
-    "ForecastAccuracy": 82,
+    "date": "2025-06-01",
+    "product_group": "กลุ่มสินค้า B",
+    "forecast_accuracy": 75,
     "MAPE": 18,
-    "Bias": "Neutral",
-    "FillRate": "Partial",
-    "DemandRisk": 40,
-    "Category": "Neutral"
+    "bias": 10,
+    "fill_rate": 85,
+    "demand_risk_level": "Medium",
+    "forecast_qty": 1200,
+    "actual_qty": 1400,
+    "forecast_month": "2025-06",
+    "notes": "Underestimated demand"
   },
   {
-    "date": "2025-01",
-    "week": "Week3",
-    "ForecastAccuracy": 75,
+    "date": "2025-06-01",
+    "product_group": "กลุ่มสินค้า C",
+    "forecast_accuracy": 65,
     "MAPE": 25,
-    "Bias": "Negative",
-    "FillRate": "Fail",
-    "DemandRisk": 55,
-    "Category": "Negative"
+    "bias": -15,
+    "fill_rate": 78,
+    "demand_risk_level": "High",
+    "forecast_qty": 800,
+    "actual_qty": 680,
+    "forecast_month": "2025-06",
+    "notes": "Volatile demand"
   },
   {
-    "date": "2025-02",
-    "week": "Week1",
-    "ForecastAccuracy": 85,
-    "MAPE": 15,
-    "Bias": "Neutral",
-    "FillRate": "Complete",
-    "DemandRisk": 30,
-    "Category": "Neutral"
+    "date": "2025-07-01",
+    "product_group": "กลุ่มสินค้า A",
+    "forecast_accuracy": 88,
+    "MAPE": 10,
+    "bias": -3,
+    "fill_rate": 95,
+    "demand_risk_level": "Low",
+    "forecast_qty": 1050,
+    "actual_qty": 1020,
+    "forecast_month": "2025-07",
+    "notes": "Stable demand"
+  },
+  {
+    "date": "2025-07-01",
+    "product_group": "กลุ่มสินค้า B",
+    "forecast_accuracy": 70,
+    "MAPE": 20,
+    "bias": 12,
+    "fill_rate": 82,
+    "demand_risk_level": "Medium",
+    "forecast_qty": 1300,
+    "actual_qty": 1500,
+    "forecast_month": "2025-07",
+    "notes": "Demand spike"
   }
-  // เพิ่มเติมตามนี้ได้เอง
 ]
