@@ -1,7 +1,7 @@
 let dataSets = {
-  1: 'data1.json', // Strategic Inventory Health & Risk
-  2: 'data2.json', // Planning Accuracy & Demand Risk
-  3: 'data3.json'  // Strategic Action & Impact
+  1: 'data_dashboard1.json', // Strategic Inventory Health & Risk
+  2: 'data_dashboard2.json', // Planning Accuracy & Demand Risk
+  3: 'data_dashboard3.json'  // Strategic Action & Impact
 };
 
 let charts = {};
