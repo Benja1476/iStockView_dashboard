@@ -2,46 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inventory Strategy Dashboard</title>
+  <title>Strategic Dashboard</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div style="padding: 2rem;">
-    <h1 style="font-size: 1.875rem; font-weight: bold;">📊 Inventory Strategy Dashboard</h1>
+  <div class="controls">
+    <select id="dashboardSelect">
+      <option value="1">Strategic Inventory Health & Risk</option>
+      <option value="2">Planning Accuracy & Demand Risk</option>
+      <option value="3">Strategic Action & Impact</option>
+    </select>
 
-    <!-- Dashboard Selector -->
-    <div style="margin-top: 1rem;">
-      <label for="dashboardSelect"><strong>เลือก Dashboard:</strong></label>
-      <select id="dashboardSelect">
-        <option value="1">Strategic Inventory Health & Risk</option>
-        <option value="2">Planning Accuracy & Demand Risk</option>
-        <option value="3">Strategic Action & Impact</option>
-      </select>
-    </div>
-
-    <!-- Date Selector -->
-    <div style="margin-top: 1rem;">
-      <label for="dateSelect"><strong>เลือกวันที่:</strong></label>
-      <select id="dateSelect">
-        <!-- วันที่จะถูกโหลดโดย JS -->
-      </select>
-    </div>
-
-    <!-- Refresh Button -->
-    <div style="margin-top: 1rem;">
-      <button id="refreshButton" style="padding: 0.5rem 1rem; background-color: #2563eb; color: white; border: none; border-radius: 0.5rem;">
-        🔄 Refresh
-      </button>
-    </div>
-
-    <!-- Dashboard Display -->
-    <div id="dashboard" class="dashboard-container" style="margin-top: 2rem;">
-      <!-- Cards & Charts will load here -->
-    </div>
+    <select id="dateSelect"></select>
+    <button id="refreshBtn">🔄 Refresh</button>
   </div>
 
-  <script type="module" src="app.js"></script>
+  <div id="dashboard1" class="window">
+    <div class="window-header">
+      <span class="circle"></span><span class="circle yellow"></span><span class="circle green"></span>
+      <h2>🔍 Strategic Inventory Health & Risk</h2>
+    </div>
+    <div class="window-content" id="content1"></div>
+  </div>
+
+  <div id="dashboard2" class="window">
+    <div class="window-header">
+      <span class="circle"></span><span class="circle yellow"></span><span class="circle green"></span>
+      <h2>📈 Planning Accuracy & Demand Risk</h2>
+    </div>
+    <div class="window-content" id="content2"></div>
+  </div>
+
+  <div id="dashboard3" class="window">
+    <div class="window-header">
+      <span class="circle"></span><span class="circle yellow"></span><span class="circle green"></span>
+      <h2>🎯 Strategic Action & Impact</h2>
+    </div>
+    <div class="window-content" id="content3"></div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
-
