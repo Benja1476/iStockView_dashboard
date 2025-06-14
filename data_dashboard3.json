@@ -1,172 +1,93 @@
-{
-  "subDashboards": [
-    {
-      "name": "Inventory Value",
-      "dates": [
-        {
-          "date": "2025-01",
-          "data": [
-            {"item": "Item A", "qty": 50000},
-            {"item": "Item B", "qty": 30000},
-            {"item": "Item C", "qty": 20000}
-          ]
-        },
-        {
-          "date": "2025-02",
-          "data": [
-            {"item": "Item A", "qty": 52000},
-            {"item": "Item B", "qty": 31000},
-            {"item": "Item C", "qty": 19000}
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Overstock %",
-      "dates": [
-        {
-          "date": "2025-01",
-          "data": [
-            {"item": "Category A", "qty": 10},
-            {"item": "Category B", "qty": 20},
-            {"item": "Category C", "qty": 30}
-          ]
-        },
-        {
-          "date": "2025-02",
-          "data": [
-            {"item": "Category A", "qty": 12},
-            {"item": "Category B", "qty": 18},
-            {"item": "Category C", "qty": 28}
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Cycle Time",
-      "dates": [
-        {
-          "date": "2025-01",
-          "data": [
-            {"item": "Process 1", "qty": 4.2},
-            {"item": "Process 2", "qty": 3.8},
-            {"item": "Process 3", "qty": 5.1}
-          ]
-        },
-        {
-          "date": "2025-02",
-          "data": [
-            {"item": "Process 1", "qty": 4.0},
-            {"item": "Process 2", "qty": 3.7},
-            {"item": "Process 3", "qty": 5.0}
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Cost per Unit",
-      "dates": [
-        {
-          "date": "2025-01",
-          "data": [
-            {"item": "Item A", "qty": 1.5},
-            {"item": "Item B", "qty": 2.0},
-            {"item": "Item C", "qty": 1.8}
-          ]
-        },
-        {
-          "date": "2025-02",
-          "data": [
-            {"item": "Item A", "qty": 1.4},
-            {"item": "Item B", "qty": 1.9},
-            {"item": "Item C", "qty": 1.7}
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Supplier Lead Time",
-      "dates": [
-        {
-          "date": "2025-01",
-          "data": [
-            {"item": "Supplier A", "qty": 7},
-            {"item": "Supplier B", "qty": 9},
-            {"item": "Supplier C", "qty": 6}
-          ]
-        },
-        {
-          "date": "2025-02",
-          "data": [
-            {"item": "Supplier A", "qty": 6},
-            {"item": "Supplier B", "qty": 8},
-            {"item": "Supplier C", "qty": 7}
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Quality Rate",
-      "dates": [
-        {
-          "date": "2025-01",
-          "data": [
-            {"item": "Line 1", "qty": 98.5},
-            {"item": "Line 2", "qty": 97.0},
-            {"item": "Line 3", "qty": 99.2}
-          ]
-        },
-        {
-          "date": "2025-02",
-          "data": [
-            {"item": "Line 1", "qty": 98.8},
-            {"item": "Line 2", "qty": 96.5},
-            {"item": "Line 3", "qty": 99.0}
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Safety Stock %",
-      "dates": [
-        {
-          "date": "2025-01",
-          "data": [
-            {"item": "Item A", "qty": 15},
-            {"item": "Item B", "qty": 18},
-            {"item": "Item C", "qty": 12}
-          ]
-        },
-        {
-          "date": "2025-02",
-          "data": [
-            {"item": "Item A", "qty": 14},
-            {"item": "Item B", "qty": 20},
-            {"item": "Item C", "qty": 11}
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Overall Score",
-      "dates": [
-        {
-          "date": "2025-01",
-          "data": [
-            {"item": "Site A", "qty": 88},
-            {"item": "Site B", "qty": 79},
-            {"item": "Site C", "qty": 85}
-          ]
-        },
-        {
-          "date": "2025-02",
-          "data": [
-            {"item": "Site A", "qty": 90},
-            {"item": "Site B", "qty": 80},
-            {"item": "Site C", "qty": 87}
-          ]
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "date": "2025-06",
+    "dashboardSubName": "Inventory Value",
+    "chartType": "bar",
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    "datasets": [{
+      "label": "Inventory Value (ล้านบาท)",
+      "data": [120, 115, 110, 108, 105, 100],
+      "backgroundColor": "#007bff"
+    }]
+  },
+  {
+    "date": "2025-06",
+    "dashboardSubName": "Overstock %",
+    "chartType": "line",
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    "datasets": [{
+      "label": "Overstock %",
+      "data": [25, 22, 20, 18, 15, 12],
+      "borderColor": "#fd7e14",
+      "fill": false
+    }]
+  },
+  {
+    "date": "2025-06",
+    "dashboardSubName": "DOI",
+    "chartType": "bar",
+    "labels": ["1-30", "31-60", "61-90", "90+"],
+    "datasets": [{
+      "label": "Days of Inventory",
+      "data": [40, 30, 20, 10],
+      "backgroundColor": "#20c997"
+    }]
+  },
+  {
+    "date": "2025-06",
+    "dashboardSubName": "Accuracy ≥80%",
+    "chartType": "pie",
+    "labels": ["≥80%", "<80%"],
+    "datasets": [{
+      "data": [75, 25],
+      "backgroundColor": ["#198754", "#dc3545"]
+    }]
+  },
+  {
+    "date": "2025-06",
+    "dashboardSubName": "Before vs After",
+    "tableHeaders": ["KPI", "Before", "After", "Change"],
+    "tableData": [
+      ["Inventory Value", "120M", "100M", "-20M"],
+      ["Overstock %", "25%", "12%", "-13%"],
+      ["DOI", "45", "40", "-5"],
+      ["Accuracy", "75%", "85%", "+10%"]
+    ]
+  },
+  {
+    "date": "2025-06",
+    "dashboardSubName": "Action Log",
+    "tableHeaders": ["Date", "Action", "Status", "Impact"],
+    "tableData": [
+      ["2025-05-01", "ปรับ Safety Stock", "เสร็จสิ้น", "+5% Accuracy"],
+      ["2025-05-15", "ปรับแผนจัดซื้อ", "ระหว่างดำเนินการ", "-10% Overstock"],
+      ["2025-06-01", "วิเคราะห์ Risk", "รอดำเนินการ", "Pending"]
+    ]
+  },
+  {
+    "date": "2025-06",
+    "dashboardSubName": "Top Improvement Items",
+    "tableHeaders": ["Item", "Impact", "Priority"],
+    "tableData": [
+      ["Item A", "+10% Accuracy", "High"],
+      ["Item B", "-5% Overstock", "Medium"],
+      ["Item C", "+3% Fill Rate", "Low"]
+    ]
+  },
+  {
+    "date": "2025-06",
+    "dashboardSubName": "Risk vs Action Correlation",
+    "chartType": "scatter",
+    "labels": [],  // scatter ใช้ datasets แสดงค่า x,y
+    "datasets": [{
+      "label": "Items",
+      "data": [
+        { "x": 90, "y": 5 },
+        { "x": 75, "y": 10 },
+        { "x": 60, "y": 15 },
+        { "x": 45, "y": 20 }
+      ],
+      "backgroundColor": "#007bff"
+    }]
+  }
+]
