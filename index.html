@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>iStockView Strategic Inventory Intelligence</title>
+  <title>iStockView Strategic Inventory Intelligence - Interactive</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -23,12 +23,17 @@
 
       <label for="dateSelect">เลือกวันที่:</label>
       <select id="dateSelect"></select>
-
-      <button id="refreshBtn">Refresh</button>
     </section>
 
     <section id="dashboardContainer" class="dashboard-window">
-      <!-- Dashboard content จะมาแสดงที่นี่ -->
+      <h2 id="dashboardTitle"></h2>
+      <canvas id="chartCanvas"></canvas>
+      <div class="table-container">
+        <table id="dataTable">
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
     </section>
   </main>
 
