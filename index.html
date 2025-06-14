@@ -1,46 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <title>Strategic Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iStockView Strategic Inventory Intelligence</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="controls">
-    <select id="dashboardSelect">
-      <option value="1">Strategic Inventory Health & Risk</option>
-      <option value="2">Planning Accuracy & Demand Risk</option>
-      <option value="3">Strategic Action & Impact</option>
-    </select>
+  <header>
+    <h1>iStockView Strategic Inventory Intelligence</h1>
+  </header>
 
-    <select id="dateSelect"></select>
-    <button id="refreshBtn">🔄 Refresh</button>
-  </div>
+  <main>
+    <section class="controls">
+      <label for="dashboardSelect">เลือก Dashboard:</label>
+      <select id="dashboardSelect">
+        <option value="1">Strategic Inventory Health & Risk</option>
+        <option value="2">Planning Accuracy & Demand Risk</option>
+        <option value="3">Strategic Action & Impact</option>
+      </select>
 
-  <div id="dashboard1" class="window">
-    <div class="window-header">
-      <span class="circle"></span><span class="circle yellow"></span><span class="circle green"></span>
-      <h2>🔍 Strategic Inventory Health & Risk</h2>
-    </div>
-    <div class="window-content" id="content1"></div>
-  </div>
+      <label for="dateSelect">เลือกวันที่:</label>
+      <select id="dateSelect"></select>
 
-  <div id="dashboard2" class="window">
-    <div class="window-header">
-      <span class="circle"></span><span class="circle yellow"></span><span class="circle green"></span>
-      <h2>📈 Planning Accuracy & Demand Risk</h2>
-    </div>
-    <div class="window-content" id="content2"></div>
-  </div>
+      <button id="refreshBtn">Refresh</button>
+    </section>
 
-  <div id="dashboard3" class="window">
-    <div class="window-header">
-      <span class="circle"></span><span class="circle yellow"></span><span class="circle green"></span>
-      <h2>🎯 Strategic Action & Impact</h2>
-    </div>
-    <div class="window-content" id="content3"></div>
-  </div>
+    <section id="dashboardContainer" class="dashboard-window">
+      <!-- Dashboard content จะมาแสดงที่นี่ -->
+    </section>
+  </main>
 
   <script src="app.js"></script>
 </body>
