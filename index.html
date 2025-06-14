@@ -1,41 +1,113 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Inventory Insights Dashboard</title>
-
-  <!-- Chart.js + Data‑Labels plugin -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
-
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 20px;
+    }
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>Inventory Insights Dashboard</h1>
-    <div class="controls">
-      <label for="dashboardSelector">เลือก Dashboard:</label>
-      <select id="dashboardSelector">
-        <option value="1">1 - Strategic Inventory Health & Risk</option>
-        <option value="2">2 - Planning Accuracy & Demand Risk</option>
-        <option value="3">3 - Strategic Action & Impact</option>
-      </select>
-
-      <label for="dateSelector">เลือกวันที่:</label>
-      <select id="dateSelector"></select>
-
-      <button id="refreshBtn">🔄 Refresh</button>
+  <h1>Inventory Dashboard</h1>
+  <div class="dashboard">
+    <div class="card">
+      <h3>Total Inventory Value</h3>
+      <p>$1,200,000</p>
     </div>
-  </header>
+    <div class="card">
+      <h3>Forecast Accuracy</h3>
+      <canvas id="gaugeChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Turnover Rate</h3>
+      <canvas id="lineChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>ABC × FSN Matrix</h3>
+      <canvas id="barChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Inventory by Category</h3>
+      <canvas id="donutChart"></canvas>
+    </div>
+  </div>
+  <script>
+    const lineChart = new Chart(document.getElementById("lineChart"), {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+        datasets: [{
+          label: 'Turnover Rate',
+          data: [20, 25, 22, 28, 30],
+          borderColor: '#4CAF50',
+          fill: false
+        }]
+      }
+    });
 
-  <main id="dashboardContainer" class="dashboard-grid">
-    <!-- การ์ดย่อยจะถูกเติมที่นี่ -->
-  </main>
+    const barChart = new Chart(document.getElementById("barChart"), {
+      type: 'bar',
+      data: {
+        labels: ['A-Fast', 'A-Slow', 'B-Fast', 'C-Non-Moving'],
+        datasets: [{
+          label: 'SKU Count',
+          data: [10, 5, 7, 3],
+          backgroundColor: ['#2196F3', '#FFC107', '#8BC34A', '#FF5722']
+        }]
+      }
+    });
 
-  <footer>
-    <p>© 2025 Inventory Analytics • Powered by Chart.js</p>
-  </footer>
+    const donutChart = new Chart(document.getElementById("donutChart"), {
+      type: 'doughnut',
+      data: {
+        labels: ['A', 'B', 'C'],
+        datasets: [{
+          data: [50, 30, 20],
+          backgroundColor: ['#3F51B5', '#009688', '#FF9800']
+        }]
+      }
+    });
 
-  <script src="app.js"></script>
+    const gaugeChart = new Chart(document.getElementById("gaugeChart"), {
+      type: 'doughnut',
+      data: {
+        labels: ['Accuracy', 'Remaining'],
+        datasets: [{
+          data: [82, 18],
+          backgroundColor: ['#4CAF50', '#E0E0E0'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        circumference: 180,
+        rotation: -90,
+        cutout: '70%',
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
