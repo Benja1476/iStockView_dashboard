@@ -1,404 +1,427 @@
-let rawData = [];
-let charts = {};
-let currentDashboard = "1";
-let currentDate = "";
-
-const dashboardConfig = {
-  "1": {
-    title: "Strategic Inventory Health & Risk",
-    dashboards: [
-      "ABC Category", "FSN Category", "Turnover Rate", "DOI Distribution",
-      "Composite Risk Score", "Urgency Level", "Inventory Aging", "Top 10 Inventory"
-    ]
-  },
-  "2": {
-    title: "Planning Accuracy & Demand Risk",
-    dashboards: [
-      "Forecast Accuracy", "MAPE", "Bias", "Fill Rate",
-      "Demand Risk Level", "Date Drill-Down", "KPI Trends", "Planning Overview"
-    ]
-  },
-  "3": {
-    title: "Strategic Action & Impact",
-    dashboards: [
-      "Inventory Value", "Overstock %", "DOI", "Accuracy ≥80%",
-      "Before vs After", "Action Log", "Impact Score", "Executive Summary"
-    ]
-  }
+let dataSets = {
+  1: 'data1.json', // Strategic Inventory Health & Risk
+  2: 'data2.json', // Planning Accuracy & Demand Risk
+  3: 'data3.json'  // Strategic Action & Impact
 };
 
+let charts = {};
+let rawData = [];
+
+const dashboardContainer = document.getElementById('dashboardContainer');
+const dashboardSelector = document.getElementById('dashboardSelector');
+const dateSelector = document.getElementById('dateSelector');
+const refreshBtn = document.getElementById('refreshBtn');
+
+// กำหนด Dashboard ย่อย 8 ตัว สำหรับแต่ละ Dashboard ใหญ่
+const dashboardDetails = {
+  1: [ // Strategic Inventory Health & Risk
+    {id:'d1-1', title:'ABC Category', type:'doughnut'},
+    {id:'d1-2', title:'FSN Category', type:'pie'},
+    {id:'d1-3', title:'Turnover Rate', type:'line'},
+    {id:'d1-4', title:'DOI Distribution', type:'bar'},
+    {id:'d1-5', title:'Composite Risk Score', type:'bar'},
+    {id:'d1-6', title:'Urgency Level', type:'doughnut'},
+    {id:'d1-7', title:'Top 10 Inventory', type:'table'},
+    {id:'d1-8', title:'Strategic Recommendations', type:'table'}
+  ],
+  2: [ // Planning Accuracy & Demand Risk
+    {id:'d2-1', title:'Forecast Accuracy', type:'line'},
+    {id:'d2-2', title:'MAPE', type:'line'},
+    {id:'d2-3', title:'Bias', type:'bar'},
+    {id:'d2-4', title:'Fill Rate', type:'bar'},
+    {id:'d2-5', title:'Demand Risk by Period', type:'bar'},
+    {id:'d2-6', title:'Dynamic Date Slicer', type:'table'},
+    {id:'d2-7', title:'Drill-Down Time Hierarchy', type:'table'},
+    {id:'d2-8', title:'Forecast vs Actual', type:'line'}
+  ],
+  3: [ // Strategic Action & Impact
+    {id:'d3-1', title:'Inventory Value', type:'bar'},
+    {id:'d3-2', title:'Overstock %', type:'doughnut'},
+    {id:'d3-3', title:'DOI', type:'bar'},
+    {id:'d3-4', title:'Accuracy ≥80%', type:'bar'},
+    {id:'d3-5', title:'Before vs After', type:'line'},
+    {id:'d3-6', title:'Action Log', type:'table'},
+    {id:'d3-7', title:'KPI Summary', type:'bar'},
+    {id:'d3-8', title:'Impact Analysis', type:'bar'}
+  ]
+};
+
+function createDashboardCards(dashboardId) {
+  dashboardContainer.innerHTML = ''; // เคลียร์ก่อน
+  const cards = dashboardDetails[dashboardId];
+  cards.forEach(card => {
+    const cardEl = document.createElement('div');
+    cardEl.className = 'dashboard-card';
+    cardEl.id = card.id;
+    let content = `<h2>${card.title}</h2>`;
+    if(card.type === 'table') {
+      content += `<table><thead></thead><tbody></tbody></table>`;
+    } else {
+      content += `<canvas id="chart_${card.id}"></canvas>`;
+    }
+    cardEl.innerHTML = content;
+    dashboardContainer.appendChild(cardEl);
+  });
+}
+
 async function loadData() {
+  const dashboardId = dashboardSelector.value;
+  const fileName = dataSets[dashboardId];
   try {
-    const res = await fetch('data.json');
+    const res = await fetch(fileName);
     rawData = await res.json();
 
-    const dates = [...new Set(rawData.map(d => d.date))].sort();
-    const dateSelect = document.getElementById('dateSelect');
-    dateSelect.innerHTML = "";
-    dates.forEach(d => {
-      const opt = document.createElement('option');
-      opt.value = d;
-      opt.textContent = d;
-      dateSelect.appendChild(opt);
+    // ดึงวันที่ไม่ซ้ำ และเรียงลำดับ
+    const dates = Array.from(new Set(rawData.map(d => d.date))).sort();
+
+    dateSelector.innerHTML = '';
+    dates.forEach(date => {
+      const option = document.createElement('option');
+      option.value = date;
+      option.textContent = date;
+      dateSelector.appendChild(option);
     });
 
-    if (!dateSelect.value && dates.length) dateSelect.value = dates[0];
-    currentDate = dateSelect.value;
+    createDashboardCards(dashboardId);
 
-    updateDashboardContainer();
-  } catch (e) {
-    console.error("Error loading data:", e);
+    if (dates.length > 0) updateDashboard(dates[0]);
+  } catch (error) {
+    console.error('Error loading data:', error);
   }
 }
 
-function updateDashboardContainer() {
-  const container = document.getElementById('dashboardContainer');
-  container.innerHTML = "";
+function updateDashboard(selectedDate) {
+  const dashboardId = dashboardSelector.value;
+  const filteredData = rawData.filter(d => d.date === selectedDate);
+  const cards = dashboardDetails[dashboardId];
 
-  const dashNames = dashboardConfig[currentDashboard].dashboards;
-
-  dashNames.forEach(name => {
-    const card = document.createElement('div');
-    card.className = "card";
-
-    const title = document.createElement('h3');
-    title.textContent = name;
-    card.appendChild(title);
-
-    // ถ้าเป็นตาราง เช่น Top 10 Inventory หรือ Action Log
-    if (name === "Top 10 Inventory" || name === "Action Log" || name === "Executive Summary" || name === "Planning Overview" || name === "Date Drill-Down") {
-      const table = document.createElement('table');
-      const thead = document.createElement('thead');
-      const tbody = document.createElement('tbody');
-      table.appendChild(thead);
-      table.appendChild(tbody);
-      card.appendChild(table);
-
-      // สร้าง header ตามชื่อ Dashboard ย่อย
-      if (name === "Top 10 Inventory") {
-        thead.innerHTML = "<tr><th>Item</th><th>Qty</th></tr>";
-      } else if (name === "Action Log") {
-        thead.innerHTML = "<tr><th>Action</th><th>Status</th><th>Date</th></tr>";
-      } else if (name === "Executive Summary") {
-        thead.innerHTML = "<tr><th>KPI</th><th>Value</th></tr>";
-      } else if (name === "Planning Overview") {
-        thead.innerHTML = "<tr><th>Plan</th><th>Details</th></tr>";
-      } else if (name === "Date Drill-Down") {
-        thead.innerHTML = "<tr><th>Date</th><th>Detail</th></tr>";
-      }
+  cards.forEach(card => {
+    if(card.type === 'table') {
+      updateTable(card.id, filteredData);
     } else {
-      // canvas สำหรับกราฟ
-      const canvas = document.createElement('canvas');
-      canvas.id = "chart_" + name.replace(/\s+/g, '');
-      card.appendChild(canvas);
-    }
-
-    container.appendChild(card);
-  });
-
-  updateAllVisuals();
-}
-
-function updateAllVisuals() {
-  const filteredData = rawData.filter(d => d.date === currentDate);
-
-  dashboardConfig[currentDashboard].dashboards.forEach(name => {
-    if (name === "Top 10 Inventory") {
-      updateTopInventory(filteredData);
-    } else if (name === "Action Log") {
-      updateActionLog(filteredData);
-    } else if (name === "Executive Summary") {
-      updateExecutiveSummary(filteredData);
-    } else if (name === "Planning Overview") {
-      updatePlanningOverview(filteredData);
-    } else if (name === "Date Drill-Down") {
-      updateDateDrillDown(filteredData);
-    } else {
-      updateChart(name, filteredData);
+      updateChart(card.id, card.type, filteredData);
     }
   });
 }
 
-function updateTopInventory(data) {
-  const tbody = document.querySelector('.card h3:contains("Top 10 Inventory")')?.nextElementSibling?.querySelector('tbody');
-  // ป้องกัน error กรณีไม่เจอ
-  if (!tbody) {
-    // ใช้วิธี querySelectorAll แล้ว match title แทน
-    let cards = document.querySelectorAll('.card');
-    for (let card of cards) {
-      if (card.querySelector('h3')?.textContent === "Top 10 Inventory") {
-        tbody = card.querySelector('tbody');
-        break;
-      }
-    }
+function updateTable(cardId, data) {
+  const cardEl = document.getElementById(cardId);
+  const tbody = cardEl.querySelector('tbody');
+  const thead = cardEl.querySelector('thead');
+
+  if(!data || data.length === 0) {
+    thead.innerHTML = '';
+    tbody.innerHTML = '<tr><td colspan="5">ไม่มีข้อมูล</td></tr>';
+    return;
   }
-  // กรณียังไม่เจอ return
-  if (!tbody) return;
 
-  // สมมติ data มี item และ qty
-  tbody.innerHTML = "";
-  const top10 = data.slice(0, 10);
-  top10.forEach(row => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${row.item || '-'}</td><td>${row.qty || 0}</td>`;
-    tbody.appendChild(tr);
-  });
-}
+  // ตัวอย่างกำหนดหัวตารางและข้อมูลตาม cardId
+  let headers = [];
+  let rows = [];
 
-function updateActionLog(data) {
-  const tbody = getTbodyByTitle("Action Log");
-  if (!tbody) return;
-  tbody.innerHTML = "";
-  data.slice(0, 5).forEach(r => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${r.action || '-'}</td><td>${r.status || '-'}</td><td>${r.date || '-'}</td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-function updateExecutiveSummary(data) {
-  const tbody = getTbodyByTitle("Executive Summary");
-  if (!tbody) return;
-  tbody.innerHTML = "";
-  // สมมติ KPI สรุป
-  const kpis = [
-    { kpi: "Inventory Value", value: "1,200,000" },
-    { kpi: "Overstock %", value: "15%" },
-    { kpi: "DOI", value: "45" },
-    { kpi: "Accuracy ≥80%", value: "82%" }
-  ];
-  kpis.forEach(k => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${k.kpi}</td><td>${k.value}</td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-function updatePlanningOverview(data) {
-  const tbody = getTbodyByTitle("Planning Overview");
-  if (!tbody) return;
-  tbody.innerHTML = "";
-  const plans = [
-    { plan: "Plan A", details: "รายละเอียดแผน A" },
-    { plan: "Plan B", details: "รายละเอียดแผน B" },
-    { plan: "Plan C", details: "รายละเอียดแผน C" }
-  ];
-  plans.forEach(p => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${p.plan}</td><td>${p.details}</td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-function updateDateDrillDown(data) {
-  const tbody = getTbodyByTitle("Date Drill-Down");
-  if (!tbody) return;
-  tbody.innerHTML = "";
-  // สมมติรายละเอียด drill down ตามวัน
-  data.forEach(r => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${r.date}</td><td>รายละเอียดสำหรับ ${r.item || '-'}</td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-function getTbodyByTitle(title) {
-  const cards = document.querySelectorAll('.card');
-  for (let card of cards) {
-    if (card.querySelector('h3')?.textContent === title) {
-      return card.querySelector('tbody');
-    }
-  }
-  return null;
-}
-
-function updateChart(name, data) {
-  const id = "chart_" + name.replace(/\s+/g, '');
-  const ctx = document.getElementById(id);
-  if (!ctx) return;
-
-  // สร้าง data และ config แบบง่ายสมมติ
-
-  let labels = [];
-  let dataset = [];
-  let bgColors = [];
-  let borderColor = '#007bff';
-  let type = 'bar';
-  let label = name;
-
-  switch (name) {
-    case "ABC Category":
-      labels = ['A', 'B', 'C'];
-      dataset = [60, 25, 15];
-      bgColors = ['#28a745', '#ffc107', '#dc3545'];
-      type = 'doughnut';
+  switch(cardId) {
+    case 'd1-7': // Top 10 Inventory
+      headers = ['Item', 'Qty'];
+      rows = data.slice(0,10).map(d => [d.item, d.qty]);
       break;
 
-    case "FSN Category":
-      labels = ['Fast', 'Slow', 'Non-Moving'];
-      dataset = [40, 30, 30];
-      bgColors = ['#20c997', '#fd7e14', '#6c757d'];
-      type = 'pie';
+    case 'd1-8': // Strategic Recommendations
+      headers = ['Item', 'Action'];
+      rows = data.slice(0,8).map(d => [d.item, d.recommendation || '-']);
       break;
 
-    case "Turnover Rate":
-      labels = ['Jan', 'Feb', 'Mar'];
-      dataset = [45, 50, 60];
-      type = 'line';
-      borderColor = '#007bff';
+    case 'd2-6': // Dynamic Date Slicer
+      headers = ['Date', 'Description'];
+      rows = data.map(d => [d.date, d.description || '-']);
       break;
 
-    case "DOI Distribution":
-      labels = ['1-30', '31-60', '61-90', '90+'];
-      dataset = [20, 15, 10, 5];
-      bgColors = '#17a2b8';
-      type = 'bar';
+    case 'd2-7': // Drill-Down Time Hierarchy
+      headers = ['Year', 'Month', 'Day'];
+      rows = data.map(d => [d.year, d.month, d.day]);
       break;
 
-    case "Composite Risk Score":
-      labels = ['Low', 'Medium', 'High'];
-      dataset = [50, 30, 20];
-      bgColors = ['#198754', '#ffc107', '#dc3545'];
-      type = 'bar';
-      break;
-
-    case "Urgency Level":
-      labels = ['Normal', 'Elevated', 'Urgent'];
-      dataset = [70, 20, 10];
-      bgColors = ['#0d6efd', '#fd7e14', '#dc3545'];
-      type = 'bar';
-      break;
-
-    case "Inventory Aging":
-      labels = ['0-90 วัน', '91-180 วัน', '181-360 วัน', '360+ วัน'];
-      dataset = [15, 10, 8, 3];
-      bgColors = '#6f42c1';
-      type = 'bar';
-      break;
-
-    case "Forecast Accuracy":
-      labels = ['Jan', 'Feb', 'Mar'];
-      dataset = [85, 82, 87];
-      bgColors = '#198754';
-      type = 'line';
-      break;
-
-    case "MAPE":
-      labels = ['Jan', 'Feb', 'Mar'];
-      dataset = [10, 12, 8];
-      bgColors = '#dc3545';
-      type = 'line';
-      break;
-
-    case "Bias":
-      labels = ['Jan', 'Feb', 'Mar'];
-      dataset = [2, -1, 0];
-      bgColors = '#ffc107';
-      type = 'line';
-      break;
-
-    case "Fill Rate":
-      labels = ['Jan', 'Feb', 'Mar'];
-      dataset = [92, 90, 95];
-      bgColors = '#0d6efd';
-      type = 'line';
-      break;
-
-    case "Demand Risk Level":
-      labels = ['Low', 'Medium', 'High'];
-      dataset = [45, 35, 20];
-      bgColors = ['#198754', '#ffc107', '#dc3545'];
-      type = 'bar';
-      break;
-
-    case "KPI Trends":
-      labels = ['Jan', 'Feb', 'Mar'];
-      dataset = [80, 83, 85];
-      bgColors = '#0d6efd';
-      type = 'line';
-      break;
-
-    case "Inventory Value":
-      labels = ['Q1', 'Q2', 'Q3', 'Q4'];
-      dataset = [300, 320, 310, 330];
-      bgColors = '#007bff';
-      type = 'bar';
-      break;
-
-    case "Overstock %":
-      labels = ['Q1', 'Q2', 'Q3', 'Q4'];
-      dataset = [15, 18, 16, 20];
-      bgColors = '#dc3545';
-      type = 'bar';
-      break;
-
-    case "Before vs After":
-      labels = ['Before', 'After'];
-      dataset = [70, 85];
-      bgColors = ['#dc3545', '#28a745'];
-      type = 'bar';
-      break;
-
-    case "Impact Score":
-      labels = ['Q1', 'Q2', 'Q3', 'Q4'];
-      dataset = [60, 70, 75, 80];
-      bgColors = '#0d6efd';
-      type = 'line';
+    case 'd3-6': // Action Log
+      headers = ['Date', 'Action', 'Status'];
+      rows = data.map(d => [d.date, d.action, d.status]);
       break;
 
     default:
-      // กรณีไม่มีข้อมูล
-      labels = ['No Data'];
-      dataset = [0];
-      bgColors = '#6c757d';
-      type = 'bar';
+      thead.innerHTML = '';
+      tbody.innerHTML = '<tr><td colspan="5">ตารางยังไม่รองรับข้อมูล</td></tr>';
+      return;
   }
 
-  if (charts[id]) {
-    charts[id].data.labels = labels;
-    charts[id].data.datasets[0].data = dataset;
-    charts[id].data.datasets[0].backgroundColor = bgColors;
-    charts[id].update();
-  } else {
-    charts[id] = new Chart(ctx, {
-      type: type,
-      data: {
-        labels: labels,
+  thead.innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+  tbody.innerHTML = rows.length > 0
+    ? rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')
+    : `<tr><td colspan="${headers.length}">ไม่มีข้อมูล</td></tr>`;
+}
+
+function updateChart(cardId, type, data) {
+  const ctx = document.getElementById('chart_'+cardId)?.getContext('2d');
+  if (!ctx) return;
+
+  // ตัวอย่างข้อมูลสมมติ (สามารถแก้ให้ดึงข้อมูลจริงจาก filtered data ได้)
+  let chartData = {};
+  switch(cardId) {
+    case 'd1-1': // ABC Category
+      chartData = {
+        labels: ['A', 'B', 'C'],
         datasets: [{
-          label: label,
-          data: dataset,
-          backgroundColor: bgColors,
-          borderColor: borderColor,
-          fill: type === 'line'
+          data: [60, 25, 15],
+          backgroundColor: ['#28a745', '#ffc107', '#dc3545']
         }]
-      },
+      };
+      break;
+
+    case 'd1-2': // FSN Category
+      chartData = {
+        labels: ['Fast', 'Slow', 'Non-Moving'],
+        datasets: [{
+          data: [40, 35, 25],
+          backgroundColor: ['#20c997', '#fd7e14', '#6c757d']
+        }]
+      };
+      break;
+
+    case 'd1-3': // Turnover Rate
+      chartData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+        datasets: [{
+          label: 'Turnover %',
+          data: [45, 50, 55, 60],
+          borderColor: '#007bff',
+          fill: false,
+          tension: 0.3
+        }]
+      };
+      break;
+
+    case 'd1-4': // DOI Distribution
+      chartData = {
+        labels: ['1-30', '31-60', '61-90', '90+'],
+        datasets: [{
+          label: 'Items',
+          data: [20, 15, 10, 5],
+          backgroundColor: '#17a2b8'
+        }]
+      };
+      break;
+
+    case 'd1-5': // Composite Risk Score
+      chartData = {
+        labels: ['Low', 'Medium', 'High'],
+        datasets: [{
+          label: 'Risk Score',
+          data: [30, 40, 30],
+          backgroundColor: ['#198754', '#ffc107', '#dc3545']
+        }]
+      };
+      break;
+
+    case 'd1-6': // Urgency Level
+      chartData = {
+        labels: ['Urgent', 'Normal', 'Low'],
+        datasets: [{
+          data: [25, 50, 25],
+          backgroundColor: ['#dc3545', '#0d6efd', '#6c757d']
+        }]
+      };
+      break;
+
+    case 'd2-1': // Forecast Accuracy
+      chartData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+        datasets: [{
+          label: 'Accuracy %',
+          data: [85, 88, 90, 87],
+          borderColor: '#198754',
+          fill: false,
+          tension: 0.2
+        }]
+      };
+      break;
+
+    case 'd2-2': // MAPE
+      chartData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+        datasets: [{
+          label: 'MAPE',
+          data: [5, 4, 3.5, 4.2],
+          borderColor: '#ffc107',
+          fill: false,
+          tension: 0.2
+        }]
+      };
+      break;
+
+    case 'd2-3': // Bias
+      chartData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+        datasets: [{
+          label: 'Bias',
+          data: [2, -1, 0, 1],
+          backgroundColor: ['#28a745', '#dc3545', '#ffc107', '#198754']
+        }]
+      };
+      break;
+
+    case 'd2-4': // Fill Rate
+      chartData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+        datasets: [{
+          label: 'Fill Rate %',
+          data: [90, 92, 91, 93],
+          backgroundColor: '#0d6efd'
+        }]
+      };
+      break;
+
+    case 'd2-5': // Demand Risk by Period
+      chartData = {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [{
+          label: 'Risk Score',
+          data: [30, 35, 40, 25],
+          backgroundColor: ['#dc3545', '#ffc107', '#198754', '#0d6efd']
+        }]
+      };
+      break;
+
+    case 'd2-8': // Forecast vs Actual
+      chartData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+        datasets: [
+          {
+            label: 'Forecast',
+            data: [100, 110, 120, 130],
+            borderColor: '#ffc107',
+            fill: false,
+            tension: 0.2
+          },
+          {
+            label: 'Actual',
+            data: [95, 115, 118, 140],
+            borderColor: '#198754',
+            fill: false,
+            tension: 0.2
+          }
+        ]
+      };
+      break;
+
+    case 'd3-1': // Inventory Value
+      chartData = {
+        labels: ['Category A', 'Category B', 'Category C'],
+        datasets: [{
+          label: 'Value',
+          data: [150000, 90000, 50000],
+          backgroundColor: ['#0d6efd', '#198754', '#ffc107']
+        }]
+      };
+      break;
+
+    case 'd3-2': // Overstock %
+      chartData = {
+        labels: ['Overstock', 'Normal Stock', 'Understock'],
+        datasets: [{
+          data: [30, 50, 20],
+          backgroundColor: ['#dc3545', '#28a745', '#ffc107']
+        }]
+      };
+      break;
+
+    case 'd3-3': // DOI
+      chartData = {
+        labels: ['1-30 days', '31-60 days', '61-90 days', '90+ days'],
+        datasets: [{
+          label: 'Days',
+          data: [40, 30, 20, 10],
+          backgroundColor: '#0d6efd'
+        }]
+      };
+      break;
+
+    case 'd3-4': // Accuracy ≥80%
+      chartData = {
+        labels: ['≥80%', '<80%'],
+        datasets: [{
+          data: [75, 25],
+          backgroundColor: ['#198754', '#dc3545']
+        }]
+      };
+      break;
+
+    case 'd3-5': // Before vs After
+      chartData = {
+        labels: ['Before', 'After'],
+        datasets: [{
+          label: 'KPI',
+          data: [60, 80],
+          backgroundColor: ['#dc3545', '#28a745']
+        }]
+      };
+      break;
+
+    case 'd3-7': // KPI Summary
+      chartData = {
+        labels: ['Inventory', 'Turnover', 'Forecast Accuracy'],
+        datasets: [{
+          label: 'Score',
+          data: [80, 70, 90],
+          backgroundColor: ['#0d6efd', '#ffc107', '#198754']
+        }]
+      };
+      break;
+
+    case 'd3-8': // Impact Analysis
+      chartData = {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [{
+          label: 'Impact',
+          data: [15, 20, 10, 25],
+          backgroundColor: '#6f42c1'
+        }]
+      };
+      break;
+
+    default:
+      chartData = {
+        labels: [],
+        datasets: []
+      };
+  }
+
+  if(charts[cardId]) {
+    charts[cardId].data = chartData;
+    charts[cardId].update();
+  } else {
+    charts[cardId] = new Chart(ctx, {
+      type: type,
+      data: chartData,
       options: {
         responsive: true,
         plugins: {
-          legend: { display: true, position: 'bottom' },
+          legend: { position: 'bottom' },
           tooltip: { enabled: true }
-        },
-        scales: (type === 'bar' || type === 'line') ? {
-          y: { beginAtZero: true }
-        } : {}
+        }
       }
     });
   }
 }
 
-document.getElementById('dashboardSelect').addEventListener('change', e => {
-  currentDashboard = e.target.value;
-  updateDashboardContainer();
-});
-
-document.getElementById('dateSelect').addEventListener('change', e => {
-  currentDate = e.target.value;
-  updateAllVisuals();
-});
-
-document.getElementById('refreshBtn').addEventListener('click', () => {
+// Event listeners
+dashboardSelector.addEventListener('change', () => {
   loadData();
 });
 
-// โหลดข้อมูลเริ่มต้น
+dateSelector.addEventListener('change', () => {
+  updateDashboard(dateSelector.value);
+});
+
+refreshBtn.addEventListener('click', () => {
+  loadData();
+});
+
+// โหลดข้อมูลครั้งแรกเมื่อเปิดหน้าเว็บ
 loadData();
