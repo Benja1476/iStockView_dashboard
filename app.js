@@ -1,8 +1,8 @@
 /***** FILE PATHS *****/
-const dataSets={
-  1:'data_dashboard1.json',
-  2:'data_dashboard2.json',
-  3:'data_dashboard3.json'
+const dataSets = {
+  1: 'data_all_dashboards.json',
+  2: 'data_all_dashboards.json',
+  3: 'data_all_dashboards.json'
 };
 
 /***** DASHBOARD DEFINITIONS *****/
