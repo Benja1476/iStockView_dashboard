@@ -1,0 +1,22 @@
+{
+  "forecastAccuracy": {
+    "labels": ["Jan", "Feb", "Mar"],
+    "data": [85, 82, 88]
+  },
+  "mapeTrend": {
+    "labels": ["Jan", "Feb", "Mar"],
+    "data": [15, 18, 12]
+  },
+  "biasIndex": {
+    "labels": ["Jan", "Feb", "Mar"],
+    "data": [5, -3, 2]
+  },
+  "fillRate": {
+    "labels": ["Filled", "Unfilled"],
+    "data": [90, 10]
+  },
+  "demandRisk": {
+    "labels": ["High", "Medium", "Low"],
+    "data": [20, 50, 30]
+  }
+}

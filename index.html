@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>iStockView - Strategic Inventory Intelligence</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>iStockView</h1>
+    <h2>Strategic Inventory Intelligence</h2>
+  </header>
+
+  <nav>
+    <label for="dashboardSelector">เลือก Dashboard ใหญ่:</label>
+    <select id="dashboardSelector">
+      <option value="1">1️⃣ Strategic Inventory Health & Risk</option>
+      <option value="2">2️⃣ Planning Accuracy & Demand Risk</option>
+      <option value="3">3️⃣ Strategic Action & Impact (Executive Scorecard)</option>
+    </select>
+    <button id="refreshBtn">🔄 Refresh</button>
+  </nav>
+
+  <main id="dashboardContainer">
+    <!-- Dashboard ย่อยจะถูกแทรกที่นี่ -->
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

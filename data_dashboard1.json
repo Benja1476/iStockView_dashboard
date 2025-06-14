@@ -1,0 +1,30 @@
+{
+  "topInventory": [
+    {"item": "Item A", "qty": 120},
+    {"item": "Item B", "qty": 90},
+    {"item": "Item C", "qty": 80},
+    {"item": "Item D", "qty": 75},
+    {"item": "Item E", "qty": 60},
+    {"item": "Item F", "qty": 55},
+    {"item": "Item G", "qty": 50},
+    {"item": "Item H", "qty": 45},
+    {"item": "Item I", "qty": 40},
+    {"item": "Item J", "qty": 35}
+  ],
+  "abcCategory": {
+    "labels": ["A", "B", "C"],
+    "data": [60, 25, 15]
+  },
+  "doiDistribution": {
+    "labels": ["1-30", "31-60", "61-90", "90+"],
+    "data": [20, 15, 10, 5]
+  },
+  "turnoverRate": {
+    "labels": ["Jan", "Feb", "Mar"],
+    "data": [45, 50, 60]
+  },
+  "fsnCategory": {
+    "labels": ["Fast", "Slow", "Non-Moving"],
+    "data": [40, 30, 30]
+  }
+}

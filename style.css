@@ -1,0 +1,50 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 20px;
+  background-color: #f0f2f5;
+  color: #333;
+}
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+nav {
+  margin-bottom: 20px;
+  text-align: center;
+}
+select, button {
+  font-size: 1rem;
+  padding: 5px 10px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+#dashboardContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: #007bff;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+th {
+  background-color: #007bff;
+  color: white;
+}
