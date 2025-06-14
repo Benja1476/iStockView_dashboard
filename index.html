@@ -7,24 +7,25 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <h1>iStockView</h1>
-    <h2>Strategic Inventory Intelligence</h2>
-  </header>
+  <h1>iStockView</h1>
+  <h2>Strategic Inventory Intelligence</h2>
 
-  <nav>
-    <label for="dashboardSelector">เลือก Dashboard ใหญ่:</label>
-    <select id="dashboardSelector">
-      <option value="1">1️⃣ Strategic Inventory Health & Risk</option>
-      <option value="2">2️⃣ Planning Accuracy & Demand Risk</option>
-      <option value="3">3️⃣ Strategic Action & Impact (Executive Scorecard)</option>
-    </select>
+  <div class="controls">
+    <label for="bigDashboardSelect">เลือก Dashboard ใหญ่:</label>
+    <select id="bigDashboardSelect"></select>
+
+    <label for="subDashboardSelect">เลือก Dashboard ย่อย:</label>
+    <select id="subDashboardSelect"></select>
+
+    <label for="dateSelect">เลือกวันที่:</label>
+    <select id="dateSelect"></select>
+
     <button id="refreshBtn">🔄 Refresh</button>
-  </nav>
+  </div>
 
-  <main id="dashboardContainer">
-    <!-- Dashboard ย่อยจะถูกแทรกที่นี่ -->
-  </main>
+  <div id="dashboardContent">
+    <canvas id="mainChart"></canvas>
+  </div>
 
   <script src="app.js"></script>
 </body>
