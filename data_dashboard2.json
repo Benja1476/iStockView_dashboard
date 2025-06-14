@@ -1,95 +1,43 @@
 [
   {
-    "date": "2025-06",
-    "dashboardSubName": "Forecast Accuracy",
-    "chartType": "line",
-    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    "datasets": [{
-      "label": "Accuracy %",
-      "data": [75, 78, 80, 82, 85, 88],
-      "borderColor": "#198754",
-      "fill": false
-    }]
+    "date": "2025-01",
+    "week": "Week1",
+    "ForecastAccuracy": 88,
+    "MAPE": 12,
+    "Bias": "Positive",
+    "FillRate": "Complete",
+    "DemandRisk": 25,
+    "Category": "Positive"
   },
   {
-    "date": "2025-06",
-    "dashboardSubName": "MAPE",
-    "chartType": "line",
-    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    "datasets": [{
-      "label": "MAPE",
-      "data": [10, 9, 8, 7, 6, 5],
-      "borderColor": "#ffc107",
-      "fill": false
-    }]
+    "date": "2025-01",
+    "week": "Week2",
+    "ForecastAccuracy": 82,
+    "MAPE": 18,
+    "Bias": "Neutral",
+    "FillRate": "Partial",
+    "DemandRisk": 40,
+    "Category": "Neutral"
   },
   {
-    "date": "2025-06",
-    "dashboardSubName": "Bias",
-    "chartType": "line",
-    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    "datasets": [{
-      "label": "Bias",
-      "data": [2, 1.5, 1, 0.5, 0, -0.5],
-      "borderColor": "#dc3545",
-      "fill": false
-    }]
+    "date": "2025-01",
+    "week": "Week3",
+    "ForecastAccuracy": 75,
+    "MAPE": 25,
+    "Bias": "Negative",
+    "FillRate": "Fail",
+    "DemandRisk": 55,
+    "Category": "Negative"
   },
   {
-    "date": "2025-06",
-    "dashboardSubName": "Fill Rate",
-    "chartType": "bar",
-    "labels": ["Week 1", "Week 2", "Week 3", "Week 4"],
-    "datasets": [{
-      "label": "Fill %",
-      "data": [85, 87, 90, 92],
-      "backgroundColor": "#0d6efd"
-    }]
-  },
-  {
-    "date": "2025-06",
-    "dashboardSubName": "Demand Risk",
-    "chartType": "bar",
-    "labels": ["Low", "Medium", "High"],
-    "datasets": [{
-      "label": "Risk Level",
-      "data": [5, 10, 15],
-      "backgroundColor": ["#198754", "#ffc107", "#dc3545"]
-    }]
-  },
-  {
-    "date": "2025-06",
-    "dashboardSubName": "Date Slicer Example",
-    "tableHeaders": ["Date", "Forecast Accuracy", "MAPE", "Bias"],
-    "tableData": [
-      ["2025-01", 75, 10, 2],
-      ["2025-02", 78, 9, 1.5],
-      ["2025-03", 80, 8, 1],
-      ["2025-04", 82, 7, 0.5],
-      ["2025-05", 85, 6, 0],
-      ["2025-06", 88, 5, -0.5]
-    ]
-  },
-  {
-    "date": "2025-06",
-    "dashboardSubName": "Top 5 Risk Items",
-    "tableHeaders": ["Item", "Risk Score", "Recommendation"],
-    "tableData": [
-      ["Item X", 90, "ตรวจสอบแผน"],
-      ["Item Y", 80, "ปรับปรุง Forecast"],
-      ["Item Z", 75, "ติดตามใกล้ชิด"],
-      ["Item W", 70, "สำรองวัตถุดิบ"],
-      ["Item V", 65, "เพิ่ม Safety Stock"]
-    ]
-  },
-  {
-    "date": "2025-06",
-    "dashboardSubName": "Planning KPI Summary",
-    "chartType": "doughnut",
-    "labels": ["On Target", "Below Target", "Above Target"],
-    "datasets": [{
-      "data": [60, 25, 15],
-      "backgroundColor": ["#28a745", "#ffc107", "#dc3545"]
-    }]
+    "date": "2025-02",
+    "week": "Week1",
+    "ForecastAccuracy": 85,
+    "MAPE": 15,
+    "Bias": "Neutral",
+    "FillRate": "Complete",
+    "DemandRisk": 30,
+    "Category": "Neutral"
   }
+  // เพิ่มเติมตามนี้ได้เอง
 ]
