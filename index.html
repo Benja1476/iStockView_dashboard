@@ -8,27 +8,26 @@
 </head>
 <body>
   <header>
-    <h1>iStockView</h1>
-    <h2>Strategic Inventory Intelligence</h2>
+    <h1>iStockView - Strategic Inventory Intelligence</h1>
   </header>
 
   <section class="controls">
-    <label for="dashboardSelect">เลือก Dashboard ใหญ่:</label>
-    <select id="dashboardSelect">
+    <label for="dashboardSelector">เลือก Dashboard ใหญ่:</label>
+    <select id="dashboardSelector">
       <option value="1">1️⃣ Strategic Inventory Health & Risk</option>
       <option value="2">2️⃣ Planning Accuracy & Demand Risk</option>
       <option value="3">3️⃣ Strategic Action & Impact</option>
     </select>
 
-    <label for="dateSelect">เลือกวันที่ (เดือน):</label>
-    <select id="dateSelect"></select>
+    <label for="dateSelector">เลือกวันที่:</label>
+    <select id="dateSelector"></select>
 
     <button id="refreshBtn">🔄 Refresh</button>
   </section>
 
-  <section id="dashboardContainer">
-    <!-- Dashboard ย่อยจะแสดงที่นี่ -->
-  </section>
+  <main id="dashboardContainer">
+    <!-- Dashboard ย่อยจะถูกเติมด้วย JS -->
+  </main>
 
   <script src="app.js"></script>
 </body>
