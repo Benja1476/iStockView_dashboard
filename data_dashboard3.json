@@ -1,23 +1,172 @@
 {
-  "inventoryValue": {
-    "labels": ["Q1", "Q2", "Q3", "Q4"],
-    "data": [100000, 120000, 115000, 110000]
-  },
-  "overstockPercent": {
-    "labels": ["Q1", "Q2", "Q3", "Q4"],
-    "data": [15, 20, 18, 16]
-  },
-  "doiScore": {
-    "labels": ["Q1", "Q2", "Q3", "Q4"],
-    "data": [30, 28, 32, 31]
-  },
-  "accuracyKPI": {
-    "labels": ["≥80%", "<80%"],
-    "data": [75, 25]
-  },
-  "actionLog": [
-    {"date": "2025-01-01", "action": "Optimize reorder point", "impact": "Reduced stockout by 10%"},
-    {"date": "2025-02-15", "action": "Increase safety stock", "impact": "Reduced stockout by 5%"},
-    {"date": "2025-03-10", "action": "Remove slow movers", "impact": "Reduced carrying cost by 7%"}
+  "subDashboards": [
+    {
+      "name": "Inventory Value",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Item A", "qty": 50000},
+            {"item": "Item B", "qty": 30000},
+            {"item": "Item C", "qty": 20000}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Item A", "qty": 52000},
+            {"item": "Item B", "qty": 31000},
+            {"item": "Item C", "qty": 19000}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Overstock %",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Category A", "qty": 10},
+            {"item": "Category B", "qty": 20},
+            {"item": "Category C", "qty": 30}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Category A", "qty": 12},
+            {"item": "Category B", "qty": 18},
+            {"item": "Category C", "qty": 28}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cycle Time",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Process 1", "qty": 4.2},
+            {"item": "Process 2", "qty": 3.8},
+            {"item": "Process 3", "qty": 5.1}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Process 1", "qty": 4.0},
+            {"item": "Process 2", "qty": 3.7},
+            {"item": "Process 3", "qty": 5.0}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cost per Unit",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Item A", "qty": 1.5},
+            {"item": "Item B", "qty": 2.0},
+            {"item": "Item C", "qty": 1.8}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Item A", "qty": 1.4},
+            {"item": "Item B", "qty": 1.9},
+            {"item": "Item C", "qty": 1.7}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Supplier Lead Time",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Supplier A", "qty": 7},
+            {"item": "Supplier B", "qty": 9},
+            {"item": "Supplier C", "qty": 6}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Supplier A", "qty": 6},
+            {"item": "Supplier B", "qty": 8},
+            {"item": "Supplier C", "qty": 7}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Quality Rate",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Line 1", "qty": 98.5},
+            {"item": "Line 2", "qty": 97.0},
+            {"item": "Line 3", "qty": 99.2}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Line 1", "qty": 98.8},
+            {"item": "Line 2", "qty": 96.5},
+            {"item": "Line 3", "qty": 99.0}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Safety Stock %",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Item A", "qty": 15},
+            {"item": "Item B", "qty": 18},
+            {"item": "Item C", "qty": 12}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Item A", "qty": 14},
+            {"item": "Item B", "qty": 20},
+            {"item": "Item C", "qty": 11}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Overall Score",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Site A", "qty": 88},
+            {"item": "Site B", "qty": 79},
+            {"item": "Site C", "qty": 85}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Site A", "qty": 90},
+            {"item": "Site B", "qty": 80},
+            {"item": "Site C", "qty": 87}
+          ]
+        }
+      ]
+    }
   ]
 }
