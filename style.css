@@ -1,66 +1,101 @@
-/* General Layout */
 body {
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
-  padding: 0;
+  padding: 1rem;
   background-color: #f9fafb;
   color: #111827;
 }
 
-/* Card Styling */
-.card {
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  transition: transform 0.2s ease-in-out;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-}
-
-/* Card Header */
-.card-header {
+h1 {
+  text-align: center;
   margin-bottom: 1rem;
-}
-
-.card-title {
-  font-size: 1.25rem;
-  font-weight: 600;
   color: #1f2937;
 }
 
-/* Dashboard Grid Layout */
-.dashboard-container {
-  display: grid;
-  gap: 1.5rem;
-  padding: 2rem;
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
-@media (min-width: 768px) {
-  .dashboard-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1280px) {
-  .dashboard-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* Tooltip Style Override (Recharts default) */
-.recharts-tooltip-wrapper {
-  font-size: 0.875rem;
-  background-color: white;
-  padding: 0.5rem;
+select, button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
   border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  color: #111827;
+  background-color: white;
 }
 
-/* Responsive Container */
-.recharts-responsive-container {
-  margin-top: 1rem;
+button {
+  background-color: #3b82f6;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
+button:hover {
+  background-color: #2563eb;
+}
+
+/* Dashboard Container */
+#dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* Card */
+.card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+th, td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 300px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .controls {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
