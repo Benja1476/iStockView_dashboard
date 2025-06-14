@@ -1,149 +1,156 @@
-const dashboardFiles = {
-  health_risk: 'data/health_risk.json',
-  planning_accuracy: 'data/planning_accuracy.json',
-  strategic_action: 'data/strategic_action.json'
+// app.js
+
+// ตัวแปรเก็บข้อมูลจำลอง (จริงๆ โหลดจากไฟล์ JSON ได้)
+const dashboards = {
+  "2025-05": [
+    {
+      dashboardSubName: "Forecast Accuracy",
+      chartType: "line",
+      labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5"],
+      datasets: [
+        {
+          label: "Accuracy %",
+          data: [85, 87, 90, 88, 92],
+          borderColor: "rgba(75, 192, 192, 1)",
+          fill: false,
+        },
+      ],
+      tableHeaders: ["Date", "Status", "Change"],
+      tableData: [
+        ["2025-05-01", "ปรับ Safety Stock", "เสร็จสิ้น +5% Accuracy"],
+        ["2025-05-15", "ปรับแผนจัดซื้อ", "ระหว่างดำเนินการ -10% Overstock"],
+        ["2025-06-01", "วิเคราะห์ Risk", "รอดำเนินการ Pending"],
+      ],
+    },
+  ],
+  "2025-06": [
+    {
+      dashboardSubName: "Top Improvement Items",
+      tableHeaders: ["Item", "Impact", "Priority"],
+      tableData: [
+        ["Item A", "+10% Accuracy", "High"],
+        ["Item B", "-5% Overstock", "Medium"],
+        ["Item C", "+3% Fill Rate", "Low"],
+      ],
+    },
+    {
+      dashboardSubName: "Risk vs Action Correlation",
+      chartType: "scatter",
+      datasets: [
+        {
+          label: "Items",
+          data: [
+            { x: 90, y: 5 },
+            { x: 75, y: 10 },
+            { x: 60, y: 15 },
+            { x: 45, y: 20 },
+          ],
+          backgroundColor: "#007bff",
+        },
+      ],
+    },
+  ],
 };
 
-let rawData = [];
-let charts = {};
-const dashboardContainer = document.getElementById('dashboardContainer');
-const dashboardSelect = document.getElementById('dashboardSelect');
-const dateSelect = document.getElementById('dateSelect');
-const refreshBtn = document.getElementById('refreshBtn');
+// ดึง element
+const dashboardSelect = document.getElementById("dashboardSelect");
+const dateSelect = document.getElementById("dateSelect");
+const dashboardContainer = document.getElementById("dashboardContainer");
 
-async function loadData() {
-  const dashboardKey = dashboardSelect.value;
-  const url = dashboardFiles[dashboardKey];
-
-  try {
-    const res = await fetch(url);
-    rawData = await res.json();
-
-    // ดึงวันที่ไม่ซ้ำ
-    const dates = [...new Set(rawData.map(d => d.date))].sort();
-
-    // เติม selector วันที่
-    dateSelect.innerHTML = '';
-    dates.forEach(d => {
-      const opt = document.createElement('option');
-      opt.value = d;
-      opt.textContent = d;
-      dateSelect.appendChild(opt);
-    });
-
-    // เลือกวันที่แรกถ้ายังไม่เลือก
-    if (!dateSelect.value && dates.length > 0) {
-      dateSelect.value = dates[0];
-    }
-
-    updateDashboard();
-
-  } catch (err) {
-    console.error('โหลดข้อมูลล้มเหลว:', err);
-    dashboardContainer.innerHTML = `<p style="color:red;">โหลดข้อมูลล้มเหลว: ${err.message}</p>`;
-  }
+// โหลด dropdown วันที่
+function loadDates() {
+  Object.keys(dashboards).forEach((date) => {
+    const option = document.createElement("option");
+    option.value = date;
+    option.textContent = date;
+    dateSelect.appendChild(option);
+  });
 }
 
-function updateDashboard() {
-  const selectedDate = dateSelect.value;
+// โหลด dashboard ตามวันที่เลือก
+function loadDashboard(date) {
+  dashboardContainer.innerHTML = "";
+  if (!date || !dashboards[date]) return;
 
-  // กรองข้อมูลตามวันที่
-  const dataByDate = rawData.filter(d => d.date === selectedDate);
+  dashboards[date].forEach((dash, index) => {
+    // สร้างกล่อง Dashboard ย่อย
+    const dashBox = document.createElement("div");
+    dashBox.className = "dashboard-sub";
 
-  // เคลียร์ของเดิม
-  dashboardContainer.innerHTML = '';
-  charts = {}; // reset charts
+    // ชื่อ dashboard ย่อย
+    const title = document.createElement("h3");
+    title.textContent = dash.dashboardSubName;
+    dashBox.appendChild(title);
 
-  // ดึง list dashboard ย่อยจากข้อมูล (สมมติแต่ละ record มี dashboardName)
-  // โดยกลุ่ม dashboard ย่อยที่กำหนดชื่อ (hardcoded) 8 ตัว ต่อแต่ละ Dashboard ใหญ่
-  // ในตัวอย่างนี้สมมติว่า rawData มีฟิลด์ dashboardSubName, title, และ data สำหรับแต่ละ dashboard ย่อย
+    // ถ้ามี chartType สร้าง canvas
+    if (dash.chartType) {
+      const canvas = document.createElement("canvas");
+      canvas.id = `chart-${date}-${index}`;
+      dashBox.appendChild(canvas);
 
-  // group by dashboardSubName
-  const grouped = dataByDate.reduce((acc, cur) => {
-    if (!acc[cur.dashboardSubName]) acc[cur.dashboardSubName] = [];
-    acc[cur.dashboardSubName].push(cur);
-    return acc;
-  }, {});
-
-  // สร้าง dashboard ย่อย ตามกลุ่ม
-  for (const subName in grouped) {
-    const groupData = grouped[subName];
-
-    const card = document.createElement('div');
-    card.className = 'card';
-
-    const title = document.createElement('h3');
-    title.textContent = subName;
-    card.appendChild(title);
-
-    // สมมติข้อมูลในแต่ละกลุ่มเป็น array ที่มี fields ต่างๆ
-    // เช่น มี type chart หรือ table
-
-    // แสดงเป็นกราฟถ้ามี field chartType
-    if (groupData[0].chartType) {
-      const canvas = document.createElement('canvas');
-      canvas.id = `chart_${subName.replace(/\s/g, '_')}`;
-      card.appendChild(canvas);
-
-      const chartData = {
-        labels: groupData[0].labels,
-        datasets: groupData[0].datasets
-      };
-
-      const type = groupData[0].chartType;
-
-      charts[canvas.id] = new Chart(canvas, {
-        type: type,
-        data: chartData,
+      // สร้าง chart ด้วย Chart.js
+      const ctx = canvas.getContext("2d");
+      new Chart(ctx, {
+        type: dash.chartType,
+        data: {
+          labels: dash.labels || [],
+          datasets: dash.datasets,
+        },
         options: {
           responsive: true,
-          plugins: {
-            legend: { display: true, position: 'bottom' },
-            tooltip: { enabled: true }
-          }
-        }
+          scales: {
+            x: dash.chartType === "scatter" ? { type: "linear", position: "bottom" } : {},
+          },
+        },
       });
-
-    } else {
-      // แสดงเป็นตาราง (สมมติ field tableHeaders, tableData)
-      if (groupData[0].tableHeaders && groupData[0].tableData) {
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        const tbody = document.createElement('tbody');
-
-        // สร้าง header
-        const trHead = document.createElement('tr');
-        groupData[0].tableHeaders.forEach(h => {
-          const th = document.createElement('th');
-          th.textContent = h;
-          trHead.appendChild(th);
-        });
-        thead.appendChild(trHead);
-
-        // สร้าง body
-        groupData[0].tableData.forEach(row => {
-          const tr = document.createElement('tr');
-          row.forEach(cell => {
-            const td = document.createElement('td');
-            td.textContent = cell;
-            tr.appendChild(td);
-          });
-          tbody.appendChild(tr);
-        });
-
-        table.appendChild(thead);
-        table.appendChild(tbody);
-        card.appendChild(table);
-      }
     }
 
-    dashboardContainer.appendChild(card);
-  }
+    // ถ้ามี tableData สร้างตาราง
+    if (dash.tableData) {
+      const table = document.createElement("table");
+      table.className = "data-table";
+
+      // header
+      const thead = document.createElement("thead");
+      const trHead = document.createElement("tr");
+      dash.tableHeaders.forEach((header) => {
+        const th = document.createElement("th");
+        th.textContent = header;
+        trHead.appendChild(th);
+      });
+      thead.appendChild(trHead);
+      table.appendChild(thead);
+
+      // body
+      const tbody = document.createElement("tbody");
+      dash.tableData.forEach((row) => {
+        const tr = document.createElement("tr");
+        row.forEach((cell) => {
+          const td = document.createElement("td");
+          td.textContent = cell;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+
+      dashBox.appendChild(table);
+    }
+
+    dashboardContainer.appendChild(dashBox);
+  });
 }
 
-dashboardSelect.addEventListener('change', loadData);
-dateSelect.addEventListener('change', updateDashboard);
-refreshBtn.addEventListener('click', loadData);
+// Event change วันที่
+dateSelect.addEventListener("change", (e) => {
+  loadDashboard(e.target.value);
+});
 
-// โหลดครั้งแรก
-loadData();
+// เริ่มต้นโหลดวันที่
+loadDates();
+
+// โหลด Dashboard วันที่แรกอัตโนมัติ
+if (dateSelect.options.length > 0) {
+  dateSelect.selectedIndex = 0;
+  loadDashboard(dateSelect.value);
+}
