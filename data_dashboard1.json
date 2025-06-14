@@ -1,30 +1,174 @@
 {
-  "topInventory": [
-    {"item": "Item A", "qty": 120},
-    {"item": "Item B", "qty": 90},
-    {"item": "Item C", "qty": 80},
-    {"item": "Item D", "qty": 75},
-    {"item": "Item E", "qty": 60},
-    {"item": "Item F", "qty": 55},
-    {"item": "Item G", "qty": 50},
-    {"item": "Item H", "qty": 45},
-    {"item": "Item I", "qty": 40},
-    {"item": "Item J", "qty": 35}
-  ],
-  "abcCategory": {
-    "labels": ["A", "B", "C"],
-    "data": [60, 25, 15]
-  },
-  "doiDistribution": {
-    "labels": ["1-30", "31-60", "61-90", "90+"],
-    "data": [20, 15, 10, 5]
-  },
-  "turnoverRate": {
-    "labels": ["Jan", "Feb", "Mar"],
-    "data": [45, 50, 60]
-  },
-  "fsnCategory": {
-    "labels": ["Fast", "Slow", "Non-Moving"],
-    "data": [40, 30, 30]
-  }
+  "subDashboards": [
+    {
+      "name": "Inventory Overview",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Item A", "qty": 120, "action": "Order"},
+            {"item": "Item B", "qty": 90, "action": "Hold"},
+            {"item": "Item C", "qty": 60, "action": "Order"}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Item A", "qty": 110, "action": "Order"},
+            {"item": "Item B", "qty": 85, "action": "Hold"},
+            {"item": "Item C", "qty": 75, "action": "Order"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ABC Analysis",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "A Category", "qty": 60},
+            {"item": "B Category", "qty": 25},
+            {"item": "C Category", "qty": 15}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "A Category", "qty": 65},
+            {"item": "B Category", "qty": 20},
+            {"item": "C Category", "qty": 15}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FSN Analysis",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Fast", "qty": 40},
+            {"item": "Slow", "qty": 35},
+            {"item": "Non-Moving", "qty": 25}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Fast", "qty": 45},
+            {"item": "Slow", "qty": 30},
+            {"item": "Non-Moving", "qty": 25}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Turnover Rate",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "January", "qty": 50},
+            {"item": "February", "qty": 55},
+            {"item": "March", "qty": 60}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "January", "qty": 52},
+            {"item": "February", "qty": 54},
+            {"item": "March", "qty": 61}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Days of Inventory (DOI)",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "1-30", "qty": 25},
+            {"item": "31-60", "qty": 30},
+            {"item": "61-90", "qty": 20},
+            {"item": "90+", "qty": 15}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "1-30", "qty": 20},
+            {"item": "31-60", "qty": 32},
+            {"item": "61-90", "qty": 22},
+            {"item": "90+", "qty": 16}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Composite Risk Score",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Item A", "qty": 80},
+            {"item": "Item B", "qty": 60},
+            {"item": "Item C", "qty": 40}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Item A", "qty": 78},
+            {"item": "Item B", "qty": 65},
+            {"item": "Item C", "qty": 42}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Urgency Level",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Order Now", "qty": 50},
+            {"item": "Monitor", "qty": 30},
+            {"item": "Hold", "qty": 20}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Order Now", "qty": 45},
+            {"item": "Monitor", "qty": 35},
+            {"item": "Hold", "qty": 20}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Strategic Recommendations",
+      "dates": [
+        {
+          "date": "2025-01",
+          "data": [
+            {"item": "Item A", "qty": 120, "action": "Order"},
+            {"item": "Item B", "qty": 90, "action": "Hold"},
+            {"item": "Item C", "qty": 60, "action": "Order"}
+          ]
+        },
+        {
+          "date": "2025-02",
+          "data": [
+            {"item": "Item A", "qty": 110, "action": "Order"},
+            {"item": "Item B", "qty": 85, "action": "Hold"},
+            {"item": "Item C", "qty": 75, "action": "Order"}
+          ]
+        }
+      ]
+    }
+  ]
 }
