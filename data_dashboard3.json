@@ -1,63 +1,22 @@
 [
   {
-    "date": "2025-06-01",
+    "date": "2025-06",
     "kpi": "Inventory Value",
     "before": 1500000,
     "after": 1300000,
     "change_percent": -13.3,
-    "target_met": true,
-    "notes": "ลดสินค้าคงคลังส่วนเกินได้ดี"
-  },
-  {
-    "date": "2025-06-01",
-    "kpi": "Overstock %",
-    "before": 20,
-    "after": 15,
-    "change_percent": -25,
-    "target_met": true,
-    "notes": "บริหารสินค้าคงคลังได้มีประสิทธิภาพขึ้น"
-  },
-  {
-    "date": "2025-06-01",
-    "kpi": "DOI (Days of Inventory)",
-    "before": 45,
-    "after": 38,
-    "change_percent": -15.6,
-    "target_met": true,
-    "notes": "ลดระยะเวลาคงคลังได้ตามเป้า"
-  },
-  {
-    "date": "2025-06-01",
-    "kpi": "Forecast Accuracy ≥80%",
-    "before": 70,
-    "after": 82,
-    "change_percent": 17.1,
-    "target_met": true,
-    "notes": "ปรับปรุงความแม่นยำของพยากรณ์"
-  },
-  {
-    "date": "2025-06-01",
+    "owner": "Ops",
+    "deadline": "2025-09-30",
     "action_log": [
       {
-        "action_date": "2025-05-15",
-        "action": "ปรับปรุงระบบจัดซื้อ",
-        "responsible": "ฝ่ายจัดซื้อ",
+        "action": "ลดสต็อก SKU005",
         "status": "Completed",
         "impact": "ลดทุนจม 10%"
       },
       {
-        "action_date": "2025-05-20",
-        "action": "ตรวจสอบสต็อกเก่า",
-        "responsible": "ฝ่ายคลังสินค้า",
-        "status": "In Progress",
-        "impact": "คาดว่าลด DOI ได้ 5 วัน"
-      },
-      {
-        "action_date": "2025-05-25",
-        "action": "อบรมทีมวางแผน",
-        "responsible": "ฝ่ายวางแผน",
-        "status": "Completed",
-        "impact": "เพิ่มความแม่นยำ Forecast 5%"
+        "action": "ปรับ Forecast SKU010",
+        "status": "In Progress",
+        "impact": "เพิ่ม Accuracy 5%"
       }
     ]
   }
