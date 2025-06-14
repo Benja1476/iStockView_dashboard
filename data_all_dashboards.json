@@ -11,12 +11,6 @@
       "item": "B2",
       "qty": 80,
       "recommendation": "เพิ่มคำสั่งซื้อ"
-    },
-    {
-      "date": "2025-06-12",
-      "item": "C3",
-      "qty": 60,
-      "recommendation": "ระบายสินค้า"
     }
   ],
   "2": [
@@ -31,12 +25,6 @@
       "accuracy": 88,
       "mape": 4,
       "bias": -1
-    },
-    {
-      "date": "2025-06-12",
-      "accuracy": 90,
-      "mape": 3,
-      "bias": 0
     }
   ],
   "3": [
@@ -51,12 +39,6 @@
       "value": 48000,
       "impact": 22,
       "action": "Improve Forecast"
-    },
-    {
-      "date": "2025-06-12",
-      "value": 47000,
-      "impact": 25,
-      "action": "Switch Vendor"
     }
   ]
 }
