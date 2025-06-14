@@ -1,239 +1,195 @@
+const dashboardGrid = document.getElementById('dashboardGrid');
 let dashboardData = null;
-const dashboardSelect = document.getElementById('dashboardSelect');
-const dateSelect = document.getElementById('dateSelect');
-const dashboardContainer = document.getElementById('dashboardContainer');
-const dashboardTitle = document.getElementById('dashboardTitle');
-const tableHead = document.getElementById('tableHead');
-const tableBody = document.getElementById('tableBody');
-const chartCanvas = document.getElementById('chartCanvas').getContext('2d');
-
-let currentChart = null;
+let charts = [];
 
 async function loadData() {
   try {
     const res = await fetch('data_all_dashboards.json');
     dashboardData = await res.json();
-    populateDates();
-    renderDashboard();
+    renderAllDashboards();
   } catch (err) {
-    dashboardContainer.innerHTML = `<p style="color:#f55;">Error loading data: ${err}</p>`;
+    dashboardGrid.innerHTML = `<p style="color:#f55;">Error loading data: ${err}</p>`;
   }
 }
 
-function populateDates() {
-  dateSelect.innerHTML = '';
+function clearCharts() {
+  charts.forEach(c => c.destroy());
+  charts = [];
+}
+
+function renderAllDashboards() {
   if (!dashboardData) return;
-  const selectedDashboard = dashboardSelect.value;
-  const datesSet = new Set(dashboardData[selectedDashboard].map(d => d.date));
-  const dates = Array.from(datesSet).sort();
+  clearCharts();
+  dashboardGrid.innerHTML = '';
 
-  for (const d of dates) {
-    const opt = document.createElement('option');
-    opt.value = d;
-    opt.textContent = d;
-    dateSelect.appendChild(opt);
-  }
-}
+  // สมมติ dashboardData เป็น object เช่น "1", "2", ... "9"
+  const keys = Object.keys(dashboardData).slice(0, 9); // 9 dashboard ย่อย
 
-function clearTable() {
-  tableHead.innerHTML = '';
-  tableBody.innerHTML = '';
-}
+  keys.forEach((dashId, i) => {
+    const container = document.createElement('section');
+    container.classList.add('dashboard-tile');
 
-function createTableHeaders(columns) {
-  const tr = document.createElement('tr');
-  for (const col of columns) {
-    const th = document.createElement('th');
-    th.textContent = col;
-    tr.appendChild(th);
-  }
-  tableHead.appendChild(tr);
-}
+    // ชื่อ dashboard
+    const title = document.createElement('h3');
+    title.textContent = `Dashboard ${dashId}`;
+    container.appendChild(title);
 
-function createTableRows(data, columns) {
-  data.forEach(row => {
-    const tr = document.createElement('tr');
-    for (const col of columns) {
-      const td = document.createElement('td');
-      td.textContent = row[col.toLowerCase()] ?? ''; // map lowercase keys
-      tr.appendChild(td);
-    }
-    tableBody.appendChild(tr);
+    // canvas for chart
+    const canvas = document.createElement('canvas');
+    canvas.id = `chart${dashId}`;
+    container.appendChild(canvas);
+
+    // table container
+    const tableContainer = document.createElement('div');
+    tableContainer.classList.add('table-container');
+    const table = document.createElement('table');
+    table.id = `table${dashId}`;
+
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    tableContainer.appendChild(table);
+    container.appendChild(tableContainer);
+
+    dashboardGrid.appendChild(container);
+
+    renderSingleDashboard(dashId, dashboardData[dashId], canvas, thead, tbody);
   });
 }
 
-function renderDashboard() {
-  if (!dashboardData) return;
+function renderSingleDashboard(dashId, data, canvas, thead, tbody) {
+  if (!data || data.length === 0) return;
 
-  const dashId = dashboardSelect.value;
-  const selectedDate = dateSelect.value;
-  const data = dashboardData[dashId].filter(d => d.date === selectedDate);
+  // สร้างหัวตารางจากคีย์ข้อมูลของ object ตัวแรก
+  const cols = Object.keys(data[0]).filter(k => k !== 'date');
 
-  // Clear old chart
-  if (currentChart) {
-    currentChart.destroy();
-    currentChart = null;
-  }
+  const trHead = document.createElement('tr');
+  cols.forEach(c => {
+    const th = document.createElement('th');
+    th.textContent = c.charAt(0).toUpperCase() + c.slice(1);
+    trHead.appendChild(th);
+  });
+  thead.appendChild(trHead);
 
-  clearTable();
+  // เพิ่มแถวข้อมูล
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+    cols.forEach(c => {
+      const td = document.createElement('td');
+      td.textContent = row[c];
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+
+  // สร้างกราฟแบบง่าย โดยดู dashboardId
+  let chartType = 'bar';
+  let labels = data.map(d => d.date);
+  let datasets = [];
 
   if (dashId === '1') {
-    dashboardTitle.textContent = 'Strategic Inventory Health & Risk';
-
-    createTableHeaders(['Item', 'Qty', 'Recommendation']);
-    createTableRows(data, ['Item', 'Qty', 'Recommendation']);
-
-    currentChart = new Chart(chartCanvas, {
-      type: 'bar',
-      data: {
-        labels: data.map(r => r.item),
-        datasets: [{
-          label: 'Quantity',
-          data: data.map(r => r.qty),
-          backgroundColor: 'rgba(76, 175, 80, 0.7)',
-          borderColor: 'rgba(76, 175, 80, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        interaction: {
-          mode: 'nearest',
-          axis: 'x',
-          intersect: false,
-        },
-        scales: {
-          y: { beginAtZero: true, ticks: { color: '#a8d5a2' } },
-          x: { ticks: { color: '#a8d5a2' } }
-        },
-        plugins: {
-          legend: { labels: { color: '#a8d5a2' } },
-          tooltip: { enabled: true }
-        }
-      }
-    });
-
+    // ใช้ qty กับ item แสดง bar chart
+    chartType = 'bar';
+    labels = data.map(d => d.item || d.date);
+    datasets = [{
+      label: 'Quantity',
+      data: data.map(d => d.qty || 0),
+      backgroundColor: 'rgba(76, 175, 80, 0.7)',
+      borderColor: 'rgba(76, 175, 80, 1)',
+      borderWidth: 1
+    }];
   } else if (dashId === '2') {
-    dashboardTitle.textContent = 'Planning Accuracy & Demand Risk';
-
-    createTableHeaders(['Accuracy', 'MAPE', 'Bias']);
-    createTableRows(data, ['Accuracy', 'MAPE', 'Bias']);
-
-    currentChart = new Chart(chartCanvas, {
-      type: 'line',
-      data: {
-        labels: data.map((_, i) => `Entry ${i + 1}`),
-        datasets: [
-          {
-            label: 'Accuracy (%)',
-            data: data.map(r => r.accuracy),
-            borderColor: 'rgba(76, 175, 80, 1)',
-            backgroundColor: 'rgba(76, 175, 80, 0.2)',
-            fill: false,
-            tension: 0.3
-          },
-          {
-            label: 'MAPE',
-            data: data.map(r => r.mape),
-            borderColor: 'rgba(255, 193, 7, 1)',
-            backgroundColor: 'rgba(255, 193, 7, 0.2)',
-            fill: false,
-            tension: 0.3
-          },
-          {
-            label: 'Bias',
-            data: data.map(r => r.bias),
-            borderColor: 'rgba(244, 67, 54, 1)',
-            backgroundColor: 'rgba(244, 67, 54, 0.2)',
-            fill: false,
-            tension: 0.3
-          }
-        ]
+    chartType = 'line';
+    datasets = [
+      {
+        label: 'Accuracy',
+        data: data.map(d => d.accuracy || 0),
+        borderColor: 'rgba(76, 175, 80, 1)',
+        backgroundColor: 'rgba(76, 175, 80, 0.2)',
+        fill: false,
+        tension: 0.3
       },
-      options: {
-        responsive: true,
-        interaction: {
-          mode: 'nearest',
-          axis: 'x',
-          intersect: false,
-        },
-        scales: {
-          y: { beginAtZero: true, ticks: { color: '#a8d5a2' } },
-          x: { ticks: { color: '#a8d5a2' } }
-        },
-        plugins: {
-          legend: {
-            display: true,
-            labels: { color: '#a8d5a2' },
-            onClick: (e, legendItem, legend) => {
-              const index = legendItem.datasetIndex;
-              const ci = legend.chart;
-              const meta = ci.getDatasetMeta(index);
-              meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
-              ci.update();
-            }
-          },
-          tooltip: { enabled: true }
-        }
+      {
+        label: 'MAPE',
+        data: data.map(d => d.mape || 0),
+        borderColor: 'rgba(255, 193, 7, 1)',
+        backgroundColor: 'rgba(255, 193, 7, 0.2)',
+        fill: false,
+        tension: 0.3
+      },
+      {
+        label: 'Bias',
+        data: data.map(d => d.bias || 0),
+        borderColor: 'rgba(244, 67, 54, 1)',
+        backgroundColor: 'rgba(244, 67, 54, 0.2)',
+        fill: false,
+        tension: 0.3
       }
-    });
-
+    ];
   } else if (dashId === '3') {
-    dashboardTitle.textContent = 'Strategic Action & Impact';
-
-    createTableHeaders(['Value', 'Impact', 'Action']);
-    createTableRows(data, ['Value', 'Impact', 'Action']);
-
-    // Pie chart data aggregation by Action
-    const impactMap = {};
-    data.forEach(r => {
-      impactMap[r.action] = (impactMap[r.action] || 0) + r.impact;
+    chartType = 'pie';
+    // รวม impact ตาม action
+    let impactMap = {};
+    data.forEach(d => {
+      if (d.action) impactMap[d.action] = (impactMap[d.action] || 0) + (d.impact || 0);
     });
-
-    currentChart = new Chart(chartCanvas, {
-      type: 'pie',
-      data: {
-        labels: Object.keys(impactMap),
-        datasets: [{
-          label: 'Impact',
-          data: Object.values(impactMap),
-          backgroundColor: [
-            'rgba(76, 175, 80, 0.7)',
-            'rgba(255, 193, 7, 0.7)',
-            'rgba(244, 67, 54, 0.7)',
-            'rgba(33, 150, 243, 0.7)',
-            'rgba(156, 39, 176, 0.7)'
-          ],
-          borderColor: '#1e1e2f',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'right',
-            labels: { color: '#a8d5a2' },
-            onClick: (e, legendItem, legend) => {
-              const index = legendItem.index;
-              const ci = legend.chart;
-              const meta = ci.getDatasetMeta(0);
-              meta.data[index].hidden = !meta.data[index].hidden;
-              ci.update();
-            }
-          },
-          tooltip: { enabled: true }
-        }
-      }
-    });
+    labels = Object.keys(impactMap);
+    datasets = [{
+      label: 'Impact',
+      data: Object.values(impactMap),
+      backgroundColor: [
+        'rgba(76, 175, 80, 0.7)',
+        'rgba(255, 193, 7, 0.7)',
+        'rgba(244, 67, 54, 0.7)',
+        'rgba(33, 150, 243, 0.7)',
+        'rgba(156, 39, 176, 0.7)'
+      ],
+      borderColor: '#1e1e2f',
+      borderWidth: 2
+    }];
+  } else {
+    // ถ้า dashId อื่นๆ ใช้ bar chart คอลัมน์ตัวแรกที่ไม่ใช่ date
+    chartType = 'bar';
+    const firstKey = Object.keys(data[0]).find(k => k !== 'date');
+    labels = data.map(d => d.date);
+    datasets = [{
+      label: firstKey.charAt(0).toUpperCase() + firstKey.slice(1),
+      data: data.map(d => d[firstKey] || 0),
+      backgroundColor: 'rgba(76, 175, 80, 0.7)',
+      borderColor: 'rgba(76, 175, 80, 1)',
+      borderWidth: 1
+    }];
   }
-}
 
-// Event listeners เปลี่ยนตัวเลือกให้แสดงข้อมูลทันที (interactive)
-dashboardSelect.addEventListener('change', () => {
-  populateDates();
-  renderDashboard();
-});
-dateSelect.addEventListener('change', () => renderDashboard());
+  // สร้าง Chart.js
+  const ctx = canvas.getContext('2d');
+  const chart = new Chart(ctx, {
+    type: chartType,
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          labels: { color: '#a8d5a2' },
+          onClick: (e, legendItem, legend) => {
+            const index = legendItem.datasetIndex;
+            const ci = legend.chart;
+            const meta = ci.getDatasetMeta(index);
+            meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
+            ci.update();
+          }
+        },
+        tooltip: { enabled: true }
+      },
+      scales: chartType !== 'pie' ? {
+        x: { ticks: { color: '#a8d5a2' } },
+        y: { ticks: { color: '#a8d5a2' }, beginAtZero: true }
+      } : {}
+    }
+  });
+
+  charts.push(chart);
+}
 
 loadData();
