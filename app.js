@@ -1,5 +1,5 @@
 let charts = {};
-let rawData = [];
+let rawData = {};
 const dashboardContainer = document.getElementById('dashboardContainer');
 const dashboardSelector = document.getElementById('dashboardSelector');
 const refreshBtn = document.getElementById('refreshBtn');
@@ -7,7 +7,6 @@ const refreshBtn = document.getElementById('refreshBtn');
 const DASHBOARDS = {
   1: {
     name: "Strategic Inventory Health & Risk",
-    jsonFile: "data_dashboard1.json",
     subDashboards: [
       { id: "topInventory", title: "Top 10 Inventory", type: "table" },
       { id: "abcCategory", title: "ABC Category", type: "doughnut" },
@@ -18,7 +17,6 @@ const DASHBOARDS = {
   },
   2: {
     name: "Planning Accuracy & Demand Risk",
-    jsonFile: "data_dashboard2.json",
     subDashboards: [
       { id: "forecastAccuracy", title: "Forecast Accuracy", type: "line" },
       { id: "mapeTrend", title: "MAPE Trend", type: "bar" },
@@ -29,7 +27,6 @@ const DASHBOARDS = {
   },
   3: {
     name: "Strategic Action & Impact (Executive Scorecard)",
-    jsonFile: "data_dashboard3.json",
     subDashboards: [
       { id: "inventoryValue", title: "Inventory Value", type: "line" },
       { id: "overstockPercent", title: "Overstock %", type: "bar" },
@@ -44,6 +41,7 @@ function createCard(subDash) {
   const card = document.createElement('div');
   card.className = 'card';
   card.id = subDash.id;
+
   const title = document.createElement('h3');
   title.textContent = subDash.title;
   card.appendChild(title);
@@ -69,26 +67,29 @@ function clearDashboard() {
 async function loadDashboard(dashboardId) {
   clearDashboard();
   const dashInfo = DASHBOARDS[dashboardId];
+
   // สร้าง card ทั้งหมด
   dashInfo.subDashboards.forEach(subDash => {
     dashboardContainer.appendChild(createCard(subDash));
   });
 
-  // โหลดข้อมูล JSON
-  const res = await fetch(dashInfo.jsonFile);
+  // โหลดข้อมูล JSON ทั้งหมด
+  const res = await fetch('data_all_dashboards.json');
   rawData = await res.json();
 
-  // แสดงข้อมูลในแต่ละ Dashboard ย่อย
+  // แสดงข้อมูลของ dashboard ที่เลือก
+  const data = rawData[dashboardId];
+
   dashInfo.subDashboards.forEach(subDash => {
     if (subDash.type === 'table') {
-      renderTable(subDash.id);
+      renderTable(subDash.id, data);
     } else {
-      renderChart(subDash.id, subDash.type);
+      renderChart(subDash.id, subDash.type, data);
     }
   });
 }
 
-function renderTable(id) {
+function renderTable(id, data) {
   const card = document.getElementById(id);
   const table = card.querySelector('table');
   const thead = table.querySelector('thead');
@@ -96,17 +97,16 @@ function renderTable(id) {
   thead.innerHTML = '';
   tbody.innerHTML = '';
 
-  if (id === 'topInventory') {
-    // ตัวอย่างสมมติ แสดง item กับ qty
+  if (id === 'topInventory' && data.topInventory) {
     thead.innerHTML = `<tr><th>Item</th><th>Qty</th></tr>`;
-    rawData.topInventory.forEach(r => {
+    data.topInventory.forEach(r => {
       const tr = document.createElement('tr');
       tr.innerHTML = `<td>${r.item}</td><td>${r.qty}</td>`;
       tbody.appendChild(tr);
     });
-  } else if (id === 'actionLog') {
+  } else if (id === 'actionLog' && data.actionLog) {
     thead.innerHTML = `<tr><th>Date</th><th>Action</th><th>Impact</th></tr>`;
-    rawData.actionLog.forEach(r => {
+    data.actionLog.forEach(r => {
       const tr = document.createElement('tr');
       tr.innerHTML = `<td>${r.date}</td><td>${r.action}</td><td>${r.impact}</td>`;
       tbody.appendChild(tr);
@@ -114,20 +114,21 @@ function renderTable(id) {
   }
 }
 
-function renderChart(id, type) {
+function renderChart(id, type, data) {
   if (charts['chart-' + id]) {
     charts['chart-' + id].destroy();
   }
 
   let config = null;
+
   switch (id) {
     case 'abcCategory':
       config = {
         type,
         data: {
-          labels: rawData.abcCategory.labels,
+          labels: data.abcCategory.labels,
           datasets: [{
-            data: rawData.abcCategory.data,
+            data: data.abcCategory.data,
             backgroundColor: ['#28a745', '#ffc107', '#dc3545']
           }]
         },
@@ -138,10 +139,10 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.doiDistribution.labels,
+          labels: data.doiDistribution.labels,
           datasets: [{
             label: 'Items',
-            data: rawData.doiDistribution.data,
+            data: data.doiDistribution.data,
             backgroundColor: '#17a2b8'
           }]
         },
@@ -152,10 +153,10 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.turnoverRate.labels,
+          labels: data.turnoverRate.labels,
           datasets: [{
             label: 'Turnover %',
-            data: rawData.turnoverRate.data,
+            data: data.turnoverRate.data,
             borderColor: '#007bff',
             fill: false
           }]
@@ -167,9 +168,9 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.fsnCategory.labels,
+          labels: data.fsnCategory.labels,
           datasets: [{
-            data: rawData.fsnCategory.data,
+            data: data.fsnCategory.data,
             backgroundColor: ['#20c997', '#fd7e14', '#6c757d']
           }]
         },
@@ -182,10 +183,10 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.forecastAccuracy.labels,
+          labels: data.forecastAccuracy.labels,
           datasets: [{
             label: 'Forecast Accuracy',
-            data: rawData.forecastAccuracy.data,
+            data: data.forecastAccuracy.data,
             borderColor: '#28a745',
             fill: false
           }]
@@ -197,10 +198,10 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.mapeTrend.labels,
+          labels: data.mapeTrend.labels,
           datasets: [{
             label: 'MAPE',
-            data: rawData.mapeTrend.data,
+            data: data.mapeTrend.data,
             backgroundColor: '#ffc107'
           }]
         },
@@ -211,10 +212,10 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.biasIndex.labels,
+          labels: data.biasIndex.labels,
           datasets: [{
             label: 'Bias',
-            data: rawData.biasIndex.data,
+            data: data.biasIndex.data,
             backgroundColor: '#dc3545'
           }]
         },
@@ -225,9 +226,9 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.fillRate.labels,
+          labels: data.fillRate.labels,
           datasets: [{
-            data: rawData.fillRate.data,
+            data: data.fillRate.data,
             backgroundColor: ['#20c997', '#fd7e14']
           }]
         },
@@ -238,9 +239,9 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.demandRisk.labels,
+          labels: data.demandRisk.labels,
           datasets: [{
-            data: rawData.demandRisk.data,
+            data: data.demandRisk.data,
             backgroundColor: ['#dc3545', '#ffc107', '#28a745']
           }]
         },
@@ -253,10 +254,10 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.inventoryValue.labels,
+          labels: data.inventoryValue.labels,
           datasets: [{
             label: 'Inventory Value',
-            data: rawData.inventoryValue.data,
+            data: data.inventoryValue.data,
             borderColor: '#007bff',
             fill: false
           }]
@@ -268,10 +269,10 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.overstockPercent.labels,
+          labels: data.overstockPercent.labels,
           datasets: [{
             label: 'Overstock %',
-            data: rawData.overstockPercent.data,
+            data: data.overstockPercent.data,
             backgroundColor: '#dc3545'
           }]
         },
@@ -282,10 +283,10 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.doiScore.labels,
+          labels: data.doiScore.labels,
           datasets: [{
             label: 'DOI Score',
-            data: rawData.doiScore.data,
+            data: data.doiScore.data,
             backgroundColor: '#17a2b8'
           }]
         },
@@ -296,9 +297,9 @@ function renderChart(id, type) {
       config = {
         type,
         data: {
-          labels: rawData.accuracyKPI.labels,
+          labels: data.accuracyKPI.labels,
           datasets: [{
-            data: rawData.accuracyKPI.data,
+            data: data.accuracyKPI.data,
             backgroundColor: ['#28a745', '#ffc107']
           }]
         },
