@@ -1,58 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>iStockView - Strategic Inventory Health & Risk</title>
-<link rel="stylesheet" href="style.css" />
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iStockView - Strategic Inventory Intelligence</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<header>
-  <h1>iStockView - Strategic Inventory Health & Risk</h1>
-</header>
+  <header>
+    <h1>iStockView - Strategic Inventory Intelligence</h1>
+  </header>
 
-<section class="filters">
-  <label for="dateRange">เลือกช่วงเวลา:</label>
-  <select id="dateRange">
-    <option value="2024Q1">2024 Q1</option>
-    <option value="2024Q2">2024 Q2</option>
-    <option value="2024Q3">2024 Q3</option>
-    <option value="2024Q4">2024 Q4</option>
-  </select>
+  <section class="controls">
+    <label for="selectDate">เลือกเดือน:</label>
+    <select id="selectDate"></select>
 
-  <label for="categorySelect">เลือกหมวดสินค้า:</label>
-  <select id="categorySelect">
-    <option value="all">ทั้งหมด</option>
-    <option value="A">กลุ่ม A</option>
-    <option value="B">กลุ่ม B</option>
-    <option value="C">กลุ่ม C</option>
-  </select>
-</section>
+    <label for="selectDashboard">เลือก Dashboard:</label>
+    <select id="selectDashboard">
+      <option value="inventoryHealth">1. Strategic Inventory Health & Risk</option>
+      <option value="planningAccuracy">2. Planning Accuracy & Demand Risk</option>
+      <option value="strategicAction">3. Strategic Action & Impact (Executive Scorecard)</option>
+    </select>
+  </section>
 
-<section class="kpi-summary">
-  <div class="kpi-card">
-    <h3>ทุนจม (Invested Capital)</h3>
-    <p id="kpiCapital">-</p>
-  </div>
-  <div class="kpi-card">
-    <h3>Turnover Rate</h3>
-    <p id="kpiTurnover">-</p>
-  </div>
-  <div class="kpi-card">
-    <h3>Days of Inventory (DOI)</h3>
-    <p id="kpiDOI">-</p>
-  </div>
-</section>
+  <section id="dashboardContent">
+    <!-- กราฟและข้อมูลจะแสดงที่นี่ -->
+  </section>
 
-<section class="charts">
-  <canvas id="abcPieChart"></canvas>
-  <canvas id="turnoverLineChart"></canvas>
-  <canvas id="riskHeatmapChart"></canvas>
-</section>
-
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
-
