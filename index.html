@@ -1,40 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>iStockView – Strategic Inventory Intelligence</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>iStockView – Strategic Inventory Intelligence</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <header>
     <h1>iStockView – Strategic Inventory Intelligence</h1>
-    <label for="dateSelector">เลือกวันที่โหลดข้อมูล:</label>
-    <select id="dateSelector"></select>
+    <div class="date-slicer">
+      <label>เลือกช่วงวันที่: </label>
+      <input type="date" id="startDate" />
+      <input type="date" id="endDate" />
+      <button id="filterBtn">Filter</button>
+    </div>
+    <nav class="dashboard-tabs">
+      <button data-dash="1" class="active">1. Strategic Inventory Health & Risk</button>
+      <button data-dash="2">2. Planning Accuracy & Demand Risk</button>
+      <button data-dash="3">3. Strategic Action & Impact</button>
+    </nav>
   </header>
 
   <main>
-    <section id="dashboard1">
-      <h2>📊 Strategic Inventory Health & Risk</h2>
-      <canvas id="abcChart"></canvas>
-      <canvas id="fsnChart"></canvas>
-      <canvas id="valueByAgingChart"></canvas>
-      <canvas id="doiTrendChart"></canvas>
+    <section id="dashboard1" class="dashboard active">
+      <h2>Dashboard 1: Strategic Inventory Health & Risk</h2>
+      <div class="charts-row">
+        <canvas id="chart1a"></canvas>
+        <canvas id="chart1b"></canvas>
+        <canvas id="chart1c"></canvas>
+      </div>
+      <div class="table-container">
+        <table id="table1">
+          <thead><tr><th>SKU</th><th>Category</th><th>DOI</th><th>Turnover</th><th>Risk Level</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </section>
 
-    <section id="dashboard2">
-      <h2>📉 Planning Accuracy & Demand Risk</h2>
-      <canvas id="forecastVsActualChart"></canvas>
-      <canvas id="forecastAccuracyChart"></canvas>
-      <canvas id="scoreHeatmap"></canvas>
+    <section id="dashboard2" class="dashboard">
+      <h2>Dashboard 2: Planning Accuracy & Demand Risk</h2>
+      <div class="charts-row">
+        <canvas id="chart2a"></canvas>
+        <canvas id="chart2b"></canvas>
+      </div>
+      <div class="table-container">
+        <table id="table2">
+          <thead><tr><th>SKU</th><th>Forecast Accuracy</th><th>Demand Risk</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </section>
 
-    <section id="dashboard3">
-      <h2>📌 Strategic Action & Impact</h2>
-      <div id="kpiCards"></div>
-      <canvas id="urgencyFlagChart"></canvas>
-      <div id="top10TableContainer"></div>
+    <section id="dashboard3" class="dashboard">
+      <h2>Dashboard 3: Strategic Action & Impact (Executive Scorecard)</h2>
+      <div class="charts-row">
+        <canvas id="chart3a"></canvas>
+      </div>
+      <div class="table-container">
+        <table id="table3">
+          <thead><tr><th>Action</th><th>Impact Score</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </section>
   </main>
 
