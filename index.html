@@ -1,33 +1,29 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>iStockView - Strategic Inventory Intelligence</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
-  <header>
+  <div class="header">
     <h1>iStockView - Strategic Inventory Intelligence</h1>
-  </header>
+    <label for="monthSelect">เลือกเดือน:</label>
+    <select id="monthSelect"></select>
 
-  <section class="controls">
-    <label for="selectDate">เลือกเดือน:</label>
-    <select id="selectDate"></select>
-
-    <label for="selectDashboard">เลือก Dashboard:</label>
-    <select id="selectDashboard">
-      <option value="inventoryHealth">1. Strategic Inventory Health & Risk</option>
-      <option value="planningAccuracy">2. Planning Accuracy & Demand Risk</option>
-      <option value="strategicAction">3. Strategic Action & Impact (Executive Scorecard)</option>
+    <label for="dashboardSelect">เลือก Dashboard:</label>
+    <select id="dashboardSelect">
+      <option value="dashboard1">Strategic Inventory Health & Risk</option>
+      <option value="dashboard2">Planning Accuracy & Demand Risk</option>
+      <option value="dashboard3">Strategic Action & Impact</option>
     </select>
-  </section>
+  </div>
 
-  <section id="dashboardContent">
-    <!-- กราฟและข้อมูลจะแสดงที่นี่ -->
-  </section>
+  <div id="dashboardContainer">
+    <canvas id="chart1" width="600" height="300"></canvas>
+    <canvas id="chart2" width="600" height="300"></canvas>
+  </div>
 
   <script src="app.js"></script>
 </body>
