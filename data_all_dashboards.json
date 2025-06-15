@@ -1,38 +1,32 @@
 {
-  "1": [
-    {"date":"2025-06-10","item":"A1","qty":100,"recommendation":"ลดสต๊อก"},
-    {"date":"2025-06-11","item":"B2","qty":80,"recommendation":"เพิ่มคำสั่งซื้อ"}
-  ],
-  "2": [
-    {"date":"2025-06-10","accuracy":85,"mape":5,"bias":2},
-    {"date":"2025-06-11","accuracy":88,"mape":4,"bias":-1}
-  ],
-  "3": [
-    {"date":"2025-06-10","value":50000,"impact":20,"action":"Reduce Over-Stock"},
-    {"date":"2025-06-11","value":48000,"impact":22,"action":"Improve Forecast"}
-  ],
-  "4": [
-    {"date":"2025-06-10","metric":"X","value":15},
-    {"date":"2025-06-11","metric":"Y","value":18}
-  ],
-  "5": [
-    {"date":"2025-06-10","score":78,"count":30},
-    {"date":"2025-06-11","score":82,"count":35}
-  ],
-  "6": [
-    {"date":"2025-06-10","category":"Cat1","amount":1200},
-    {"date":"2025-06-11","category":"Cat2","amount":1100}
-  ],
-  "7": [
-    {"date":"2025-06-10","type":"TypeA","number":25},
-    {"date":"2025-06-11","type":"TypeB","number":30}
-  ],
-  "8": [
-    {"date":"2025-06-10","name":"John","score":90},
-    {"date":"2025-06-11","name":"Jane","score":85}
-  ],
-  "9": [
-    {"date":"2025-06-10","label":"L1","value":50},
-    {"date":"2025-06-11","label":"L2","value":60}
-  ]
+  "dashboard1": {
+    "abc": {
+      "labels": ["A", "B", "C"],
+      "values": [500000, 300000, 100000]
+    },
+    "fsn": {
+      "labels": ["Fast", "Slow", "Non-moving"],
+      "counts": [40, 30, 10]
+    },
+    "turnover": {
+      "months": ["Jan", "Feb", "Mar", "Apr"],
+      "values": [3.2, 3.5, 3.1, 3.8]
+    },
+    "doi": {
+      "items": ["Item A", "Item B", "Item C"],
+      "values": [60, 45, 90]
+    },
+    "risk": {
+      "labels": ["Obsolete", "Slow-moving", "Short Shelf Life"],
+      "values": [150000, 100000, 50000]
+    }
+  },
+  "dashboard2": {
+    "labels": ["Jan", "Feb", "Mar"],
+    "accuracy": [0.8, 0.75, 0.82]
+  },
+  "dashboard3": {
+    "labels": ["Reduced Stock", "Auto Replenish", "Improved Accuracy"],
+    "values": [40, 35, 25]
+  }
 }
