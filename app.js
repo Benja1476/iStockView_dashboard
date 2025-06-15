@@ -1,185 +1,222 @@
-// app.js
-let dashboardData = {};
-let currentDashboard = 'dashboard1';
+let allData = null;
+let filteredData = null;
 
-function switchDashboard(id) {
-  document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  currentDashboard = id;
-  renderCharts();
-}
+const ctx1a = document.getElementById('chart1a').getContext('2d');
+const ctx1b = document.getElementById('chart1b').getContext('2d');
+const ctx1c = document.getElementById('chart1c').getContext('2d');
 
-function onDateChange() {
-  renderCharts();
-}
+let chart1a, chart1b, chart1c;
 
-function populateDateSelector(data) {
-  const dateSet = new Set(data.map(d => d['Date Load']));
-  const selector = document.getElementById('dateLoad');
-  selector.innerHTML = '';
-  [...dateSet].sort().reverse().forEach(date => {
-    const option = document.createElement('option');
-    option.value = date;
-    option.textContent = date;
-    selector.appendChild(option);
+document.addEventListener('DOMContentLoaded', async () => {
+  // โหลดข้อมูล JSON
+  const response = await fetch('data_all_dashboards.json');
+  allData = await response.json();
+
+  // ตั้งค่าวันที่เริ่มต้น - สิ้นสุด เป็นค่าใน data
+  setDateInputs();
+
+  // สร้าง event listener ปุ่ม filter
+  document.getElementById('filterBtn').addEventListener('click', () => {
+    applyFilterAndRender();
   });
-}
 
-function fetchData() {
-  fetch('data_all_dashboards.json')
-    .then(res => res.json())
-    .then(data => {
-      dashboardData = data;
-      populateDateSelector(data);
-      renderCharts();
+  // สลับ tab dashboard
+  document.querySelectorAll('.dashboard-tabs button').forEach(btn => {
+    btn.addEventListener('click', e => {
+      document.querySelectorAll('.dashboard-tabs button').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+
+      document.querySelectorAll('.dashboard').forEach(sec => sec.classList.remove('active'));
+      const dashNum = e.target.getAttribute('data-dash');
+      document.getElementById('dashboard' + dashNum).classList.add('active');
+
+      applyFilterAndRender();
     });
+  });
+
+  applyFilterAndRender();
+});
+
+function setDateInputs() {
+  // หา min max วันที่ใน data (dashboard1 ตัวอย่าง)
+  const dates = allData.dashboard1.map(d => new Date(d.date));
+  const minDate = new Date(Math.min(...dates));
+  const maxDate = new Date(Math.max(...dates));
+
+  const startInput = document.getElementById('startDate');
+  const endInput = document.getElementById('endDate');
+
+  startInput.valueAsDate = minDate;
+  endInput.valueAsDate = maxDate;
+  startInput.min = formatDate(minDate);
+  endInput.max = formatDate(maxDate);
 }
 
-function renderCharts() {
-  const selectedDate = document.getElementById('dateLoad').value;
-  const filteredData = dashboardData.filter(d => d['Date Load'] === selectedDate);
-  
-  if (currentDashboard === 'dashboard1') {
-    renderABCChart(filteredData);
-    renderFSNChart(filteredData);
-    renderDOIChart(filteredData);
-  } else if (currentDashboard === 'dashboard2') {
-    renderAccuracyChart(filteredData);
-    renderForecastChart(filteredData);
-  } else if (currentDashboard === 'dashboard3') {
-    renderUrgencyChart(filteredData);
-    renderOpportunityChart(filteredData);
-  }
+function formatDate(d) {
+  return d.toISOString().split('T')[0];
 }
 
-function renderABCChart(data) {
-  const ctx = document.getElementById('abcChart').getContext('2d');
-  const counts = { A: 0, B: 0, C: 0 };
-  data.forEach(d => counts[d['ABC Category']]++);
-  new Chart(ctx, {
-    type: 'doughnut',
+function applyFilterAndRender() {
+  const startDate = new Date(document.getElementById('startDate').value);
+  const endDate = new Date(document.getElementById('endDate').value);
+
+  // กรองข้อมูลตามวันที่
+  filteredData = {
+    dashboard1: allData.dashboard1.filter(d => {
+      const dt = new Date(d.date);
+      return dt >= startDate && dt <= endDate;
+    }),
+    dashboard2: allData.dashboard2.filter(d => {
+      const dt = new Date(d.date);
+      return dt >= startDate && dt <= endDate;
+    }),
+    dashboard3: allData.dashboard3.filter(d => {
+      const dt = new Date(d.date);
+      return dt >= startDate && dt <= endDate;
+    }),
+  };
+
+  renderDashboard1();
+  renderDashboard2();
+  renderDashboard3();
+}
+
+function renderDashboard1() {
+  // ตัวอย่างกราฟ1a: DOI by Category Bar Chart
+  const categories = [...new Set(filteredData.dashboard1.map(d => d.category))];
+  const avgDoiByCat = categories.map(cat => {
+    const filtered = filteredData.dashboard1.filter(d => d.category === cat);
+    const avg = filtered.reduce((sum, item) => sum + item.doi, 0) / filtered.length || 0;
+    return avg.toFixed(2);
+  });
+
+  if (chart1a) chart1a.destroy();
+  chart1a = new Chart(ctx1a, {
+    type: 'bar',
     data: {
-      labels: ['A', 'B', 'C'],
+      labels: categories,
       datasets: [{
-        data: [counts.A, counts.B, counts.C],
-        backgroundColor: ['#4caf50', '#ff9800', '#f44336']
+        label: 'Average DOI',
+        data: avgDoiByCat,
+        backgroundColor: '#007bff',
       }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: true }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
     }
   });
+
+  // สร้างกราฟอื่น ๆ ใน dashboard1 ที่เหลือตามที่คุณต้องการ (turnover, risk level, etc)
+
+  // เติมตาราง
+  const tbody = document.querySelector('#table1 tbody');
+  tbody.innerHTML = '';
+  filteredData.dashboard1.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${row.sku}</td><td>${row.category}</td><td>${row.doi}</td><td>${row.turnover}</td><td>${row.risk}</td>`;
+    tbody.appendChild(tr);
+  });
 }
 
-function renderFSNChart(data) {
-  const ctx = document.getElementById('fsnChart').getContext('2d');
-  const counts = { F: 0, S: 0, N: 0 };
-  data.forEach(d => counts[d['FSN Category']]++);
-  new Chart(ctx, {
+function renderDashboard2() {
+  // ตัวอย่างกราฟ
+  const ctx2a = document.getElementById('chart2a').getContext('2d');
+  const ctx2b = document.getElementById('chart2b').getContext('2d');
+
+  // Forecast Accuracy (line chart by SKU)
+  const skus = [...new Set(filteredData.dashboard2.map(d => d.sku))];
+  const datasets = skus.map(sku => {
+    const points = filteredData.dashboard2.filter(d => d.sku === sku).map(d => ({x: d.date, y: d.forecastAccuracy}));
+    return {
+      label: sku,
+      data: points,
+      borderColor: getRandomColor(),
+      fill: false,
+      tension: 0.2,
+    };
+  });
+
+  if (window.chart2a) window.chart2a.destroy();
+  window.chart2a = new Chart(ctx2a, {
+    type: 'line',
+    data: { datasets },
+    options: {
+      parsing: { xAxisKey: 'x', yAxisKey: 'y' },
+      scales: {
+        x: { type: 'time', time: { unit: 'day' } },
+        y: { min: 0, max: 1 }
+      }
+    }
+  });
+
+  // Demand Risk Pie Chart
+  const riskCounts = filteredData.dashboard2.reduce((acc, cur) => {
+    acc[cur.demandRisk] = (acc[cur.demandRisk] || 0) + 1;
+    return acc;
+  }, {});
+
+  if (window.chart2b) window.chart2b.destroy();
+  window.chart2b = new Chart(ctx2b, {
     type: 'pie',
     data: {
-      labels: ['F', 'S', 'N'],
+      labels: Object.keys(riskCounts),
       datasets: [{
-        data: [counts.F, counts.S, counts.N],
-        backgroundColor: ['#2196f3', '#ffeb3b', '#9e9e9e']
+        data: Object.values(riskCounts),
+        backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
       }]
     }
   });
+
+  // ตาราง dashboard2
+  const tbody2 = document.querySelector('#table2 tbody');
+  tbody2.innerHTML = '';
+  filteredData.dashboard2.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${row.sku}</td><td>${(row.forecastAccuracy*100).toFixed(1)}%</td><td>${row.demandRisk}</td>`;
+    tbody2.appendChild(tr);
+  });
 }
 
-function renderDOIChart(data) {
-  const ctx = document.getElementById('doiChart').getContext('2d');
-  const items = data.map(d => d['Item number']);
-  const values = data.map(d => d['DOI']);
-  new Chart(ctx, {
+function renderDashboard3() {
+  // กราฟ Impact Score Bar Chart
+  const ctx3a = document.getElementById('chart3a').getContext('2d');
+  const actions = filteredData.dashboard3.map(d => d.action);
+  const impactScores = filteredData.dashboard3.map(d => d.impactScore);
+
+  if (window.chart3a) window.chart3a.destroy();
+  window.chart3a = new Chart(ctx3a, {
     type: 'bar',
     data: {
-      labels: items,
+      labels: actions,
       datasets: [{
-        label: 'DOI',
-        data: values,
-        backgroundColor: '#3f51b5'
+        label: 'Impact Score',
+        data: impactScores,
+        backgroundColor: '#28a745',
       }]
-    },
-    options: { scales: { x: { display: false } } }
+    }
+  });
+
+  // ตาราง dashboard3
+  const tbody3 = document.querySelector('#table3 tbody');
+  tbody3.innerHTML = '';
+  filteredData.dashboard3.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${row.action}</td><td>${row.impactScore}</td><td>${row.status}</td>`;
+    tbody3.appendChild(tr);
   });
 }
 
-function renderAccuracyChart(data) {
-  const ctx = document.getElementById('accuracyChart').getContext('2d');
-  const items = data.map(d => d['Item number']);
-  const values = data.map(d => d['Forecast Accuracy']);
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: items,
-      datasets: [{
-        label: 'Forecast Accuracy',
-        data: values,
-        backgroundColor: '#009688'
-      }]
-    },
-    options: { scales: { x: { display: false } } }
-  });
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for(let i=0; i<6; i++){
+    color += letters[Math.floor(Math.random()*16)];
+  }
+  return color;
 }
-
-function renderForecastChart(data) {
-  const ctx = document.getElementById('forecastChart').getContext('2d');
-  const items = data.map(d => d['Item number']);
-  const forecast = data.map(d => d['ForecastQty']);
-  const actual = data.map(d => d['ActualQty']);
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: items,
-      datasets: [
-        {
-          label: 'Forecast Qty',
-          data: forecast,
-          borderColor: '#ff9800'
-        },
-        {
-          label: 'Actual Qty',
-          data: actual,
-          borderColor: '#4caf50'
-        }
-      ]
-    },
-    options: { scales: { x: { display: false } } }
-  });
-}
-
-function renderUrgencyChart(data) {
-  const ctx = document.getElementById('urgencyChart').getContext('2d');
-  const urgencyGroups = {};
-  data.forEach(d => {
-    const flag = d['Urgency Flag'];
-    urgencyGroups[flag] = (urgencyGroups[flag] || 0) + 1;
-  });
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: Object.keys(urgencyGroups),
-      datasets: [{
-        label: 'Items',
-        data: Object.values(urgencyGroups),
-        backgroundColor: '#e91e63'
-      }]
-{
-  "dashboard1": [
-    {"sku":"SKU001","category":"A","doi":45,"turnover":3.2,"risk":"High","date":"2025-05-01"},
-    {"sku":"SKU002","category":"B","doi":20,"turnover":5.1,"risk":"Low","date":"2025-05-01"},
-    {"sku":"SKU003","category":"C","doi":60,"turnover":2.0,"risk":"Medium","date":"2025-06-01"},
-    {"sku":"SKU004","category":"A","doi":15,"turnover":7.5,"risk":"Low","date":"2025-06-01"}
-  ],
-  "dashboard2": [
-    {"sku":"SKU001","forecastAccuracy":0.85,"demandRisk":"High","date":"2025-05-01"},
-    {"sku":"SKU002","forecastAccuracy":0.92,"demandRisk":"Low","date":"2025-05-01"},
-    {"sku":"SKU003","forecastAccuracy":0.78,"demandRisk":"Medium","date":"2025-06-01"},
-    {"sku":"SKU004","forecastAccuracy":0.95,"demandRisk":"Low","date":"2025-06-01"}
-  ],
-  "dashboard3": [
-    {"action":"Reduce Dead Stock","impactScore":85,"status":"In Progress","date":"2025-05-01"},
-    {"action":"Improve Forecast","impactScore":78,"status":"Completed","date":"2025-05-01"},
-    {"action":"Optimize Supply Chain","impactScore":92,"status":"Planned","date":"2025-06-01"},
-    {"action":"Review Safety Stock","impactScore":80,"status":"In Progress","date":"2025-06-01"}
-  ]
-}
-
