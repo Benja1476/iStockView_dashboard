@@ -1,29 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>iStockView - Strategic Inventory Intelligence</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="header">
-    <h1>iStockView - Strategic Inventory Intelligence</h1>
-    <label for="monthSelect">เลือกเดือน:</label>
-    <select id="monthSelect"></select>
+  <header>
+    <h1>iStockView</h1>
+    <h2>Strategic Inventory Intelligence</h2>
+  </header>
 
-    <label for="dashboardSelect">เลือก Dashboard:</label>
-    <select id="dashboardSelect">
-      <option value="dashboard1">Strategic Inventory Health & Risk</option>
-      <option value="dashboard2">Planning Accuracy & Demand Risk</option>
-      <option value="dashboard3">Strategic Action & Impact</option>
+  <nav>
+    <label for="dashboardSelector">เลือก Dashboard ใหญ่:</label>
+    <select id="dashboardSelector">
+      <option value="1">1️⃣ Strategic Inventory Health & Risk</option>
+      <option value="2">2️⃣ Planning Accuracy & Demand Risk</option>
+      <option value="3">3️⃣ Strategic Action & Impact (Executive Scorecard)</option>
     </select>
-  </div>
+    <button id="refreshBtn">🔄 Refresh</button>
+  </nav>
 
-  <div id="dashboardContainer">
-    <canvas id="chart1"></canvas>
-    <canvas id="chart2"></canvas>
-  </div>
+  <main id="dashboardContainer">
+    <!-- Dashboard ย่อยจะถูกแทรกที่นี่ -->
+  </main>
 
   <script src="app.js"></script>
 </body>
