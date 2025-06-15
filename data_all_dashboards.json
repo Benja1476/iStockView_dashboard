@@ -1,38 +1,69 @@
 {
-  "dashboard1": {
-    "2025-06": {
-      "abc": {
-        "labels": ["A", "B", "C"],
-        "values": [120, 80, 40]
-      },
-      "fsn": {
-        "labels": ["Fast", "Slow", "Non-Moving"],
-        "values": [90, 45, 15]
-      }
+  "1": {
+    "topInventory": [
+      { "item": "Item A", "qty": 120 },
+      { "item": "Item B", "qty": 85 },
+      { "item": "Item C", "qty": 60 }
+    ],
+    "abcCategory": {
+      "labels": ["A", "B", "C"],
+      "data": [50, 30, 20]
+    },
+    "doiDistribution": {
+      "labels": ["0-10", "11-20", "21-30", "31+"],
+      "data": [15, 25, 40, 20]
+    },
+    "turnoverRate": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [5.5, 6.2, 5.8, 6.0]
+    },
+    "fsnCategory": {
+      "labels": ["Fast", "Slow", "Non-moving"],
+      "data": [70, 20, 10]
     }
   },
-  "dashboard2": {
-    "2025-06": {
-      "accuracy": {
-        "labels": ["Forecast", "Actual"],
-        "values": [95, 89]
-      },
-      "demandRisk": {
-        "labels": ["High", "Medium", "Low"],
-        "values": [30, 50, 20]
-      }
+  "2": {
+    "forecastAccuracy": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [90, 85, 88, 92]
+    },
+    "mapeTrend": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [5, 6, 4, 3]
+    },
+    "biasIndex": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [1, -0.5, 0.3, 0]
+    },
+    "fillRate": {
+      "labels": ["On-time", "Late"],
+      "data": [80, 20]
+    },
+    "demandRisk": {
+      "labels": ["High", "Medium", "Low"],
+      "data": [10, 60, 30]
     }
   },
-  "dashboard3": {
-    "2025-06": {
-      "impact": {
-        "labels": ["Cost Saving", "Inventory Reduction"],
-        "values": [30000, 18000]
-      },
-      "scorecard": {
-        "labels": ["KPI 1", "KPI 2", "KPI 3"],
-        "values": [85, 90, 78]
-      }
-    }
+  "3": {
+    "inventoryValue": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [100000, 105000, 98000, 102000]
+    },
+    "overstockPercent": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [15, 18, 14, 17]
+    },
+    "doiScore": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [50, 55, 52, 54]
+    },
+    "accuracyKPI": {
+      "labels": ["Met KPI", "Below KPI"],
+      "data": [75, 25]
+    },
+    "actionLog": [
+      { "date": "2025-01-01", "action": "Reduce overstock", "impact": "High" },
+      { "date": "2025-02-15", "action": "Improve forecast", "impact": "Medium" }
+    ]
   }
 }
