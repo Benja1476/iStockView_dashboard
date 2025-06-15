@@ -1,300 +1,168 @@
-let charts = {};
-let rawData = {};
-const dashboardContainer = document.getElementById('dashboardContainer');
-const dashboardSelector = document.getElementById('dashboardSelector');
-const refreshBtn = document.getElementById('refreshBtn');
-
-const DASHBOARDS = {
-  1: {
-    name: "Strategic Inventory Health & Risk",
-    key: "dashboard1",
-    subDashboards: [
-      { id: "topInventory", title: "Top 10 Inventory", type: "table" },
-      { id: "abcCategory", title: "ABC Category", type: "doughnut" },
-      { id: "doiDistribution", title: "DOI Distribution", type: "bar" },
-      { id: "turnoverRate", title: "Turnover Rate", type: "line" },
-      { id: "fsnCategory", title: "FSN Category", type: "pie" },
-      { id: "extraChart1", title: "Extra Chart 1", type: "line" },
-      { id: "extraChart2", title: "Extra Chart 2", type: "bar" },
-      { id: "extraChart3", title: "Extra Chart 3", type: "doughnut" },
-      { id: "extraChart4", title: "Extra Chart 4", type: "pie" },
+// ตัวอย่าง data_all_dashboards.json (ย่อมา)
+const data_all_dashboards = {
+  "dashboard1": {
+    "chart1": [
+      {"date": "2025-06-01", "labels": ["A","B","C"], "data": [10,20,30]},
+      {"date": "2025-06-02", "labels": ["A","B","C"], "data": [15,25,35]},
+      {"date": "2025-06-03", "labels": ["A","B","C"], "data": [12,22,32]}
     ],
-  },
-  2: {
-    name: "Planning Accuracy & Demand Risk",
-    key: "dashboard2",
-    subDashboards: [
-      { id: "forecastAccuracy", title: "Forecast Accuracy", type: "line" },
-      { id: "mapeTrend", title: "MAPE Trend", type: "bar" },
-      { id: "biasIndex", title: "Bias Index", type: "bar" },
-      { id: "fillRate", title: "Fill Rate", type: "doughnut" },
-      { id: "demandRisk", title: "Demand Risk Level", type: "pie" },
+    "chart2": [
+      {"date": "2025-06-01", "labels": ["X","Y","Z"], "data": [5,10,15]},
+      {"date": "2025-06-02", "labels": ["X","Y","Z"], "data": [7,11,17]},
+      {"date": "2025-06-03", "labels": ["X","Y","Z"], "data": [6,9,14]}
     ],
+    // เพิ่ม chart3 - chart9 แบบเดียวกัน (ย่อไว้)
+    "chart3": [...],
+    "chart4": [...],
+    "chart5": [...],
+    "chart6": [...],
+    "chart7": [...],
+    "chart8": [...],
+    "chart9": [...]
   },
-  3: {
-    name: "Strategic Action & Impact (Executive Scorecard)",
-    key: "dashboard3",
-    subDashboards: [
-      { id: "inventoryValue", title: "Inventory Value", type: "line" },
-      { id: "overstockPercent", title: "Overstock %", type: "bar" },
-      { id: "doiScore", title: "DOI Score", type: "bar" },
-      { id: "accuracyKPI", title: "Accuracy KPI ≥80%", type: "doughnut" },
-      { id: "actionLog", title: "Action Log", type: "table" },
-    ],
+  "dashboard2": {
+    // เหมือน dashboard1 แต่อาจมีข้อมูลต่างกัน
+    "chart1": [...],
+    "chart2": [...],
+    "chart3": [...],
+    "chart4": [...],
+    "chart5": [...],
+    "chart6": [...],
+    "chart7": [...],
+    "chart8": [...],
+    "chart9": [...]
   },
+  "dashboard3": {
+    // เหมือนกัน
+    "chart1": [...],
+    "chart2": [...],
+    "chart3": [...],
+    "chart4": [...],
+    "chart5": [...],
+    "chart6": [...],
+    "chart7": [...],
+    "chart8": [...],
+    "chart9": [...]
+  }
 };
 
-function createCard(subDash) {
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.id = subDash.id;
-  const title = document.createElement('h3');
-  title.textContent = subDash.title;
-  card.appendChild(title);
+const chartTitles = {
+  dashboard1: [
+    "Inventory ABC Category",
+    "FSN Analysis",
+    "DOI Distribution",
+    "Turnover Rate",
+    "Top Inventory Items",
+    "Stock Aging",
+    "Capital Tied Up",
+    "Risk Assessment",
+    "Stock Movement"
+  ],
+  dashboard2: [
+    "Forecast Accuracy",
+    "MAPE Trend",
+    "Bias Index",
+    "Fill Rate",
+    "Demand Risk",
+    "Plan vs Actual",
+    "Error Distribution",
+    "Lead Time Analysis",
+    "Forecast Bias"
+  ],
+  dashboard3: [
+    "Inventory Value",
+    "Overstock Percentage",
+    "DOI Score",
+    "Accuracy KPI",
+    "Action Log",
+    "Impact Score",
+    "Executive Summary",
+    "Risk Index",
+    "Strategic Initiatives"
+  ]
+};
 
-  if (subDash.type === 'table') {
-    const table = document.createElement('table');
-    table.innerHTML = `<thead></thead><tbody></tbody>`;
-    card.appendChild(table);
-  } else {
-    const canvas = document.createElement('canvas');
-    canvas.id = 'chart-' + subDash.id;
-    card.appendChild(canvas);
-  }
-  return card;
-}
+let chartInstances = [];
 
-function clearDashboard() {
-  dashboardContainer.innerHTML = '';
-  Object.values(charts).forEach(chart => chart.destroy());
-  charts = {};
-}
-
-async function loadDashboard(dashboardId) {
-  clearDashboard();
-
-  if (!rawData || Object.keys(rawData).length === 0) {
-    // โหลด JSON แค่ครั้งแรก
-    const res = await fetch('data_all_dashboards.json');
-    rawData = await res.json();
-  }
-
-  const dashInfo = DASHBOARDS[dashboardId];
-  dashboardContainer.style.gridTemplateColumns = 'repeat(3, 1fr)'; // 3 คอลัมน์
-
-  // สร้าง card ทั้งหมด
-  dashInfo.subDashboards.forEach(subDash => {
-    dashboardContainer.appendChild(createCard(subDash));
-  });
-
-  // ดึงข้อมูลย่อยของ Dashboard ปัจจุบัน
-  const dashData = rawData[dashInfo.key];
-
-  dashInfo.subDashboards.forEach(subDash => {
-    if (subDash.type === 'table') {
-      renderTable(subDash.id, dashData);
-    } else {
-      renderChart(subDash.id, subDash.type, dashData);
-    }
+function filterDataByDate(dataArr, startDate, endDate) {
+  if (!startDate || !endDate) return dataArr;
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  return dataArr.filter(d => {
+    const dt = new Date(d.date);
+    return dt >= start && dt <= end;
   });
 }
 
-function renderTable(id, dashData) {
-  const card = document.getElementById(id);
-  const table = card.querySelector('table');
-  const thead = table.querySelector('thead');
-  const tbody = table.querySelector('tbody');
-  thead.innerHTML = '';
-  tbody.innerHTML = '';
-
-  if (id === 'topInventory') {
-    thead.innerHTML = `<tr><th>Item</th><th>Qty</th></tr>`;
-    dashData.topInventory.forEach(r => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${r.item}</td><td>${r.qty}</td>`;
-      tbody.appendChild(tr);
-    });
-  } else if (id === 'actionLog') {
-    thead.innerHTML = `<tr><th>Date</th><th>Action</th><th>Impact</th></tr>`;
-    dashData.actionLog.forEach(r => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${r.date}</td><td>${r.action}</td><td>${r.impact}</td>`;
-      tbody.appendChild(tr);
-    });
-  }
+function clearCharts() {
+  chartInstances.forEach(chart => chart.destroy());
+  chartInstances = [];
 }
 
-function renderChart(id, type, dashData) {
-  if (charts['chart-' + id]) {
-    charts['chart-' + id].destroy();
-  }
+function renderCharts(dashboardKey, startDate, endDate) {
+  clearCharts();
+  const container = document.getElementById('dashboardContainer');
+  container.innerHTML = '';
 
-  let config = null;
-  const dataObj = dashData[id];
-
-  if (!dataObj) {
-    console.warn('No data for chart id:', id);
+  const dashboardData = data_all_dashboards[dashboardKey];
+  if (!dashboardData) {
+    container.innerHTML = `<p>ไม่พบข้อมูลสำหรับ Dashboard นี้</p>`;
     return;
   }
 
-  switch (id) {
-    case 'abcCategory':
-    case 'accuracyKPI':
-    case 'extraChart3':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            data: dataObj.data,
-            backgroundColor: ['#28a745', '#ffc107', '#dc3545']
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
-    case 'doiDistribution':
-    case 'overstockPercent':
-    case 'biasIndex':
-    case 'extraChart2':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            label: id,
-            data: dataObj.data,
-            backgroundColor: '#dc3545'
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
-    case 'turnoverRate':
-    case 'forecastAccuracy':
-    case 'inventoryValue':
-    case 'extraChart1':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            label: id,
-            data: dataObj.data,
-            borderColor: '#007bff',
-            fill: false
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
-    case 'fsnCategory':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            data: dataObj.data,
-            backgroundColor: ['#20c997', '#fd7e14', '#6c757d']
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
-    case 'mapeTrend':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            label: id,
-            data: dataObj.data,
-            backgroundColor: '#ffc107'
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
-    case 'fillRate':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            data: dataObj.data,
-            backgroundColor: ['#20c997', '#fd7e14']
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
-    case 'demandRisk':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            data: dataObj.data,
-            backgroundColor: ['#dc3545', '#ffc107', '#28a745']
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
-    case 'doiScore':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            label: id,
-            data: dataObj.data,
-            backgroundColor: '#17a2b8'
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
-    case 'extraChart4':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            data: dataObj.data,
-            backgroundColor: ['#6f42c1', '#fd7e14', '#dc3545']
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
+  for(let i = 1; i <= 9; i++) {
+    const chartId = 'chart' + i;
+    const chartDataRaw = dashboardData[chartId];
+    if(!chartDataRaw) continue;
 
-    default:
-      console.warn('No chart config for', id);
-      return;
+    const filteredData = filterDataByDate(chartDataRaw, startDate, endDate);
+    if(filteredData.length === 0) continue;
+
+    // รวมข้อมูลจาก filteredData เช่นรวมค่า data arrays เพื่อทำกราฟ
+    // สำหรับตัวอย่างนี้เอาค่า data แถวสุดท้ายมาแสดง
+    const latest = filteredData[filteredData.length - 1];
+
+    // สร้าง div สำหรับกราฟ
+    const card = document.createElement('div');
+    card.className = 'chart-card';
+    card.innerHTML = `<h3>${chartTitles[dashboardKey][i-1]}</h3><canvas id="${dashboardKey}_${chartId}"></canvas>`;
+    container.appendChild(card);
+
+    // สร้าง chart
+    const ctx = document.getElementById(`${dashboardKey}_${chartId}`).getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: latest.labels,
+        datasets: [{
+          label: `${latest.date}`,
+          data: latest.data,
+          backgroundColor: 'rgba(54, 162, 235, 0.7)'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+    chartInstances.push(chart);
   }
-
-  const ctx = document.getElementById('chart-' + id).getContext('2d');
-  charts['chart-' + id] = new Chart(ctx, config);
 }
 
-function chartOptions() {
-  return {
-    responsive: true,
-    plugins: {
-      legend: { position: 'bottom' },
-      tooltip: { enabled: true }
-    }
-  };
+document.getElementById('btnLoad').addEventListener('click', () => {
+  const dashboardKey = document.getElementById('selectDashboard').value;
+  const startDate = document.getElementById('startDate').value;
+  const endDate = document.getElementById('endDate').value;
+  renderCharts(dashboardKey, startDate, endDate);
+});
+
+// โหลดครั้งแรก
+window.onload = () => {
+  const today = new Date().toISOString().slice(0,10);
+  document.getElementById('startDate').value = '2025-06-01';
+  document.getElementById('endDate').value = today;
+  renderCharts('dashboard1', '2025-06-01', today);
 }
-
-dashboardSelector.addEventListener('change', () => {
-  loadDashboard(dashboardSelector.value);
-});
-
-refreshBtn.addEventListener('click', () => {
-  loadDashboard(dashboardSelector.value);
-});
-
-// โหลด Dashboard แรกตอนเริ่มต้น
-loadDashboard(dashboardSelector.value);
