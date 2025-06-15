@@ -117,27 +117,73 @@
     "chart5": [
       {"date": "2025-06-01", "labels": ["Action1", "Action2", "Action3"], "data": [10, 12, 15]},
       {"date": "2025-06-02", "labels": ["Action1", "Action2", "Action3"], "data": [11, 13, 16]},
-      {"date": "2025-06-03", "labels": ["Action1", "Action2", "Action3"], "data": [9, 11, 14]}
+{
+  "1": {
+    "topInventory": [
+      { "item": "Item A", "qty": 120 },
+      { "item": "Item B", "qty": 85 },
+      { "item": "Item C", "qty": 60 }
     ],
-    "chart6": [
-      {"date": "2025-06-01", "labels": ["Impact1", "Impact2", "Impact3"], "data": [30, 35, 32]},
-      {"date": "2025-06-02", "labels": ["Impact1", "Impact2", "Impact3"], "data": [32, 36, 34]},
-      {"date": "2025-06-03", "labels": ["Impact1", "Impact2", "Impact3"], "data": [31, 34, 33]}
-    ],
-    "chart7": [
-      {"date": "2025-06-01", "labels": ["Exec1", "Exec2", "Exec3"], "data": [75, 80, 78]},
-      {"date": "2025-06-02", "labels": ["Exec1", "Exec2", "Exec3"], "data": [77, 82, 80]},
-      {"date": "2025-06-03", "labels": ["Exec1", "Exec2", "Exec3"], "data": [74, 79, 77]}
-    ],
-    "chart8": [
-      {"date": "2025-06-01", "labels": ["Risk1", "Risk2", "Risk3"], "data": [20, 22, 25]},
-      {"date": "2025-06-02", "labels": ["Risk1", "Risk2", "Risk3"], "data": [21, 23, 26]},
-      {"date": "2025-06-03", "labels": ["Risk1", "Risk2", "Risk3"], "data": [19, 21, 24]}
-    ],
-    "chart9": [
-      {"date": "2025-06-01", "labels": ["Strategy1", "Strategy2", "Strategy3"], "data": [5, 7, 6]},
-      {"date": "2025-06-02", "labels": ["Strategy1", "Strategy2", "Strategy3"], "data": [6, 8, 7]},
-      {"date": "2025-06-03", "labels": ["Strategy1", "Strategy2", "Strategy3"], "data": [4, 6, 5]}
+    "abcCategory": {
+      "labels": ["A", "B", "C"],
+      "data": [50, 30, 20]
+    },
+    "doiDistribution": {
+      "labels": ["0-10", "11-20", "21-30", "31+"],
+      "data": [15, 25, 40, 20]
+    },
+    "turnoverRate": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [5.5, 6.2, 5.8, 6.0]
+    },
+    "fsnCategory": {
+      "labels": ["Fast", "Slow", "Non-moving"],
+      "data": [70, 20, 10]
+    }
+  },
+  "2": {
+    "forecastAccuracy": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [90, 85, 88, 92]
+    },
+    "mapeTrend": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [5, 6, 4, 3]
+    },
+    "biasIndex": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [1, -0.5, 0.3, 0]
+    },
+    "fillRate": {
+      "labels": ["On-time", "Late"],
+      "data": [80, 20]
+    },
+    "demandRisk": {
+      "labels": ["High", "Medium", "Low"],
+      "data": [10, 60, 30]
+    }
+  },
+  "3": {
+    "inventoryValue": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [100000, 105000, 98000, 102000]
+    },
+    "overstockPercent": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [15, 18, 14, 17]
+    },
+    "doiScore": {
+      "labels": ["Jan", "Feb", "Mar", "Apr"],
+      "data": [50, 55, 52, 54]
+    },
+    "accuracyKPI": {
+      "labels": ["Met KPI", "Below KPI"],
+      "data": [75, 25]
+    },
+    "actionLog": [
+      { "date": "2025-01-01", "action": "Reduce overstock", "impact": "High" },
+      { "date": "2025-02-15", "action": "Improve forecast", "impact": "Medium" }
     ]
   }
 }
+
