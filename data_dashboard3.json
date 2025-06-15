@@ -1,23 +1,23 @@
-[
-  {
-    "date": "2025-06",
-    "kpi": "Inventory Value",
-    "before": 1500000,
-    "after": 1300000,
-    "change_percent": -13.3,
-    "owner": "Ops",
-    "deadline": "2025-09-30",
-    "action_log": [
-      {
-        "action": "ลดสต็อก SKU005",
-        "status": "Completed",
-        "impact": "ลดทุนจม 10%"
-      },
-      {
-        "action": "ปรับ Forecast SKU010",
-        "status": "In Progress",
-        "impact": "เพิ่ม Accuracy 5%"
-      }
-    ]
-  }
-]
+{
+  "inventoryValue": {
+    "labels": ["Q1", "Q2", "Q3", "Q4"],
+    "data": [100000, 120000, 115000, 110000]
+  },
+  "overstockPercent": {
+    "labels": ["Q1", "Q2", "Q3", "Q4"],
+    "data": [15, 20, 18, 16]
+  },
+  "doiScore": {
+    "labels": ["Q1", "Q2", "Q3", "Q4"],
+    "data": [30, 28, 32, 31]
+  },
+  "accuracyKPI": {
+    "labels": ["≥80%", "<80%"],
+    "data": [75, 25]
+  },
+  "actionLog": [
+    {"date": "2025-01-01", "action": "Optimize reorder point", "impact": "Reduced stockout by 10%"},
+    {"date": "2025-02-15", "action": "Increase safety stock", "impact": "Reduced stockout by 5%"},
+    {"date": "2025-03-10", "action": "Remove slow movers", "impact": "Reduced carrying cost by 7%"}
+  ]
+}
