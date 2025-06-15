@@ -10,17 +10,22 @@
 <body>
   <header>
     <h1>iStockView - Strategic Inventory Intelligence</h1>
-    <select id="dashboardSelector">
-      <option value="1">Strategic Inventory Health & Risk</option>
-      <option value="2">Planning Accuracy & Demand Risk</option>
-      <option value="3">Strategic Action & Impact (Executive Scorecard)</option>
-    </select>
-    <button id="refreshBtn">Refresh</button>
+    <div class="controls">
+      <label for="dashboardSelector">Select Dashboard:</label>
+      <select id="dashboardSelector">
+        <option value="1">Strategic Inventory Health & Risk</option>
+        <option value="2">Planning Accuracy & Demand Risk</option>
+        <option value="3">Strategic Action & Impact (Executive Scorecard)</option>
+      </select>
+
+      <label for="dateSelector">Select Date:</label>
+      <input type="date" id="dateSelector" value="2025-06-14" />
+
+      <button id="refreshBtn">Refresh</button>
+    </div>
   </header>
 
-  <main id="dashboardContainer">
-    <!-- Dashboard content will be rendered here -->
-  </main>
+  <main id="dashboardContainer"></main>
 
   <script src="app.js"></script>
 </body>
