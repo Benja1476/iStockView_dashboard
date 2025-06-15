@@ -138,9 +138,9 @@ function renderChart(id, type, dashData) {
   }
 
   switch (id) {
-    // ตัวอย่างกราฟแต่ละตัว (เหมือนเดิมแต่เปลี่ยน rawData → dataObj)
     case 'abcCategory':
     case 'accuracyKPI':
+    case 'extraChart3':
       config = {
         type,
         data: {
@@ -156,6 +156,7 @@ function renderChart(id, type, dashData) {
     case 'doiDistribution':
     case 'overstockPercent':
     case 'biasIndex':
+    case 'extraChart2':
       config = {
         type,
         data: {
@@ -172,6 +173,7 @@ function renderChart(id, type, dashData) {
     case 'turnoverRate':
     case 'forecastAccuracy':
     case 'inventoryValue':
+    case 'extraChart1':
       config = {
         type,
         data: {
@@ -248,48 +250,6 @@ function renderChart(id, type, dashData) {
             label: id,
             data: dataObj.data,
             backgroundColor: '#17a2b8'
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
-    case 'extraChart1':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            label: 'Extra Chart 1',
-            data: dataObj.data,
-            borderColor: '#6610f2',
-            fill: false
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
-    case 'extraChart2':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            label: 'Extra Chart 2',
-            data: dataObj.data,
-            backgroundColor: '#fd7e14'
-          }]
-        },
-        options: chartOptions()
-      };
-      break;
-    case 'extraChart3':
-      config = {
-        type,
-        data: {
-          labels: dataObj.labels,
-          datasets: [{
-            data: dataObj.data,
-            backgroundColor: ['#17a2b8', '#20c997', '#ffc107']
           }]
         },
         options: chartOptions()
