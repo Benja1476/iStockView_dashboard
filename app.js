@@ -1,103 +1,102 @@
-// โหลดข้อมูล JSON
-async function loadData() {
-    const response = await fetch('data_all_dashboards.json');
-    const data = await response.json();
-    return data;
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
-// สร้างกราฟจากข้อมูล dashboard1
-function renderDashboard1(data) {
-    const ctx = document.getElementById('chart1').getContext('2d');
-    if(window.chart1) window.chart1.destroy();
-
-    window.chart1 = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: data.dashboard1.labels,
-            datasets: [{
-                label: 'Total Quantity',
-                data: data.dashboard1.totalQty,
-                backgroundColor: 'rgba(75, 192, 192, 0.6)'
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { display: true } }
-        }
-    });
-}
-
-// สร้างกราฟจากข้อมูล dashboard2
-function renderDashboard2(data) {
-    const ctx = document.getElementById('chart2').getContext('2d');
-    if(window.chart2) window.chart2.destroy();
-
-    window.chart2 = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: data.dashboard2.labels,
-            datasets: [{
-                label: 'Forecast Accuracy',
-                data: data.dashboard2.accuracy,
-                borderColor: 'rgba(54, 162, 235, 0.8)',
-                fill: false,
-                tension: 0.3
-            }]
-        },
-        options: { responsive: true }
-    });
-}
-
-// สร้างกราฟจากข้อมูล dashboard3
-function renderDashboard3(data) {
-    const ctx = document.getElementById('chart3').getContext('2d');
-    if(window.chart3) window.chart3.destroy();
-
-    window.chart3 = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: data.dashboard3.labels,
-            datasets: [{
-                label: 'Strategic Actions',
-                data: data.dashboard3.values,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(255, 206, 86, 0.6)',
-                    'rgba(54, 162, 235, 0.6)'
-                ]
-            }]
-        },
-        options: { responsive: true }
-    });
-}
-
-// สลับแท็บ
-function setupTabs(data) {
-    const buttons = document.querySelectorAll('.tab-btn');
-    const sections = document.querySelectorAll('.tab-content');
-
-    buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            buttons.forEach(b => b.classList.remove('active'));
-            sections.forEach(s => s.classList.remove('active'));
-
-            btn.classList.add('active');
-            document.getElementById(btn.dataset.tab).classList.add('active');
-
-            // แสดงกราฟตามแท็บ
-            if (btn.dataset.tab === 'dashboard1') renderDashboard1(data);
-            else if (btn.dataset.tab === 'dashboard2') renderDashboard2(data);
-            else if (btn.dataset.tab === 'dashboard3') renderDashboard3(data);
-        });
-    });
-
-    // โหลดกราฟหน้าแรกอัตโนมัติ
+fetch('data_all_dashboards.json')
+  .then(res => res.json())
+  .then(data => {
     renderDashboard1(data);
+    renderDashboard2(data);
+    renderDashboard3(data);
+  });
+
+function renderDashboard1(data) {
+  new Chart(document.getElementById('chart1_abc'), {
+    type: 'bar',
+    data: {
+      labels: data.dashboard1.abc.labels,
+      datasets: [{
+        label: 'Inventory Value',
+        data: data.dashboard1.abc.values,
+        backgroundColor: ['#4caf50', '#ff9800', '#f44336']
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('chart1_fsn'), {
+    type: 'pie',
+    data: {
+      labels: data.dashboard1.fsn.labels,
+      datasets: [{
+        data: data.dashboard1.fsn.counts,
+        backgroundColor: ['#03a9f4', '#8bc34a', '#ff5722']
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('chart1_turnover'), {
+    type: 'line',
+    data: {
+      labels: data.dashboard1.turnover.months,
+      datasets: [{
+        label: 'Turnover Ratio',
+        data: data.dashboard1.turnover.values,
+        borderColor: '#673ab7',
+        fill: false
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('chart1_doi'), {
+    type: 'bar',
+    data: {
+      labels: data.dashboard1.doi.items,
+      datasets: [{
+        label: 'DOI',
+        data: data.dashboard1.doi.values,
+        backgroundColor: '#009688'
+      }]
+    }
+  });
+
+  new Chart(document.getElementById('chart1_risk'), {
+    type: 'doughnut',
+    data: {
+      labels: data.dashboard1.risk.labels,
+      datasets: [{
+        label: 'Inventory at Risk',
+        data: data.dashboard1.risk.values,
+        backgroundColor: ['#e91e63', '#cddc39', '#2196f3']
+      }]
+    }
+  });
 }
 
-// เริ่มต้นโหลดข้อมูลและตั้งค่าหน้า
-loadData().then(data => {
-    setupTabs(data);
-}).catch(err => {
-    console.error('Error loading data:', err);
-});
+function renderDashboard2(data) {
+  new Chart(document.getElementById('chart2'), {
+    type: 'bar',
+    data: {
+      labels: data.dashboard2.labels,
+      datasets: [{
+        label: 'Forecast Accuracy',
+        data: data.dashboard2.accuracy,
+        backgroundColor: '#607d8b'
+      }]
+    }
+  });
+}
+
+function renderDashboard3(data) {
+  new Chart(document.getElementById('chart3'), {
+    type: 'pie',
+    data: {
+      labels: data.dashboard3.labels,
+      datasets: [{
+        label: 'Strategic Impact',
+        data: data.dashboard3.values,
+        backgroundColor: ['#795548', '#009688', '#03a9f4']
+      }]
+    }
+  });
+}
