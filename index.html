@@ -2,26 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>iStockView – Strategic Inventory Intelligence</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <header>
-    <h1>📦 iStockView – Strategic Inventory Intelligence</h1>
-    <nav>
-      <button onclick="switchDashboard(1)">📊 Dashboard 1<br>Inventory Health</button>
-      <button onclick="switchDashboard(2)">📈 Dashboard 2<br>Planning Accuracy</button>
-      <button onclick="switchDashboard(3)">📋 Dashboard 3<br>Strategic Actions</button>
-    </nav>
+    <h1>iStockView – Strategic Inventory Intelligence</h1>
+    <label for="dateSelector">เลือกวันที่โหลดข้อมูล:</label>
+    <select id="dateSelector"></select>
   </header>
 
-  <main id="dashboard-container">
-    <!-- Dashboard will load here -->
+  <main>
+    <section id="dashboard1">
+      <h2>📊 Strategic Inventory Health & Risk</h2>
+      <canvas id="abcChart"></canvas>
+      <canvas id="fsnChart"></canvas>
+      <canvas id="valueByAgingChart"></canvas>
+      <canvas id="doiTrendChart"></canvas>
+    </section>
+
+    <section id="dashboard2">
+      <h2>📉 Planning Accuracy & Demand Risk</h2>
+      <canvas id="forecastVsActualChart"></canvas>
+      <canvas id="forecastAccuracyChart"></canvas>
+      <canvas id="scoreHeatmap"></canvas>
+    </section>
+
+    <section id="dashboard3">
+      <h2>📌 Strategic Action & Impact</h2>
+      <div id="kpiCards"></div>
+      <canvas id="urgencyFlagChart"></canvas>
+      <div id="top10TableContainer"></div>
+    </section>
   </main>
 
   <script src="app.js"></script>
 </body>
 </html>
-
