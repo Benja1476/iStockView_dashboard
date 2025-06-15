@@ -1,42 +1,93 @@
+/* General styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f9;
   margin: 0;
-  background-color: #f9f9f9;
+  padding: 0;
+  color: #333;
 }
 
 header {
-  background-color: #004080;
+  background-color: #1a73e8;
   color: white;
   padding: 1rem;
   text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 nav {
-  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  padding: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 nav button {
-  margin: 0.5rem;
-  padding: 0.7rem 1.2rem;
-  background-color: #007acc;
-  color: white;
-  border: none;
-  border-radius: 8px;
+  background-color: #e8f0fe;
+  border: 1px solid #1a73e8;
+  color: #1a73e8;
+  padding: 0.5rem 1rem;
+  margin: 0 0.3rem;
   cursor: pointer;
-  font-size: 0.95rem;
+  border-radius: 4px;
+  font-weight: 500;
 }
 
-nav button:hover {
-  background-color: #005fa3;
+nav button.active {
+  background-color: #1a73e8;
+  color: white;
 }
 
-main {
-  padding: 2rem;
+.container {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: auto;
 }
 
-canvas {
-  max-width: 100%;
-  height: auto;
-  margin: 2rem auto;
+.dashboard {
+  display: none;
+}
+
+.dashboard.active {
   display: block;
+}
+
+/* Chart containers */
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.chart-card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Date selector */
+#dateSelector {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Responsive tweaks */
+@media screen and (max-width: 600px) {
+  header {
+    font-size: 1.2rem;
+  }
+
+  nav button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
 }
