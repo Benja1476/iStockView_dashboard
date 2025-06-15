@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,22 +10,25 @@
 <body>
   <header>
     <h1>iStockView - Strategic Inventory Intelligence</h1>
-    <div class="controls">
-      <label for="dashboardSelector">Select Dashboard:</label>
-      <select id="dashboardSelector">
-        <option value="1">Strategic Inventory Health & Risk</option>
-        <option value="2">Planning Accuracy & Demand Risk</option>
-        <option value="3">Strategic Action & Impact (Executive Scorecard)</option>
-      </select>
-
-      <label for="dateSelector">Select Date:</label>
-      <input type="date" id="dateSelector" value="2025-06-14" />
-
-      <button id="refreshBtn">Refresh</button>
-    </div>
   </header>
 
-  <main id="dashboardContainer"></main>
+  <section class="controls">
+    <label for="dashboardSelect">เลือก Dashboard:</label>
+    <select id="dashboardSelect">
+      <option value="StrategicInventoryHealthRisk">Strategic Inventory Health & Risk</option>
+      <option value="PlanningAccuracyDemandRisk">Planning Accuracy & Demand Risk</option>
+      <option value="StrategicActionImpact">Strategic Action & Impact (Executive Scorecard)</option>
+    </select>
+
+    <label for="dateSelect">เลือกวันที่:</label>
+    <select id="dateSelect"></select>
+
+    <button id="refreshBtn">Refresh</button>
+  </section>
+
+  <main id="dashboardContainer" class="dashboard-grid">
+    <!-- กราฟจะขึ้นที่นี่ -->
+  </main>
 
   <script src="app.js"></script>
 </body>
