@@ -1,51 +1,37 @@
 {
-  "dates": ["2025-03", "2025-04", "2025-05"],
-  "dashboards": {
-    "inventoryHealth": {
-      "2025-03": {
-        "abc": {"A": 50, "B": 30, "C": 20},
-        "fsn": {"Fast": 60, "Slow": 25, "Non-moving": 15},
-        "turnover": [5, 4.5, 6, 5.5, 4],
-        "doi": [40, 38, 35, 45, 42]
+  "dashboard1": {
+    "2025-06": {
+      "abc": {
+        "labels": ["A", "B", "C"],
+        "values": [100, 60, 40]
       },
-      "2025-04": {
-        "abc": {"A": 45, "B": 35, "C": 20},
-        "fsn": {"Fast": 55, "Slow": 30, "Non-moving": 15},
-        "turnover": [5.2, 4.7, 6.1, 5.6, 4.3],
-        "doi": [42, 39, 37, 46, 44]
-      },
-      "2025-05": {
-        "abc": {"A": 48, "B": 32, "C": 20},
-        "fsn": {"Fast": 58, "Slow": 27, "Non-moving": 15},
-        "turnover": [5.1, 4.6, 6, 5.4, 4.1],
-        "doi": [41, 38, 36, 44, 43]
+      "fsn": {
+        "labels": ["Fast", "Slow", "Non-Moving"],
+        "values": [80, 50, 20]
       }
-    },
-
-    "planningAccuracy": {
-      "2025-03": {
-        "accuracy": [85, 88, 90, 87, 86],
-        "demandRisk": {"Low": 70, "Medium": 20, "High": 10}
+    }
+  },
+  "dashboard2": {
+    "2025-06": {
+      "accuracy": {
+        "labels": ["Forecast", "Actual"],
+        "values": [95, 88]
       },
-      "2025-04": {
-        "accuracy": [87, 89, 91, 88, 87],
-        "demandRisk": {"Low": 72, "Medium": 18, "High": 10}
-      },
-      "2025-05": {
-        "accuracy": [86, 87, 89, 86, 85],
-        "demandRisk": {"Low": 68, "Medium": 22, "High": 10}
+      "demandRisk": {
+        "labels": ["High", "Medium", "Low"],
+        "values": [30, 50, 20]
       }
-    },
-
-    "strategicAction": {
-      "2025-03": {
-        "scorecard": {"On Track": 75, "Warning": 15, "At Risk": 10}
+    }
+  },
+  "dashboard3": {
+    "2025-06": {
+      "impact": {
+        "labels": ["Cost Saving", "Inventory Reduction"],
+        "values": [50000, 20000]
       },
-      "2025-04": {
-        "scorecard": {"On Track": 78, "Warning": 12, "At Risk": 10}
-      },
-      "2025-05": {
-        "scorecard": {"On Track": 76, "Warning": 14, "At Risk": 10}
+      "scorecard": {
+        "labels": ["KPI 1", "KPI 2", "KPI 3"],
+        "values": [85, 90, 75]
       }
     }
   }
