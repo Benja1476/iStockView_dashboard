@@ -5,24 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>iStockView – Strategic Inventory Intelligence</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+
   <header>
     <h1>iStockView</h1>
-    <p>Strategic Inventory Intelligence</p>
+    <h2>Strategic Inventory Intelligence</h2>
   </header>
 
   <nav>
-    <button onclick="navigateTo('health')">1️⃣ Health & Risk</button>
+    <button onclick="navigateTo('health')">1️⃣ Strategic Inventory Health & Risk</button>
     <button onclick="navigateTo('planning')">2️⃣ Planning Accuracy & Demand Risk</button>
     <button onclick="navigateTo('impact')">3️⃣ Strategic Action & Impact</button>
   </nav>
 
   <main id="app">
-    <p>กำลังโหลดข้อมูล...</p>
+    <!-- Dashboard content inject here -->
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
