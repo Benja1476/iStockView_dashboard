@@ -1,26 +1,22 @@
-[
-  {
-    "date": "2025-06",
-    "product_group": "Group A",
-    "forecast_accuracy": 85,
-    "MAPE": 12,
-    "bias": -5,
-    "fill_rate": 92,
-    "demand_risk_level": "Low",
-    "forecast_qty": 1000,
-    "actual_qty": 950,
-    "notes": "Seasonal increase"
+{
+  "forecastAccuracy": {
+    "labels": ["Jan", "Feb", "Mar"],
+    "data": [85, 82, 88]
   },
-  {
-    "date": "2025-06",
-    "product_group": "Group B",
-    "forecast_accuracy": 75,
-    "MAPE": 18,
-    "bias": 10,
-    "fill_rate": 85,
-    "demand_risk_level": "Medium",
-    "forecast_qty": 1200,
-    "actual_qty": 1400,
-    "notes": "Under‑forecast"
+  "mapeTrend": {
+    "labels": ["Jan", "Feb", "Mar"],
+    "data": [15, 18, 12]
+  },
+  "biasIndex": {
+    "labels": ["Jan", "Feb", "Mar"],
+    "data": [5, -3, 2]
+  },
+  "fillRate": {
+    "labels": ["Filled", "Unfilled"],
+    "data": [90, 10]
+  },
+  "demandRisk": {
+    "labels": ["High", "Medium", "Low"],
+    "data": [20, 50, 30]
   }
-]
+}
