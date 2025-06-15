@@ -1,85 +1,188 @@
-let currentDashboard = 1;
+// app.js
+let dashboardData = {};
+let currentDashboard = 'dashboard1';
 
-async function loadData() {
-  const response = await fetch("data_all_dashboards.json");
-  return await response.json();
+function switchDashboard(id) {
+  document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  currentDashboard = id;
+  renderCharts();
 }
 
-function switchDashboard(dashboardNumber) {
-  currentDashboard = dashboardNumber;
-  renderDashboard();
+function onDateChange() {
+  renderCharts();
 }
 
-async function renderDashboard() {
-  const data = await loadData();
-  const container = document.getElementById("dashboard-container");
-  container.innerHTML = "";
+function populateDateSelector(data) {
+  const dateSet = new Set(data.map(d => d['Date Load']));
+  const selector = document.getElementById('dateLoad');
+  selector.innerHTML = '';
+  [...dateSet].sort().reverse().forEach(date => {
+    const option = document.createElement('option');
+    option.value = date;
+    option.textContent = date;
+    selector.appendChild(option);
+  });
+}
 
-  if (currentDashboard === 1) {
-    const canvas = document.createElement("canvas");
-    canvas.id = "chart1";
-    container.appendChild(canvas);
-
-    new Chart(canvas, {
-      type: "bar",
-      data: {
-        labels: data.dashboard1.labels,
-        datasets: [{
-          label: "Inventory Value",
-          data: data.dashboard1.values,
-          backgroundColor: "#007acc"
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { title: { display: true, text: "Inventory Value by Item Group" } }
-      }
+function fetchData() {
+  fetch('data_all_dashboards.json')
+    .then(res => res.json())
+    .then(data => {
+      dashboardData = data;
+      populateDateSelector(data);
+      renderCharts();
     });
+}
 
-  } else if (currentDashboard === 2) {
-    const canvas = document.createElement("canvas");
-    canvas.id = "chart2";
-    container.appendChild(canvas);
-
-    new Chart(canvas, {
-      type: "line",
-      data: {
-        labels: data.dashboard2.dates,
-        datasets: [{
-          label: "Forecast Accuracy",
-          data: data.dashboard2.accuracy,
-          borderColor: "green",
-          fill: false
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { title: { display: true, text: "Forecast Accuracy Over Time" } }
-      }
-    });
-
-  } else if (currentDashboard === 3) {
-    const canvas = document.createElement("canvas");
-    canvas.id = "chart3";
-    container.appendChild(canvas);
-
-    new Chart(canvas, {
-      type: "doughnut",
-      data: {
-        labels: data.dashboard3.categories,
-        datasets: [{
-          label: "Recommendations",
-          data: data.dashboard3.counts,
-          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { title: { display: true, text: "Strategic Recommendations" } }
-      }
-    });
+function renderCharts() {
+  const selectedDate = document.getElementById('dateLoad').value;
+  const filteredData = dashboardData.filter(d => d['Date Load'] === selectedDate);
+  
+  if (currentDashboard === 'dashboard1') {
+    renderABCChart(filteredData);
+    renderFSNChart(filteredData);
+    renderDOIChart(filteredData);
+  } else if (currentDashboard === 'dashboard2') {
+    renderAccuracyChart(filteredData);
+    renderForecastChart(filteredData);
+  } else if (currentDashboard === 'dashboard3') {
+    renderUrgencyChart(filteredData);
+    renderOpportunityChart(filteredData);
   }
 }
 
-renderDashboard();
+function renderABCChart(data) {
+  const ctx = document.getElementById('abcChart').getContext('2d');
+  const counts = { A: 0, B: 0, C: 0 };
+  data.forEach(d => counts[d['ABC Category']]++);
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['A', 'B', 'C'],
+      datasets: [{
+        data: [counts.A, counts.B, counts.C],
+        backgroundColor: ['#4caf50', '#ff9800', '#f44336']
+      }]
+    }
+  });
+}
 
+function renderFSNChart(data) {
+  const ctx = document.getElementById('fsnChart').getContext('2d');
+  const counts = { F: 0, S: 0, N: 0 };
+  data.forEach(d => counts[d['FSN Category']]++);
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['F', 'S', 'N'],
+      datasets: [{
+        data: [counts.F, counts.S, counts.N],
+        backgroundColor: ['#2196f3', '#ffeb3b', '#9e9e9e']
+      }]
+    }
+  });
+}
+
+function renderDOIChart(data) {
+  const ctx = document.getElementById('doiChart').getContext('2d');
+  const items = data.map(d => d['Item number']);
+  const values = data.map(d => d['DOI']);
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: items,
+      datasets: [{
+        label: 'DOI',
+        data: values,
+        backgroundColor: '#3f51b5'
+      }]
+    },
+    options: { scales: { x: { display: false } } }
+  });
+}
+
+function renderAccuracyChart(data) {
+  const ctx = document.getElementById('accuracyChart').getContext('2d');
+  const items = data.map(d => d['Item number']);
+  const values = data.map(d => d['Forecast Accuracy']);
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: items,
+      datasets: [{
+        label: 'Forecast Accuracy',
+        data: values,
+        backgroundColor: '#009688'
+      }]
+    },
+    options: { scales: { x: { display: false } } }
+  });
+}
+
+function renderForecastChart(data) {
+  const ctx = document.getElementById('forecastChart').getContext('2d');
+  const items = data.map(d => d['Item number']);
+  const forecast = data.map(d => d['ForecastQty']);
+  const actual = data.map(d => d['ActualQty']);
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: items,
+      datasets: [
+        {
+          label: 'Forecast Qty',
+          data: forecast,
+          borderColor: '#ff9800'
+        },
+        {
+          label: 'Actual Qty',
+          data: actual,
+          borderColor: '#4caf50'
+        }
+      ]
+    },
+    options: { scales: { x: { display: false } } }
+  });
+}
+
+function renderUrgencyChart(data) {
+  const ctx = document.getElementById('urgencyChart').getContext('2d');
+  const urgencyGroups = {};
+  data.forEach(d => {
+    const flag = d['Urgency Flag'];
+    urgencyGroups[flag] = (urgencyGroups[flag] || 0) + 1;
+  });
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(urgencyGroups),
+      datasets: [{
+        label: 'Items',
+        data: Object.values(urgencyGroups),
+        backgroundColor: '#e91e63'
+      }]
+    }
+  });
+}
+
+function renderOpportunityChart(data) {
+  const ctx = document.getElementById('opportunityChart').getContext('2d');
+  const opportunities = data.filter(d => d['OpportunityCostFlag'] !== null);
+  const items = opportunities.map(d => d['Item number']);
+  const values = opportunities.map(d => d['InventoryValue']);
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: items,
+      datasets: [{
+        label: 'Inventory Value at Risk',
+        data: values,
+        backgroundColor: '#f44336'
+      }]
+    },
+    options: { scales: { x: { display: false } } }
+  });
+}
+
+fetchData();
