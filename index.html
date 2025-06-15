@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>iStockView – Strategic Inventory Intelligence</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>iStockView - Strategic Inventory Intelligence</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <h1>iStockView – Strategic Inventory Intelligence</h1>
-    <div class="controls">
-      <label for="dashboardSelector">เลือก Dashboard:</label>
-      <select id="dashboardSelector">
-        <option value="1">1. Strategic Inventory Health & Risk</option>
-        <option value="2">2. Planning Accuracy & Demand Risk</option>
-        <option value="3">3. Strategic Action & Impact (Executive Scorecard)</option>
-      </select>
-      <button id="refreshBtn">Refresh</button>
-    </div>
-  </header>
+  <h1>iStockView - Strategic Inventory Intelligence</h1>
 
-  <main>
-    <div id="dashboardContainer" class="grid-container"></div>
-  </main>
+  <div class="controls">
+    <label for="selectDashboard">เลือก Dashboard:</label>
+    <select id="selectDashboard">
+      <option value="dashboard1">1. Strategic Inventory Health & Risk</option>
+      <option value="dashboard2">2. Planning Accuracy & Demand Risk</option>
+      <option value="dashboard3">3. Strategic Action & Impact (Executive Scorecard)</option>
+    </select>
+
+    <label for="startDate">เลือกวันที่เริ่ม:</label>
+    <input type="date" id="startDate" />
+
+    <label for="endDate">เลือกวันที่สิ้นสุด:</label>
+    <input type="date" id="endDate" />
+
+    <button id="btnLoad">โหลดข้อมูล</button>
+  </div>
+
+  <div id="dashboardContainer" class="grid-container">
+    <!-- กราฟจะถูกสร้างที่นี่ -->
+  </div>
 
   <script src="app.js"></script>
 </body>
