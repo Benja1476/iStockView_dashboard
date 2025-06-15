@@ -3,11 +3,11 @@
     "2025-06": {
       "abc": {
         "labels": ["A", "B", "C"],
-        "values": [100, 60, 40]
+        "values": [120, 80, 40]
       },
       "fsn": {
         "labels": ["Fast", "Slow", "Non-Moving"],
-        "values": [80, 50, 20]
+        "values": [90, 45, 15]
       }
     }
   },
@@ -15,7 +15,7 @@
     "2025-06": {
       "accuracy": {
         "labels": ["Forecast", "Actual"],
-        "values": [95, 88]
+        "values": [95, 89]
       },
       "demandRisk": {
         "labels": ["High", "Medium", "Low"],
@@ -27,11 +27,11 @@
     "2025-06": {
       "impact": {
         "labels": ["Cost Saving", "Inventory Reduction"],
-        "values": [50000, 20000]
+        "values": [30000, 18000]
       },
       "scorecard": {
         "labels": ["KPI 1", "KPI 2", "KPI 3"],
-        "values": [85, 90, 75]
+        "values": [85, 90, 78]
       }
     }
   }
