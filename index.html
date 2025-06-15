@@ -1,25 +1,28 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>iStockView Strategic Inventory Intelligence</title>
-<link rel="stylesheet" href="style.css" />
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iStockView – Strategic Inventory Intelligence</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>iStockView Strategic Inventory Intelligence</h1>
+    <h1>iStockView</h1>
+    <p>Strategic Inventory Intelligence</p>
   </header>
 
-  <main id="dashboardGrid">
-    <!-- Dashboards จะถูกสร้างด้วย JS -->
+  <nav>
+    <button onclick="navigateTo('health')">1️⃣ Health & Risk</button>
+    <button onclick="navigateTo('planning')">2️⃣ Planning Accuracy & Demand Risk</button>
+    <button onclick="navigateTo('impact')">3️⃣ Strategic Action & Impact</button>
+  </nav>
+
+  <main id="app">
+    <p>กำลังโหลดข้อมูล...</p>
   </main>
 
-  <footer>
-    <small>© 2025 iStockView Dashboard</small>
-  </footer>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
