@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>iStockView - Strategic Inventory Intelligence</title>
+  <title>iStockView – Strategic Inventory Intelligence</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <header>
-    <h1>iStockView - Strategic Inventory Intelligence</h1>
+    <h1>iStockView – Strategic Inventory Intelligence</h1>
   </header>
 
   <section class="controls">
@@ -17,18 +17,14 @@
     <select id="dashboardSelect">
       <option value="StrategicInventoryHealthRisk">Strategic Inventory Health & Risk</option>
       <option value="PlanningAccuracyDemandRisk">Planning Accuracy & Demand Risk</option>
-      <option value="StrategicActionImpact">Strategic Action & Impact (Executive Scorecard)</option>
+      <option value="StrategicActionExecutiveScorecard">Strategic Action & Executive Scorecard</option>
     </select>
 
     <label for="dateSelect">เลือกวันที่:</label>
     <select id="dateSelect"></select>
-
-    <button id="refreshBtn">Refresh</button>
   </section>
 
-  <main id="dashboardContainer" class="dashboard-grid">
-    <!-- กราฟจะขึ้นที่นี่ -->
-  </main>
+  <section id="chartsContainer"></section>
 
   <script src="app.js"></script>
 </body>
