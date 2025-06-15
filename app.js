@@ -1,182 +1,63 @@
-let rawData = null;
+let data = {};
 
-const selectDate = document.getElementById("selectDate");
-const selectDashboard = document.getElementById("selectDashboard");
-const dashboardContent = document.getElementById("dashboardContent");
-
-let currentCharts = [];
-
-async function loadData() {
-  const response = await fetch("data_all_dashboards.json");
-  rawData = await response.json();
-
-  // เติม dropdown วันที่
-  rawData.dates.forEach(date => {
-    const option = document.createElement("option");
-    option.value = date;
-    option.textContent = date;
-    selectDate.appendChild(option);
+fetch('data_all_dashboards.json')
+  .then((res) => res.json())
+  .then((json) => {
+    data = json;
+    populateMonthOptions();
+    renderCurrentDashboard();
   });
 
-  // ตั้งค่าเริ่มต้นวันที่เป็นตัวแรก
-  selectDate.value = rawData.dates[0];
-
-  updateDashboard();
+function populateMonthOptions() {
+  const monthSelect = document.getElementById('monthSelect');
+  const months = Object.keys(data["dashboard1"]);
+  months.forEach(month => {
+    const option = document.createElement('option');
+    option.value = month;
+    option.textContent = month;
+    monthSelect.appendChild(option);
+  });
+  monthSelect.addEventListener('change', renderCurrentDashboard);
+  document.getElementById('dashboardSelect').addEventListener('change', renderCurrentDashboard);
 }
 
-function clearDashboard() {
-  dashboardContent.innerHTML = "";
-  // ทำลาย chart เก่า
-  currentCharts.forEach(chart => chart.destroy());
-  currentCharts = [];
-}
+function renderCurrentDashboard() {
+  const dashboard = document.getElementById('dashboardSelect').value;
+  const month = document.getElementById('monthSelect').value;
+  const chartData = data[dashboard]?.[month];
 
-function updateDashboard() {
-  clearDashboard();
-  const selectedDate = selectDate.value;
-  const selectedDashboard = selectDashboard.value;
-
-  if (!rawData || !rawData.dashboards[selectedDashboard]) return;
-
-  const data = rawData.dashboards[selectedDashboard][selectedDate];
-
-  if (!data) {
-    dashboardContent.textContent = "ไม่มีข้อมูลสำหรับวันที่นี้";
+  if (!chartData) {
+    alert("ไม่มีข้อมูลสำหรับเดือนนี้");
     return;
   }
 
-  if (selectedDashboard === "inventoryHealth") {
-    createInventoryHealthDashboard(data);
-  } else if (selectedDashboard === "planningAccuracy") {
-    createPlanningAccuracyDashboard(data);
-  } else if (selectedDashboard === "strategicAction") {
-    createStrategicActionDashboard(data);
-  }
-}
+  const ctx1 = document.getElementById('chart1').getContext('2d');
+  const ctx2 = document.getElementById('chart2').getContext('2d');
 
-function createInventoryHealthDashboard(data) {
-  // ABC Pie Chart
-  createPieChart("ABC Classification", data.abc);
+  if (window.chart1) window.chart1.destroy();
+  if (window.chart2) window.chart2.destroy();
 
-  // FSN Pie Chart
-  createPieChart("FSN Classification", data.fsn);
-
-  // Turnover Line Chart
-  createLineChart("Inventory Turnover (times)", data.turnover);
-
-  // DOI Line Chart
-  createLineChart("Days of Inventory (DOI)", data.doi);
-}
-
-function createPlanningAccuracyDashboard(data) {
-  // Accuracy Line Chart
-  createLineChart("Planning Accuracy (%)", data.accuracy);
-
-  // Demand Risk Pie Chart
-  createPieChart("Demand Risk", data.demandRisk);
-}
-
-function createStrategicActionDashboard(data) {
-  // Executive Scorecard Pie Chart
-  createPieChart("Executive Scorecard", data.scorecard);
-}
-
-function createPieChart(title, dataObj) {
-  const container = document.createElement("div");
-  container.className = "chart-container";
-  const canvas = document.createElement("canvas");
-  container.appendChild(canvas);
-  dashboardContent.appendChild(container);
-
-  const labels = Object.keys(dataObj);
-  const values = Object.values(dataObj);
-
-  const chart = new Chart(canvas.getContext("2d"), {
-    type: "pie",
+  window.chart1 = new Chart(ctx1, {
+    type: 'bar',
     data: {
-      labels,
+      labels: chartData.abc.labels,
       datasets: [{
-        label: title,
-        data: values,
-        backgroundColor: generateColors(labels.length),
+        label: 'ABC Category',
+        data: chartData.abc.values,
+        backgroundColor: ['#f39c12', '#27ae60', '#c0392b']
       }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: "bottom"
-        },
-        title: {
-          display: true,
-          text: title,
-          font: { size: 18 }
-        }
-      }
     }
   });
 
-  currentCharts.push(chart);
-}
-
-function createLineChart(title, dataArr) {
-  const container = document.createElement("div");
-  container.className = "chart-container";
-  const canvas = document.createElement("canvas");
-  container.appendChild(canvas);
-  dashboardContent.appendChild(container);
-
-  // สร้าง label แบบตัวเลข 1,2,3,... หรืออาจปรับเป็นเดือน
-  const labels = dataArr.map((_, i) => `Point ${i+1}`);
-
-  const chart = new Chart(canvas.getContext("2d"), {
-    type: "line",
+  window.chart2 = new Chart(ctx2, {
+    type: 'pie',
     data: {
-      labels,
+      labels: chartData.fsn.labels,
       datasets: [{
-        label: title,
-        data: dataArr,
-        fill: false,
-        borderColor: "rgba(54, 162, 235, 1)",
-        backgroundColor: "rgba(54, 162, 235, 0.4)",
-        tension: 0.3,
-        pointRadius: 5
+        label: 'FSN Category',
+        data: chartData.fsn.values,
+        backgroundColor: ['#2980b9', '#8e44ad', '#2ecc71']
       }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: "bottom" },
-        title: {
-          display: true,
-          text: title,
-          font: { size: 18 }
-        }
-      },
-      scales: {
-        y: { beginAtZero: true }
-      }
     }
   });
-
-  currentCharts.push(chart);
 }
-
-function generateColors(count) {
-  const baseColors = [
-    "#007bff", "#28a745", "#dc3545",
-    "#ffc107", "#17a2b8", "#6f42c1",
-    "#fd7e14", "#20c997"
-  ];
-  const colors = [];
-  for (let i = 0; i < count; i++) {
-    colors.push(baseColors[i % baseColors.length]);
-  }
-  return colors;
-}
-
-// Event listeners
-selectDate.addEventListener("change", updateDashboard);
-selectDashboard.addEventListener("change", updateDashboard);
-
-loadData();
