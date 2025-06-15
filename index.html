@@ -1,72 +1,58 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>iStockView – Strategic Inventory Intelligence</title>
+<title>iStockView - Strategic Inventory Health & Risk</title>
 <link rel="stylesheet" href="style.css" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <h1>iStockView – Strategic Inventory Intelligence</h1>
-    <div class="date-slicer">
-      <label>เลือกช่วงวันที่: </label>
-      <input type="date" id="startDate" />
-      <input type="date" id="endDate" />
-      <button id="filterBtn">Filter</button>
-    </div>
-    <nav class="dashboard-tabs">
-      <button data-dash="1" class="active">1. Strategic Inventory Health & Risk</button>
-      <button data-dash="2">2. Planning Accuracy & Demand Risk</button>
-      <button data-dash="3">3. Strategic Action & Impact</button>
-    </nav>
-  </header>
 
-  <main>
-    <section id="dashboard1" class="dashboard active">
-      <h2>Dashboard 1: Strategic Inventory Health & Risk</h2>
-      <div class="charts-row">
-        <canvas id="chart1a"></canvas>
-        <canvas id="chart1b"></canvas>
-        <canvas id="chart1c"></canvas>
-      </div>
-      <div class="table-container">
-        <table id="table1">
-          <thead><tr><th>SKU</th><th>Category</th><th>DOI</th><th>Turnover</th><th>Risk Level</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
+<header>
+  <h1>iStockView - Strategic Inventory Health & Risk</h1>
+</header>
 
-    <section id="dashboard2" class="dashboard">
-      <h2>Dashboard 2: Planning Accuracy & Demand Risk</h2>
-      <div class="charts-row">
-        <canvas id="chart2a"></canvas>
-        <canvas id="chart2b"></canvas>
-      </div>
-      <div class="table-container">
-        <table id="table2">
-          <thead><tr><th>SKU</th><th>Forecast Accuracy</th><th>Demand Risk</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
+<section class="filters">
+  <label for="dateRange">เลือกช่วงเวลา:</label>
+  <select id="dateRange">
+    <option value="2024Q1">2024 Q1</option>
+    <option value="2024Q2">2024 Q2</option>
+    <option value="2024Q3">2024 Q3</option>
+    <option value="2024Q4">2024 Q4</option>
+  </select>
 
-    <section id="dashboard3" class="dashboard">
-      <h2>Dashboard 3: Strategic Action & Impact (Executive Scorecard)</h2>
-      <div class="charts-row">
-        <canvas id="chart3a"></canvas>
-      </div>
-      <div class="table-container">
-        <table id="table3">
-          <thead><tr><th>Action</th><th>Impact Score</th><th>Status</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+  <label for="categorySelect">เลือกหมวดสินค้า:</label>
+  <select id="categorySelect">
+    <option value="all">ทั้งหมด</option>
+    <option value="A">กลุ่ม A</option>
+    <option value="B">กลุ่ม B</option>
+    <option value="C">กลุ่ม C</option>
+  </select>
+</section>
 
-  <script src="app.js"></script>
+<section class="kpi-summary">
+  <div class="kpi-card">
+    <h3>ทุนจม (Invested Capital)</h3>
+    <p id="kpiCapital">-</p>
+  </div>
+  <div class="kpi-card">
+    <h3>Turnover Rate</h3>
+    <p id="kpiTurnover">-</p>
+  </div>
+  <div class="kpi-card">
+    <h3>Days of Inventory (DOI)</h3>
+    <p id="kpiDOI">-</p>
+  </div>
+</section>
+
+<section class="charts">
+  <canvas id="abcPieChart"></canvas>
+  <canvas id="turnoverLineChart"></canvas>
+  <canvas id="riskHeatmapChart"></canvas>
+</section>
+
+<script src="app.js"></script>
 </body>
 </html>
+
