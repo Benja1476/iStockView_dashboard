@@ -3,26 +3,24 @@
 }
 
 body {
-  font-family: "Kanit", sans-serif, Arial;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  padding: 0;
-  background-color: #f5f9ff;
-  color: #003366;
+  padding: 1rem;
+  background-color: #f4f7fc;
+  color: #222;
 }
 
 header {
-  background-color: #004080;
-  color: white;
-  padding: 1rem 2rem;
   text-align: center;
+  margin-bottom: 1rem;
 }
 
 .controls {
-  margin: 1rem 2rem;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .controls label {
@@ -30,47 +28,28 @@ header {
   margin-right: 0.5rem;
 }
 
-.controls select, .controls button {
-  padding: 0.4rem 0.8rem;
-  border: 1px solid #004080;
-  border-radius: 4px;
+select {
+  padding: 0.3rem 0.5rem;
   font-size: 1rem;
-  cursor: pointer;
 }
 
-.controls button {
-  background-color: #004080;
-  color: white;
-  transition: background-color 0.3s ease;
-}
-
-.controls button:hover {
-  background-color: #00264d;
-}
-
-.dashboard-grid {
+#chartsContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.5rem;
-  margin: 1rem 2rem 3rem 2rem;
 }
 
-.card {
+.chart-card {
   background: white;
-  padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
-  display: flex;
-  flex-direction: column;
+  padding: 1rem;
+  box-shadow: 0 0 8px rgb(0 0 0 / 0.1);
 }
 
-.card h3 {
-  margin-top: 0;
-  margin-bottom: 0.8rem;
+.chart-card h3 {
+  margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
-  border-bottom: 2px solid #004080;
-  padding-bottom: 0.3rem;
-  color: #00264d;
+  text-align: center;
 }
 
 canvas {
