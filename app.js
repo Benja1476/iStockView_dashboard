@@ -1,159 +1,182 @@
-let abcPieChart, turnoverLineChart, riskHeatmapChart;
+let rawData = null;
+
+const selectDate = document.getElementById("selectDate");
+const selectDashboard = document.getElementById("selectDashboard");
+const dashboardContent = document.getElementById("dashboardContent");
+
+let currentCharts = [];
 
 async function loadData() {
-  const res = await fetch('data_all_dashboards.json');
-  const data = await res.json();
-  return data;
-}
+  const response = await fetch("data_all_dashboards.json");
+  rawData = await response.json();
 
-function formatNumber(num) {
-  return num.toLocaleString(undefined, { maximumFractionDigits: 2 });
-}
-
-function createKPI(data) {
-  document.getElementById('kpiCapital').textContent = formatNumber(data.investedCapital) + " ฿";
-  document.getElementById('kpiTurnover').textContent = formatNumber(data.turnoverRate) + " ครั้ง/ปี";
-  document.getElementById('kpiDOI').textContent = formatNumber(data.doi) + " วัน";
-}
-
-function createABCPieChart(data) {
-  const ctx = document.getElementById('abcPieChart').getContext('2d');
-  if (abcPieChart) abcPieChart.destroy();
-
-  abcPieChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: Object.keys(data),
-      datasets: [{
-        data: Object.values(data),
-        backgroundColor: ['#27ae60', '#f39c12', '#e74c3c']
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: { enabled: true }
-      }
-    }
+  // เติม dropdown วันที่
+  rawData.dates.forEach(date => {
+    const option = document.createElement("option");
+    option.value = date;
+    option.textContent = date;
+    selectDate.appendChild(option);
   });
+
+  // ตั้งค่าเริ่มต้นวันที่เป็นตัวแรก
+  selectDate.value = rawData.dates[0];
+
+  updateDashboard();
 }
 
-function createTurnoverLineChart(data) {
-  const ctx = document.getElementById('turnoverLineChart').getContext('2d');
-  if (turnoverLineChart) turnoverLineChart.destroy();
-
-  turnoverLineChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.'],
-      datasets: [{
-        label: 'Turnover Rate',
-        data: data,
-        borderColor: '#2980b9',
-        backgroundColor: 'rgba(41, 128, 185, 0.2)',
-        fill: true,
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: { y: { beginAtZero: true } }
-    }
-  });
+function clearDashboard() {
+  dashboardContent.innerHTML = "";
+  // ทำลาย chart เก่า
+  currentCharts.forEach(chart => chart.destroy());
+  currentCharts = [];
 }
 
-function createRiskHeatmapChart(data) {
-  // ใช้ Bar chart แทน heatmap แบบง่าย
-  const ctx = document.getElementById('riskHeatmapChart').getContext('2d');
-  if (riskHeatmapChart) riskHeatmapChart.destroy();
+function updateDashboard() {
+  clearDashboard();
+  const selectedDate = selectDate.value;
+  const selectedDashboard = selectDashboard.value;
 
-  riskHeatmapChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: data.map(d => d.product),
-      datasets: [{
-        label: 'Risk Score',
-        data: data.map(d => d.risk),
-        backgroundColor: data.map(d => d.risk > 75 ? '#e74c3c' : '#f39c12')
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: { beginAtZero: true, max: 100 }
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: { enabled: true }
-      }
-    }
-  });
-}
+  if (!rawData || !rawData.dashboards[selectedDashboard]) return;
 
-async function updateDashboard() {
-  const dateRange = document.getElementById('dateRange').value;
-  const category = document.getElementById('categorySelect').value;
+  const data = rawData.dashboards[selectedDashboard][selectedDate];
 
-  const data = await loadData();
-
-  // กรองข้อมูล
-  let selectedData = data[dateRange];
-  if (!selectedData) return;
-
-  let categoryData = category === 'all' ? {
-    investedCapital: 0,
-    turnoverRate: 0,
-    doi: 0,
-    abcDistribution: { A: 0, B: 0, C: 0 },
-    turnoverTrend: [],
-    riskHeatmap: []
-  } : selectedData.categories[category];
-
-  // หากเลือก all ให้รวมข้อมูลทุก category
-  if (category === 'all') {
-    let totalCapital = 0, totalTurnover = 0, totalDOI = 0, count = 0;
-    let abcSum = { A: 0, B: 0, C: 0 };
-    let turnoverTrendSum = [0,0,0,0];
-    let riskHeatmapAll = [];
-
-    for (const catKey in selectedData.categories) {
-      const cat = selectedData.categories[catKey];
-      totalCapital += cat.investedCapital;
-      totalTurnover += cat.turnoverRate;
-      totalDOI += cat.doi;
-      count++;
-
-      abcSum.A += cat.abcDistribution.A;
-      abcSum.B += cat.abcDistribution.B;
-      abcSum.C += cat.abcDistribution.C;
-
-      for (let i=0; i<4; i++) turnoverTrendSum[i] += cat.turnoverTrend[i];
-
-      riskHeatmapAll = riskHeatmapAll.concat(cat.riskHeatmap);
-    }
-
-    categoryData = {
-      investedCapital: totalCapital,
-      turnoverRate: (totalTurnover / count).toFixed(2),
-      doi: (totalDOI / count).toFixed(2),
-      abcDistribution: abcSum,
-      turnoverTrend: turnoverTrendSum.map(x => x / count),
-      riskHeatmap: riskHeatmapAll
-    };
+  if (!data) {
+    dashboardContent.textContent = "ไม่มีข้อมูลสำหรับวันที่นี้";
+    return;
   }
 
-  // แสดง KPI
-  createKPI(categoryData);
-
-  // สร้างกราฟ
-  createABCPieChart(categoryData.abcDistribution);
-  createTurnoverLineChart(categoryData.turnoverTrend);
-  createRiskHeatmapChart(categoryData.riskHeatmap);
+  if (selectedDashboard === "inventoryHealth") {
+    createInventoryHealthDashboard(data);
+  } else if (selectedDashboard === "planningAccuracy") {
+    createPlanningAccuracyDashboard(data);
+  } else if (selectedDashboard === "strategicAction") {
+    createStrategicActionDashboard(data);
+  }
 }
 
-document.getElementById('dateRange').addEventListener('change', updateDashboard);
-document.getElementById('categorySelect').addEventListener('change', updateDashboard);
+function createInventoryHealthDashboard(data) {
+  // ABC Pie Chart
+  createPieChart("ABC Classification", data.abc);
 
-// โหลดข้อมูลตอนเริ่ม
-updateDashboard();
+  // FSN Pie Chart
+  createPieChart("FSN Classification", data.fsn);
+
+  // Turnover Line Chart
+  createLineChart("Inventory Turnover (times)", data.turnover);
+
+  // DOI Line Chart
+  createLineChart("Days of Inventory (DOI)", data.doi);
+}
+
+function createPlanningAccuracyDashboard(data) {
+  // Accuracy Line Chart
+  createLineChart("Planning Accuracy (%)", data.accuracy);
+
+  // Demand Risk Pie Chart
+  createPieChart("Demand Risk", data.demandRisk);
+}
+
+function createStrategicActionDashboard(data) {
+  // Executive Scorecard Pie Chart
+  createPieChart("Executive Scorecard", data.scorecard);
+}
+
+function createPieChart(title, dataObj) {
+  const container = document.createElement("div");
+  container.className = "chart-container";
+  const canvas = document.createElement("canvas");
+  container.appendChild(canvas);
+  dashboardContent.appendChild(container);
+
+  const labels = Object.keys(dataObj);
+  const values = Object.values(dataObj);
+
+  const chart = new Chart(canvas.getContext("2d"), {
+    type: "pie",
+    data: {
+      labels,
+      datasets: [{
+        label: title,
+        data: values,
+        backgroundColor: generateColors(labels.length),
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "bottom"
+        },
+        title: {
+          display: true,
+          text: title,
+          font: { size: 18 }
+        }
+      }
+    }
+  });
+
+  currentCharts.push(chart);
+}
+
+function createLineChart(title, dataArr) {
+  const container = document.createElement("div");
+  container.className = "chart-container";
+  const canvas = document.createElement("canvas");
+  container.appendChild(canvas);
+  dashboardContent.appendChild(container);
+
+  // สร้าง label แบบตัวเลข 1,2,3,... หรืออาจปรับเป็นเดือน
+  const labels = dataArr.map((_, i) => `Point ${i+1}`);
+
+  const chart = new Chart(canvas.getContext("2d"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: title,
+        data: dataArr,
+        fill: false,
+        borderColor: "rgba(54, 162, 235, 1)",
+        backgroundColor: "rgba(54, 162, 235, 0.4)",
+        tension: 0.3,
+        pointRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: "bottom" },
+        title: {
+          display: true,
+          text: title,
+          font: { size: 18 }
+        }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+
+  currentCharts.push(chart);
+}
+
+function generateColors(count) {
+  const baseColors = [
+    "#007bff", "#28a745", "#dc3545",
+    "#ffc107", "#17a2b8", "#6f42c1",
+    "#fd7e14", "#20c997"
+  ];
+  const colors = [];
+  for (let i = 0; i < count; i++) {
+    colors.push(baseColors[i % baseColors.length]);
+  }
+  return colors;
+}
+
+// Event listeners
+selectDate.addEventListener("change", updateDashboard);
+selectDashboard.addEventListener("change", updateDashboard);
+
+loadData();
