@@ -1,69 +1,59 @@
 {
-  "dates": ["2025-06-01", "2025-06-08", "2025-06-15"],
-  "dashboard1": {
-    "title": "Strategic Inventory Health & Risk",
-    "abc": {
-      "labels": ["A", "B", "C"],
-      "values": [120, 80, 60]
-    },
-    "fsn": {
-      "labels": ["F", "S", "N"],
-      "values": [100, 90, 70]
-    },
-    "turnoverCategory": {
-      "labels": ["Monthly", "Quarterly", "Yearly", "Rarely"],
-      "values": [85, 60, 40, 75]
-    },
-    "doiTrend": {
-      "labels": ["Falling", "Stable", "Rising", "Critical"],
-      "values": [40, 30, 20, 10]
-    },
-    "agingGroup": {
-      "labels": ["0-30", "31-90", "91-180", "181+", "999+"],
-      "values": [50, 40, 30, 20, 10]
+  "2024Q1": {
+    "categories": {
+      "A": {
+        "investedCapital": 1200000,
+        "turnoverRate": 4.5,
+        "doi": 35,
+        "abcDistribution": { "A": 50, "B": 30, "C": 20 },
+        "turnoverTrend": [3.8, 4.0, 4.2, 4.5],
+        "riskHeatmap": [
+          { "product": "SKU1", "risk": 80 },
+          { "product": "SKU2", "risk": 60 },
+          { "product": "SKU3", "risk": 90 }
+        ]
+      },
+      "B": {
+        "investedCapital": 800000,
+        "turnoverRate": 3.8,
+        "doi": 40,
+        "abcDistribution": { "A": 40, "B": 40, "C": 20 },
+        "turnoverTrend": [3.5, 3.6, 3.7, 3.8],
+        "riskHeatmap": [
+          { "product": "SKU4", "risk": 55 },
+          { "product": "SKU5", "risk": 65 },
+          { "product": "SKU6", "risk": 70 }
+        ]
+      },
+      "C": {
+        "investedCapital": 400000,
+        "turnoverRate": 2.5,
+        "doi": 50,
+        "abcDistribution": { "A": 20, "B": 50, "C": 30 },
+        "turnoverTrend": [2.0, 2.2, 2.3, 2.5],
+        "riskHeatmap": [
+          { "product": "SKU7", "risk": 30 },
+          { "product": "SKU8", "risk": 45 },
+          { "product": "SKU9", "risk": 50 }
+        ]
+      }
     }
   },
-  "dashboard2": {
-    "title": "Planning Accuracy & Demand Risk",
-    "forecastAccuracy": {
-      "labels": ["Item A", "Item B", "Item C", "Item D", "Item E"],
-      "values": [0.85, 0.92, 0.78, 0.68, 0.74]
-    },
-    "actualVsForecast": {
-      "labels": ["2025-06-01", "2025-06-08", "2025-06-15"],
-      "actual": [320, 290, 310],
-      "forecast": [300, 300, 305]
-    },
-    "accuracyDistribution": {
-      "labels": [">90%", "75-90%", "50-75%", "<50%"],
-      "values": [40, 30, 20, 10]
+  "2024Q2": {
+    "categories": {
+      "A": {
+        "investedCapital": 1300000,
+        "turnoverRate": 4.7,
+        "doi": 32,
+        "abcDistribution": { "A": 55, "B": 25, "C": 20 },
+        "turnoverTrend": [4.0, 4.3, 4.5, 4.7],
+        "riskHeatmap": [
+          { "product": "SKU1", "risk": 85 },
+          { "product": "SKU2", "risk": 65 },
+          { "product": "SKU3", "risk": 92 }
+        ]
+      }
+      // ... ข้อมูลอื่น ๆ ...
     }
-  },
-  "dashboard3": {
-    "title": "Strategic Action & Impact (Executive Scorecard)",
-    "urgencyFlag": {
-      "labels": ["✅ ปกติ", "👀 จับตา", "⚠️ ทบทวน", "🛑 เร่งด่วน"],
-      "values": [80, 50, 30, 10]
-    },
-    "inventoryHealth": {
-      "labels": ["✅ Normal", "🐢 Overstock", "💀 Dead Stock"],
-      "values": [100, 60, 40]
-    },
-    "opportunityCost": {
-      "labels": ["มี", "ไม่มี"],
-      "values": [35, 165]
-    },
-    "top10AItems": [
-      {"name": "Item A1", "value": 50000},
-      {"name": "Item A2", "value": 42000},
-      {"name": "Item A3", "value": 39000},
-      {"name": "Item A4", "value": 37000},
-      {"name": "Item A5", "value": 35000},
-      {"name": "Item A6", "value": 34000},
-      {"name": "Item A7", "value": 32000},
-      {"name": "Item A8", "value": 31000},
-      {"name": "Item A9", "value": 30000},
-      {"name": "Item A10", "value": 29000}
-    ]
   }
 }
