@@ -162,27 +162,24 @@ function renderUrgencyChart(data) {
         data: Object.values(urgencyGroups),
         backgroundColor: '#e91e63'
       }]
-    }
-  });
+{
+  "dashboard1": [
+    {"sku":"SKU001","category":"A","doi":45,"turnover":3.2,"risk":"High","date":"2025-05-01"},
+    {"sku":"SKU002","category":"B","doi":20,"turnover":5.1,"risk":"Low","date":"2025-05-01"},
+    {"sku":"SKU003","category":"C","doi":60,"turnover":2.0,"risk":"Medium","date":"2025-06-01"},
+    {"sku":"SKU004","category":"A","doi":15,"turnover":7.5,"risk":"Low","date":"2025-06-01"}
+  ],
+  "dashboard2": [
+    {"sku":"SKU001","forecastAccuracy":0.85,"demandRisk":"High","date":"2025-05-01"},
+    {"sku":"SKU002","forecastAccuracy":0.92,"demandRisk":"Low","date":"2025-05-01"},
+    {"sku":"SKU003","forecastAccuracy":0.78,"demandRisk":"Medium","date":"2025-06-01"},
+    {"sku":"SKU004","forecastAccuracy":0.95,"demandRisk":"Low","date":"2025-06-01"}
+  ],
+  "dashboard3": [
+    {"action":"Reduce Dead Stock","impactScore":85,"status":"In Progress","date":"2025-05-01"},
+    {"action":"Improve Forecast","impactScore":78,"status":"Completed","date":"2025-05-01"},
+    {"action":"Optimize Supply Chain","impactScore":92,"status":"Planned","date":"2025-06-01"},
+    {"action":"Review Safety Stock","impactScore":80,"status":"In Progress","date":"2025-06-01"}
+  ]
 }
 
-function renderOpportunityChart(data) {
-  const ctx = document.getElementById('opportunityChart').getContext('2d');
-  const opportunities = data.filter(d => d['OpportunityCostFlag'] !== null);
-  const items = opportunities.map(d => d['Item number']);
-  const values = opportunities.map(d => d['InventoryValue']);
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: items,
-      datasets: [{
-        label: 'Inventory Value at Risk',
-        data: values,
-        backgroundColor: '#f44336'
-      }]
-    },
-    options: { scales: { x: { display: false } } }
-  });
-}
-
-fetchData();
