@@ -3,66 +3,77 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  margin: 10px;
-  background: #f4f7fa;
-  color: #333;
+  font-family: "Kanit", sans-serif, Arial;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f9ff;
+  color: #003366;
 }
 
 header {
-  margin-bottom: 20px;
+  background-color: #004080;
+  color: white;
+  padding: 1rem 2rem;
+  text-align: center;
 }
 
 .controls {
+  margin: 1rem 2rem;
   display: flex;
-  align-items: center;
-  gap: 10px;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
 }
 
 .controls label {
-  font-weight: bold;
+  font-weight: 600;
+  margin-right: 0.5rem;
 }
 
-#dashboardContainer {
+.controls select, .controls button {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #004080;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.controls button {
+  background-color: #004080;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.controls button:hover {
+  background-color: #00264d;
+}
+
+.dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1rem 2rem 3rem 2rem;
 }
 
 .card {
-  background: #fff;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-  padding: 15px;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
+  display: flex;
+  flex-direction: column;
 }
 
 .card h3 {
   margin-top: 0;
-  font-size: 1.1em;
-  margin-bottom: 10px;
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #004080;
+  padding-bottom: 0.3rem;
+  color: #00264d;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9em;
-}
-
-thead th {
-  background: #007bff;
-  color: white;
-  padding: 6px;
-}
-
-tbody td {
-  border: 1px solid #ddd;
-  padding: 6px;
-  text-align: center;
-}
-
-@media (max-width: 800px) {
-  #dashboardContainer {
-    grid-template-columns: repeat(1, 1fr);
-  }
+canvas {
+  width: 100% !important;
+  height: 250px !important;
 }
