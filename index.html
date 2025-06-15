@@ -1,39 +1,62 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>iStockView – Strategic Inventory Intelligence</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>iStockView – Strategic Inventory Intelligence</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <header>
-        <h1>iStockView – Strategic Inventory Intelligence</h1>
-    </header>
-
-    <nav class="tabs">
-        <button class="tab-btn active" data-tab="dashboard1">Strategic Inventory Health & Risk</button>
-        <button class="tab-btn" data-tab="dashboard2">Planning Accuracy & Demand Risk</button>
-        <button class="tab-btn" data-tab="dashboard3">Strategic Action & Impact</button>
+  <header>
+    <h1>iStockView – Strategic Inventory Intelligence</h1>
+    <nav>
+      <button onclick="showTab('dashboard1')">1️⃣ Inventory Health & Risk</button>
+      <button onclick="showTab('dashboard2')">2️⃣ Planning Accuracy</button>
+      <button onclick="showTab('dashboard3')">3️⃣ Strategic Scorecard</button>
     </nav>
+  </header>
 
-    <main>
-        <section id="dashboard1" class="tab-content active">
-            <h2>Strategic Inventory Health & Risk</h2>
-            <canvas id="chart1"></canvas>
-        </section>
+  <main>
+    <section id="dashboard1" class="tab-content active">
+      <h2>Strategic Inventory Health & Risk</h2>
 
-        <section id="dashboard2" class="tab-content">
-            <h2>Planning Accuracy & Demand Risk</h2>
-            <canvas id="chart2"></canvas>
-        </section>
+      <div class="card">
+        <h3>ABC Analysis</h3>
+        <canvas id="chart1_abc"></canvas>
+      </div>
 
-        <section id="dashboard3" class="tab-content">
-            <h2>Strategic Action & Impact (Executive Scorecard)</h2>
-            <canvas id="chart3"></canvas>
-        </section>
-    </main>
+      <div class="card">
+        <h3>FSN Analysis</h3>
+        <canvas id="chart1_fsn"></canvas>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="app.js"></script>
+      <div class="card">
+        <h3>Turnover Ratio</h3>
+        <canvas id="chart1_turnover"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Days of Inventory</h3>
+        <canvas id="chart1_doi"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Inventory Risk</h3>
+        <canvas id="chart1_risk"></canvas>
+      </div>
+    </section>
+
+    <section id="dashboard2" class="tab-content">
+      <h2>Planning Accuracy & Demand Risk</h2>
+      <canvas id="chart2"></canvas>
+    </section>
+
+    <section id="dashboard3" class="tab-content">
+      <h2>Strategic Action & Impact</h2>
+      <canvas id="chart3"></canvas>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
