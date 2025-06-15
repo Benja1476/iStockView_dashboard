@@ -1,73 +1,68 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0 1rem;
-  background: #f5f7fa;
+  margin: 10px;
+  background: #f4f7fa;
   color: #333;
 }
 
 header {
+  margin-bottom: 20px;
+}
+
+.controls {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 0;
-  border-bottom: 2px solid #007bff;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-header h1 {
-  flex-grow: 1;
-  font-size: 1.4rem;
-  margin: 0;
-}
-
-select, button {
-  font-size: 1rem;
-  padding: 0.3rem 0.8rem;
-  border: 1px solid #007bff;
-  border-radius: 4px;
-  background: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #007bff;
-  color: white;
+.controls label {
+  font-weight: bold;
 }
 
 #dashboardContainer {
-  margin-top: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
 }
 
 .card {
-  background: white;
+  background: #fff;
   border-radius: 6px;
-  box-shadow: 0 0 6px rgb(0 0 0 / 0.1);
-  padding: 1rem;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+  padding: 15px;
 }
 
 .card h3 {
   margin-top: 0;
-  margin-bottom: 0.8rem;
-  font-size: 1.1rem;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 0.4rem;
+  font-size: 1.1em;
+  margin-bottom: 10px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 0.9em;
 }
 
-table th, table td {
+thead th {
+  background: #007bff;
+  color: white;
+  padding: 6px;
+}
+
+tbody td {
   border: 1px solid #ddd;
-  padding: 0.5rem;
-  text-align: left;
+  padding: 6px;
+  text-align: center;
 }
 
-canvas {
-  width: 100% !important;
-  height: 250px !important;
+@media (max-width: 800px) {
+  #dashboardContainer {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
