@@ -1,135 +1,136 @@
-let rawData = null;
-let currentDashboard = "StrategicInventoryHealthRisk";
-let currentDate = null;
-let chartInstances = [];
-
 const dashboardSelect = document.getElementById("dashboardSelect");
 const dateSelect = document.getElementById("dateSelect");
-const dashboardContainer = document.getElementById("dashboardContainer");
-const refreshBtn = document.getElementById("refreshBtn");
+const chartsContainer = document.getElementById("chartsContainer");
+
+let dataJSON = null;
+let chartInstances = [];
 
 // โหลดข้อมูล JSON
 async function loadData() {
   try {
-    const resp = await fetch("data_all_dashboards.json");
-    rawData = await resp.json();
+    const response = await fetch("data_all_dashboards.json");
+    dataJSON = await response.json();
+    populateDateSelect();
+    updateDashboard();
   } catch (error) {
-    alert("โหลดข้อมูลล้มเหลว: " + error);
+    console.error("โหลดข้อมูลล้มเหลว:", error);
+    chartsContainer.innerHTML = "<p>ไม่สามารถโหลดข้อมูลได้</p>";
   }
 }
 
-// สร้างตัวเลือกวันที่จากข้อมูล
-function populateDates() {
-  dateSelect.innerHTML = "";
-  if (!rawData || !rawData.dates || rawData.dates.length === 0) return;
+// เติม selector วันที่ จากข้อมูล
+function populateDateSelect() {
+  if (!dataJSON || !dataJSON.dates) return;
 
-  rawData.dates.forEach((date) => {
+  dateSelect.innerHTML = "";
+  dataJSON.dates.forEach(date => {
     const option = document.createElement("option");
     option.value = date;
     option.textContent = date;
     dateSelect.appendChild(option);
   });
-  currentDate = rawData.dates[0];
-  dateSelect.value = currentDate;
 }
 
-// เคลียร์กราฟเดิม
+// ล้างกราฟเดิม
 function clearCharts() {
   chartInstances.forEach(chart => chart.destroy());
   chartInstances = [];
-  dashboardContainer.innerHTML = "";
+  chartsContainer.innerHTML = "";
 }
 
-// สร้างกราฟตามข้อมูล dashboard และวันที่ที่เลือก
-function createCharts() {
+// สร้างกราฟใหม่ตามข้อมูล
+function createCharts(dashboardKey, date) {
   clearCharts();
 
-  if (!rawData || !rawData[currentDashboard] || !rawData[currentDashboard][currentDate]) {
-    dashboardContainer.innerHTML = `<p>ไม่มีข้อมูลสำหรับวันที่เลือก</p>`;
+  if (!dataJSON[dashboardKey] || !dataJSON[dashboardKey][date]) {
+    chartsContainer.innerHTML = "<p>ไม่มีข้อมูลสำหรับ Dashboard หรือ วันที่นี้</p>";
     return;
   }
 
-  const dataSet = rawData[currentDashboard][currentDate];
+  const chartsData = dataJSON[dashboardKey][date];
 
-  dataSet.forEach((chartData, idx) => {
+  chartsData.forEach(chartData => {
     const card = document.createElement("div");
-    card.classList.add("card");
+    card.className = "chart-card";
 
     const title = document.createElement("h3");
     title.textContent = chartData.title;
     card.appendChild(title);
 
     const canvas = document.createElement("canvas");
-    canvas.id = `chart-${idx}`;
     card.appendChild(canvas);
-
-    dashboardContainer.appendChild(card);
+    chartsContainer.appendChild(card);
 
     const ctx = canvas.getContext("2d");
 
-    const config = {
+    // สร้าง chart ด้วย Chart.js
+    const chart = new Chart(ctx, {
       type: chartData.type,
       data: {
         labels: chartData.labels,
         datasets: [{
           label: chartData.title,
           data: chartData.data,
-          backgroundColor: generateColors(chartData.data.length),
-          borderColor: chartData.type === "line" ? "#003366" : undefined,
-          borderWidth: chartData.type === "line" ? 2 : 0,
+          backgroundColor: generateColors(chartData.data.length, chartData.type),
+          borderColor: chartData.type === "line" ? "rgba(0,0,0,0.1)" : undefined,
+          borderWidth: chartData.type === "line" ? 2 : 1,
           fill: chartData.type === "line" ? false : true,
-          tension: 0.3
+          tension: chartData.type === "line" ? 0.3 : 0,
         }]
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: { display: true, position: "bottom" },
           title: { display: false }
         },
         scales: chartData.type === "pie" || chartData.type === "doughnut" ? {} : {
-          y: { beginAtZero: true }
+          y: {
+            beginAtZero: true,
+          }
         }
       }
-    };
+    });
 
-    const chart = new Chart(ctx, config);
     chartInstances.push(chart);
   });
 }
 
-function generateColors(count) {
+// สร้างสีสุ่มสำหรับกราฟ Pie, Bar
+function generateColors(count, chartType) {
   const baseColors = [
-    "#003f5c", "#58508d", "#bc5090", "#ff6361", "#ffa600",
-    "#008080", "#4b0082", "#d2691e", "#20b2aa", "#708090"
+    "#4e79a7", "#f28e2b", "#e15759", "#76b7b2",
+    "#59a14f", "#edc949", "#af7aa1", "#ff9da7",
+    "#9c755f", "#bab0ab"
   ];
   let colors = [];
   for (let i = 0; i < count; i++) {
     colors.push(baseColors[i % baseColors.length]);
   }
+  // สำหรับ line chart ใช้สีเดียวสวย ๆ
+  if (chartType === "line") return "#4e79a7";
   return colors;
 }
 
-// event listener
-dashboardSelect.addEventListener("change", () => {
-  currentDashboard = dashboardSelect.value;
-  createCharts();
-});
-
-dateSelect.addEventListener("change", () => {
-  currentDate = dateSelect.value;
-  createCharts();
-});
-
-refreshBtn.addEventListener("click", () => {
-  createCharts();
-});
-
-// เริ่มทำงาน
-async function init() {
-  await loadData();
-  populateDates();
-  createCharts();
+// อัพเดตกราฟเมื่อเปลี่ยน Dashboard หรือ Date
+function updateDashboard() {
+  const selectedDashboard = dashboardSelect.value;
+  const selectedDate = dateSelect.value;
+  createCharts(selectedDashboard, selectedDate);
 }
 
-init();
+// ตั้งให้รีเฟรชทุก 5 นาที (300000 ms)
+setInterval(() => {
+  updateDashboard();
+}, 300000);
+
+// event listener
+dashboardSelect.addEventListener("change", () => {
+  populateDateSelect(); // กรณีข้อมูลวันที่เปลี่ยนตาม dashboard (ในนี้ใช้ static แต่เผื่อไว้)
+  updateDashboard();
+});
+
+dateSelect.addEventListener("change", updateDashboard);
+
+window.addEventListener("load", loadData);
