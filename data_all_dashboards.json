@@ -1,44 +1,111 @@
 {
-  "2025-06-14": {
-    "1": {
-      "abcCategory": { "labels": ["A", "B", "C"], "data": [30, 50, 20] },
-      "doiDistribution": { "labels": ["0-10", "11-20", "21-30"], "data": [5, 10, 15] },
-      "turnoverRate": { "labels": ["Jan", "Feb", "Mar"], "data": [2, 3, 4] },
-      "fsnCategory": { "labels": ["Fast", "Slow", "Non-moving"], "data": [60, 30, 10] },
-      "topInventory": [
-        { "item": "Item A", "qty": 100 },
-        { "item": "Item B", "qty": 80 },
-        { "item": "Item C", "qty": 60 }
-      ],
-      "extraChart1": { "labels": ["X", "Y", "Z"], "data": [15, 25, 35] },
-      "extraChart2": { "labels": ["P", "Q", "R"], "data": [10, 20, 30] },
-      "extraChart3": { "labels": ["L", "M", "N"], "data": [5, 15, 25] },
-      "extraChart4": { "labels": ["D", "E", "F"], "data": [7, 17, 27] }
-    },
-    "2": {
-      "forecastAccuracy": { "labels": ["Jan", "Feb", "Mar"], "data": [80, 85, 90] },
-      "mapeTrend": { "labels": ["Jan", "Feb", "Mar"], "data": [5, 4, 3] },
-      "biasIndex": { "labels": ["Jan", "Feb", "Mar"], "data": [1, -1, 0] },
-      "fillRate": { "labels": ["Full", "Partial"], "data": [70, 30] },
-      "demandRisk": { "labels": ["High", "Medium", "Low"], "data": [15, 25, 60] },
-      "extraChart1": { "labels": ["A", "B", "C"], "data": [10, 20, 30] },
-      "extraChart2": { "labels": ["X", "Y", "Z"], "data": [20, 30, 40] },
-      "extraChart3": { "labels": ["L", "M", "N"], "data": [10, 15, 20] },
-      "extraChart4": { "labels": ["P", "Q", "R"], "data": [12, 22, 32] }
-    },
-    "3": {
-      "inventoryValue": { "labels": ["Jan", "Feb", "Mar"], "data": [1000, 1200, 1100] },
-      "overstockPercent": { "labels": ["Overstock", "Normal"], "data": [40, 60] },
-      "doiScore": { "labels": ["Low", "Medium", "High"], "data": [10, 50, 40] },
-      "accuracyKPI": { "labels": ["Meet", "Miss"], "data": [75, 25] },
-      "actionLog": [
-        { "date": "2025-06-01", "action": "Reduced stock", "impact": "Lower costs" },
-        { "date": "2025-06-10", "action": "Improved forecast", "impact": "Better planning" }
-      ],
-      "extraChart1": { "labels": ["S", "T", "U"], "data": [8, 18, 28] },
-      "extraChart2": { "labels": ["V", "W", "X"], "data": [14, 24, 34] },
-      "extraChart3": { "labels": ["Y", "Z", "AA"], "data": [20, 30, 40] },
-      "extraChart4": { "labels": ["BB", "CC", "DD"], "data": [25, 35, 45] }
-    }
+  "dates": ["2025-06-10", "2025-06-11", "2025-06-12"],
+
+  "StrategicInventoryHealthRisk": {
+    "2025-06-10": [
+      {"title": "FSN Distribution", "type": "pie", "labels": ["Fast", "Slow", "Non-moving"], "data": [40, 35, 25]},
+      {"title": "DOI by Category", "type": "bar", "labels": ["A", "B", "C"], "data": [50, 120, 180]},
+      {"title": "Inventory Value", "type": "line", "labels": ["Week1", "Week2", "Week3"], "data": [50000, 60000, 55000]},
+      {"title": "Alert Flag Count", "type": "bar", "labels": ["Alert", "No Alert"], "data": [30, 70]},
+      {"title": "ABC Rank Distribution", "type": "pie", "labels": ["A", "B", "C"], "data": [45, 30, 25]},
+      {"title": "% Inventory Risk", "type": "doughnut", "labels": ["Risk", "Safe"], "data": [20, 80]},
+      {"title": "Total Opportunity Cost", "type": "bar", "labels": ["Jan", "Feb", "Mar"], "data": [10000, 15000, 12000]},
+      {"title": "% Slow or Dead Stock", "type": "pie", "labels": ["Slow", "Dead", "Fast"], "data": [40, 10, 50]},
+      {"title": "Turnover Rate", "type": "line", "labels": ["Jan", "Feb", "Mar"], "data": [2.5, 2.7, 2.8]}
+    ],
+    "2025-06-11": [
+      {"title": "FSN Distribution", "type": "pie", "labels": ["Fast", "Slow", "Non-moving"], "data": [42, 33, 25]},
+      {"title": "DOI by Category", "type": "bar", "labels": ["A", "B", "C"], "data": [55, 115, 175]},
+      {"title": "Inventory Value", "type": "line", "labels": ["Week1", "Week2", "Week3"], "data": [52000, 62000, 56000]},
+      {"title": "Alert Flag Count", "type": "bar", "labels": ["Alert", "No Alert"], "data": [32, 68]},
+      {"title": "ABC Rank Distribution", "type": "pie", "labels": ["A", "B", "C"], "data": [43, 32, 25]},
+      {"title": "% Inventory Risk", "type": "doughnut", "labels": ["Risk", "Safe"], "data": [22, 78]},
+      {"title": "Total Opportunity Cost", "type": "bar", "labels": ["Jan", "Feb", "Mar"], "data": [10500, 14000, 11500]},
+      {"title": "% Slow or Dead Stock", "type": "pie", "labels": ["Slow", "Dead", "Fast"], "data": [42, 12, 46]},
+      {"title": "Turnover Rate", "type": "line", "labels": ["Jan", "Feb", "Mar"], "data": [2.6, 2.8, 2.9]}
+    ],
+    "2025-06-12": [
+      {"title": "FSN Distribution", "type": "pie", "labels": ["Fast", "Slow", "Non-moving"], "data": [38, 37, 25]},
+      {"title": "DOI by Category", "type": "bar", "labels": ["A", "B", "C"], "data": [48, 125, 185]},
+      {"title": "Inventory Value", "type": "line", "labels": ["Week1", "Week2", "Week3"], "data": [51000, 61000, 54000]},
+      {"title": "Alert Flag Count", "type": "bar", "labels": ["Alert", "No Alert"], "data": [28, 72]},
+      {"title": "ABC Rank Distribution", "type": "pie", "labels": ["A", "B", "C"], "data": [47, 28, 25]},
+      {"title": "% Inventory Risk", "type": "doughnut", "labels": ["Risk", "Safe"], "data": [18, 82]},
+      {"title": "Total Opportunity Cost", "type": "bar", "labels": ["Jan", "Feb", "Mar"], "data": [9500, 13000, 12500]},
+      {"title": "% Slow or Dead Stock", "type": "pie", "labels": ["Slow", "Dead", "Fast"], "data": [38, 8, 54]},
+      {"title": "Turnover Rate", "type": "line", "labels": ["Jan", "Feb", "Mar"], "data": [2.4, 2.6, 2.7]}
+    ]
+  },
+
+  "PlanningAccuracyDemandRisk": {
+    "2025-06-10": [
+      {"title": "Forecast Accuracy", "type": "bar", "labels": ["Product A", "Product B", "Product C"], "data": [0.85, 0.9, 0.8]},
+      {"title": "MAPE", "type": "line", "labels": ["Week1", "Week2", "Week3"], "data": [0.15, 0.12, 0.13]},
+      {"title": "Bias Index", "type": "bar", "labels": ["Product A", "Product B", "Product C"], "data": [0.05, -0.03, 0.02]},
+      {"title": "Avg Usage 7D", "type": "line", "labels": ["Day1", "Day2", "Day3"], "data": [200, 220, 210]},
+      {"title": "Fill Rate", "type": "doughnut", "labels": ["Filled", "Unfilled"], "data": [95, 5]},
+      {"title": "High Risk in Group A", "type": "bar", "labels": ["Risky", "Safe"], "data": [10, 90]},
+      {"title": "Demand Risk Trend", "type": "line", "labels": ["Jan", "Feb", "Mar"], "data": [1.2, 1.3, 1.4]},
+      {"title": "Forecast Error Distribution", "type": "pie", "labels": ["Low", "Medium", "High"], "data": [50, 30, 20]},
+      {"title": "Planning Accuracy Summary", "type": "bar", "labels": ["Accurate", "Inaccurate"], "data": [80, 20]}
+    ],
+    "2025-06-11": [
+      {"title": "Forecast Accuracy", "type": "bar", "labels": ["Product A", "Product B", "Product C"], "data": [0.88, 0.92, 0.79]},
+      {"title": "MAPE", "type": "line", "labels": ["Week1", "Week2", "Week3"], "data": [0.14, 0.11, 0.12]},
+      {"title": "Bias Index", "type": "bar", "labels": ["Product A", "Product B", "Product C"], "data": [0.04, -0.02, 0.01]},
+      {"title": "Avg Usage 7D", "type": "line", "labels": ["Day1", "Day2", "Day3"], "data": [210, 230, 220]},
+      {"title": "Fill Rate", "type": "doughnut", "labels": ["Filled", "Unfilled"], "data": [96, 4]},
+      {"title": "High Risk in Group A", "type": "bar", "labels": ["Risky", "Safe"], "data": [12, 88]},
+      {"title": "Demand Risk Trend", "type": "line", "labels": ["Jan", "Feb", "Mar"], "data": [1.3, 1.4, 1.5]},
+      {"title": "Forecast Error Distribution", "type": "pie", "labels": ["Low", "Medium", "High"], "data": [52, 28, 20]},
+      {"title": "Planning Accuracy Summary", "type": "bar", "labels": ["Accurate", "Inaccurate"], "data": [82, 18]}
+    ],
+    "2025-06-12": [
+      {"title": "Forecast Accuracy", "type": "bar", "labels": ["Product A", "Product B", "Product C"], "data": [0.83, 0.89, 0.81]},
+      {"title": "MAPE", "type": "line", "labels": ["Week1", "Week2", "Week3"], "data": [0.16, 0.13, 0.14]},
+      {"title": "Bias Index", "type": "bar", "labels": ["Product A", "Product B", "Product C"], "data": [0.06, -0.04, 0.03]},
+      {"title": "Avg Usage 7D", "type": "line", "labels": ["Day1", "Day2", "Day3"], "data": [205, 215, 225]},
+      {"title": "Fill Rate", "type": "doughnut", "labels": ["Filled", "Unfilled"], "data": [94, 6]},
+      {"title": "High Risk in Group A", "type": "bar", "labels": ["Risky", "Safe"], "data": [9, 91]},
+      {"title": "Demand Risk Trend", "type": "line", "labels": ["Jan", "Feb", "Mar"], "data": [1.1, 1.2, 1.3]},
+      {"title": "Forecast Error Distribution", "type": "pie", "labels": ["Low", "Medium", "High"], "data": [48, 32, 20]},
+      {"title": "Planning Accuracy Summary", "type": "bar", "labels": ["Accurate", "Inaccurate"], "data": [78, 22]}
+    ]
+  },
+
+  "StrategicActionExecutiveScorecard": {
+    "2025-06-10": [
+      {"title": "Total Inventory Value", "type": "bar", "labels": ["A", "B", "C"], "data": [500000, 300000, 200000]},
+      {"title": "% Overstock", "type": "doughnut", "labels": ["Overstock", "Normal"], "data": [25, 75]},
+      {"title": "% Accuracy ≥ 80%", "type": "bar", "labels": ["Met", "Not Met"], "data": [70, 30]},
+      {"title": "Avg DOI", "type": "line", "labels": ["Jan", "Feb", "Mar"], "data": [150, 140, 130]},
+      {"title": "% Dead Stock in ABC A", "type": "pie", "labels": ["Dead", "Alive"], "data": [10, 90]},
+      {"title": "ΔDOI", "type": "bar", "labels": ["Before", "After"], "data": [140, 130]},
+      {"title": "ΔOpportunityCost", "type": "bar", "labels": ["Before", "After"], "data": [10000, 8000]},
+      {"title": "Impact Score", "type": "line", "labels": ["Q1", "Q2", "Q3"], "data": [300000, 350000, 400000]},
+      {"title": "Executive Summary", "type": "bar", "labels": ["Success", "Failure"], "data": [60, 40]}
+    ],
+    "2025-06-11": [
+      {"title": "Total Inventory Value", "type": "bar", "labels": ["A", "B", "C"], "data": [510000, 310000, 210000]},
+      {"title": "% Overstock", "type": "doughnut", "labels": ["Overstock", "Normal"], "data": [26, 74]},
+      {"title": "% Accuracy ≥ 80%", "type": "bar", "labels": ["Met", "Not Met"], "data": [72, 28]},
+      {"title": "Avg DOI", "type": "line", "labels": ["Jan", "Feb", "Mar"], "data": [152, 138, 135]},
+      {"title": "% Dead Stock in ABC A", "type": "pie", "labels": ["Dead", "Alive"], "data": [11, 89]},
+      {"title": "ΔDOI", "type": "bar", "labels": ["Before", "After"], "data": [138, 135]},
+      {"title": "ΔOpportunityCost", "type": "bar", "labels": ["Before", "After"], "data": [10500, 8500]},
+      {"title": "Impact Score", "type": "line", "labels": ["Q1", "Q2", "Q3"], "data": [310000, 360000, 410000]},
+      {"title": "Executive Summary", "type": "bar", "labels": ["Success", "Failure"], "data": [65, 35]}
+    ],
+    "2025-06-12": [
+      {"title": "Total Inventory Value", "type": "bar", "labels": ["A", "B", "C"], "data": [495000, 295000, 205000]},
+      {"title": "% Overstock", "type": "doughnut", "labels": ["Overstock", "Normal"], "data": [24, 76]},
+      {"title": "% Accuracy ≥ 80%", "type": "bar", "labels": ["Met", "Not Met"], "data": [69, 31]},
+      {"title": "Avg DOI", "type": "line", "labels": ["Jan", "Feb", "Mar"], "data": [148, 142, 132]},
+      {"title": "% Dead Stock in ABC A", "type": "pie", "labels": ["Dead", "Alive"], "data": [9, 91]},
+      {"title": "ΔDOI", "type": "bar", "labels": ["Before", "After"], "data": [142, 132]},
+      {"title": "ΔOpportunityCost", "type": "bar", "labels": ["Before", "After"], "data": [9500, 7800]},
+      {"title": "Impact Score", "type": "line", "labels": ["Q1", "Q2", "Q3"], "data": [290000, 340000, 390000]},
+      {"title": "Executive Summary", "type": "bar", "labels": ["Success", "Failure"], "data": [62, 38]}
+    ]
   }
 }
