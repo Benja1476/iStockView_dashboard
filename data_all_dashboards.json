@@ -1,59 +1,52 @@
 {
-  "2024Q1": {
-    "categories": {
-      "A": {
-        "investedCapital": 1200000,
-        "turnoverRate": 4.5,
-        "doi": 35,
-        "abcDistribution": { "A": 50, "B": 30, "C": 20 },
-        "turnoverTrend": [3.8, 4.0, 4.2, 4.5],
-        "riskHeatmap": [
-          { "product": "SKU1", "risk": 80 },
-          { "product": "SKU2", "risk": 60 },
-          { "product": "SKU3", "risk": 90 }
-        ]
+  "dates": ["2025-03", "2025-04", "2025-05"],
+  "dashboards": {
+    "inventoryHealth": {
+      "2025-03": {
+        "abc": {"A": 50, "B": 30, "C": 20},
+        "fsn": {"Fast": 60, "Slow": 25, "Non-moving": 15},
+        "turnover": [5, 4.5, 6, 5.5, 4],
+        "doi": [40, 38, 35, 45, 42]
       },
-      "B": {
-        "investedCapital": 800000,
-        "turnoverRate": 3.8,
-        "doi": 40,
-        "abcDistribution": { "A": 40, "B": 40, "C": 20 },
-        "turnoverTrend": [3.5, 3.6, 3.7, 3.8],
-        "riskHeatmap": [
-          { "product": "SKU4", "risk": 55 },
-          { "product": "SKU5", "risk": 65 },
-          { "product": "SKU6", "risk": 70 }
-        ]
+      "2025-04": {
+        "abc": {"A": 45, "B": 35, "C": 20},
+        "fsn": {"Fast": 55, "Slow": 30, "Non-moving": 15},
+        "turnover": [5.2, 4.7, 6.1, 5.6, 4.3],
+        "doi": [42, 39, 37, 46, 44]
       },
-      "C": {
-        "investedCapital": 400000,
-        "turnoverRate": 2.5,
-        "doi": 50,
-        "abcDistribution": { "A": 20, "B": 50, "C": 30 },
-        "turnoverTrend": [2.0, 2.2, 2.3, 2.5],
-        "riskHeatmap": [
-          { "product": "SKU7", "risk": 30 },
-          { "product": "SKU8", "risk": 45 },
-          { "product": "SKU9", "risk": 50 }
-        ]
+      "2025-05": {
+        "abc": {"A": 48, "B": 32, "C": 20},
+        "fsn": {"Fast": 58, "Slow": 27, "Non-moving": 15},
+        "turnover": [5.1, 4.6, 6, 5.4, 4.1],
+        "doi": [41, 38, 36, 44, 43]
       }
-    }
-  },
-  "2024Q2": {
-    "categories": {
-      "A": {
-        "investedCapital": 1300000,
-        "turnoverRate": 4.7,
-        "doi": 32,
-        "abcDistribution": { "A": 55, "B": 25, "C": 20 },
-        "turnoverTrend": [4.0, 4.3, 4.5, 4.7],
-        "riskHeatmap": [
-          { "product": "SKU1", "risk": 85 },
-          { "product": "SKU2", "risk": 65 },
-          { "product": "SKU3", "risk": 92 }
-        ]
+    },
+
+    "planningAccuracy": {
+      "2025-03": {
+        "accuracy": [85, 88, 90, 87, 86],
+        "demandRisk": {"Low": 70, "Medium": 20, "High": 10}
+      },
+      "2025-04": {
+        "accuracy": [87, 89, 91, 88, 87],
+        "demandRisk": {"Low": 72, "Medium": 18, "High": 10}
+      },
+      "2025-05": {
+        "accuracy": [86, 87, 89, 86, 85],
+        "demandRisk": {"Low": 68, "Medium": 22, "High": 10}
       }
-      // ... ข้อมูลอื่น ๆ ...
+    },
+
+    "strategicAction": {
+      "2025-03": {
+        "scorecard": {"On Track": 75, "Warning": 15, "At Risk": 10}
+      },
+      "2025-04": {
+        "scorecard": {"On Track": 78, "Warning": 12, "At Risk": 10}
+      },
+      "2025-05": {
+        "scorecard": {"On Track": 76, "Warning": 14, "At Risk": 10}
+      }
     }
   }
 }
