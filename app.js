@@ -1,215 +1,135 @@
-let charts = {};
-const dashboardContainer = document.getElementById('dashboardContainer');
-const dashboardSelector = document.getElementById('dashboardSelector');
-const dateSelector = document.getElementById('dateSelector');
-const refreshBtn = document.getElementById('refreshBtn');
+let rawData = null;
+let currentDashboard = "StrategicInventoryHealthRisk";
+let currentDate = null;
+let chartInstances = [];
 
-const DASHBOARDS = {
-  1: {
-    name: "Strategic Inventory Health & Risk",
-    subDashboards: [
-      { id: "abcCategory", title: "ABC Category", type: "doughnut" },
-      { id: "doiDistribution", title: "DOI Distribution", type: "bar" },
-      { id: "turnoverRate", title: "Turnover Rate", type: "line" },
-      { id: "fsnCategory", title: "FSN Category", type: "pie" },
-      { id: "topInventory", title: "Top 10 Inventory", type: "table" },
-      { id: "extraChart1", title: "Extra Chart 1", type: "bar" },
-      { id: "extraChart2", title: "Extra Chart 2", type: "bar" },
-      { id: "extraChart3", title: "Extra Chart 3", type: "bar" },
-      { id: "extraChart4", title: "Extra Chart 4", type: "bar" }
-    ]
-  },
-  2: {
-    name: "Planning Accuracy & Demand Risk",
-    subDashboards: [
-      { id: "forecastAccuracy", title: "Forecast Accuracy", type: "line" },
-      { id: "mapeTrend", title: "MAPE Trend", type: "bar" },
-      { id: "biasIndex", title: "Bias Index", type: "bar" },
-      { id: "fillRate", title: "Fill Rate", type: "doughnut" },
-      { id: "demandRisk", title: "Demand Risk Level", type: "pie" },
-      { id: "extraChart1", title: "Extra Chart 1", type: "bar" },
-      { id: "extraChart2", title: "Extra Chart 2", type: "bar" },
-      { id: "extraChart3", title: "Extra Chart 3", type: "bar" },
-      { id: "extraChart4", title: "Extra Chart 4", type: "bar" }
-    ]
-  },
-  3: {
-    name: "Strategic Action & Impact (Executive Scorecard)",
-    subDashboards: [
-      { id: "inventoryValue", title: "Inventory Value", type: "line" },
-      { id: "overstockPercent", title: "Overstock %", type: "bar" },
-      { id: "doiScore", title: "DOI Score", type: "bar" },
-      { id: "accuracyKPI", title: "Accuracy KPI ≥80%", type: "doughnut" },
-      { id: "actionLog", title: "Action Log", type: "table" },
-      { id: "extraChart1", title: "Extra Chart 1", type: "bar" },
-      { id: "extraChart2", title: "Extra Chart 2", type: "bar" },
-      { id: "extraChart3", title: "Extra Chart 3", type: "bar" },
-      { id: "extraChart4", title: "Extra Chart 4", type: "bar" }
-    ]
+const dashboardSelect = document.getElementById("dashboardSelect");
+const dateSelect = document.getElementById("dateSelect");
+const dashboardContainer = document.getElementById("dashboardContainer");
+const refreshBtn = document.getElementById("refreshBtn");
+
+// โหลดข้อมูล JSON
+async function loadData() {
+  try {
+    const resp = await fetch("data_all_dashboards.json");
+    rawData = await resp.json();
+  } catch (error) {
+    alert("โหลดข้อมูลล้มเหลว: " + error);
   }
-};
+}
 
-async function loadDashboard() {
-  const dashId = dashboardSelector.value;
-  const selectedDate = dateSelector.value;
+// สร้างตัวเลือกวันที่จากข้อมูล
+function populateDates() {
+  dateSelect.innerHTML = "";
+  if (!rawData || !rawData.dates || rawData.dates.length === 0) return;
 
-  clearDashboard();
-
-  const dashInfo = DASHBOARDS[dashId];
-  dashInfo.subDashboards.forEach(subDash => {
-    dashboardContainer.appendChild(createCard(subDash));
+  rawData.dates.forEach((date) => {
+    const option = document.createElement("option");
+    option.value = date;
+    option.textContent = date;
+    dateSelect.appendChild(option);
   });
+  currentDate = rawData.dates[0];
+  dateSelect.value = currentDate;
+}
 
-  // โหลดข้อมูล json ทั้งหมด
-  const res = await fetch('data_all_dashboards.json');
-  const allData = await res.json();
+// เคลียร์กราฟเดิม
+function clearCharts() {
+  chartInstances.forEach(chart => chart.destroy());
+  chartInstances = [];
+  dashboardContainer.innerHTML = "";
+}
 
-  // กรองข้อมูลตามวันที่และ Dashboard
-  const rawData = allData[selectedDate]?.[dashId];
-  if (!rawData) {
-    dashboardContainer.innerHTML = '<p>No data available for this date and dashboard.</p>';
+// สร้างกราฟตามข้อมูล dashboard และวันที่ที่เลือก
+function createCharts() {
+  clearCharts();
+
+  if (!rawData || !rawData[currentDashboard] || !rawData[currentDashboard][currentDate]) {
+    dashboardContainer.innerHTML = `<p>ไม่มีข้อมูลสำหรับวันที่เลือก</p>`;
     return;
   }
 
-  // แสดงข้อมูลแต่ละ subDashboard
-  dashInfo.subDashboards.forEach(subDash => {
-    if (subDash.type === 'table') {
-      renderTable(subDash.id, rawData);
-    } else {
-      renderChart(subDash.id, subDash.type, rawData);
-    }
-  });
-}
+  const dataSet = rawData[currentDashboard][currentDate];
 
-function createCard(subDash) {
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.id = subDash.id;
+  dataSet.forEach((chartData, idx) => {
+    const card = document.createElement("div");
+    card.classList.add("card");
 
-  const title = document.createElement('h3');
-  title.textContent = subDash.title;
-  card.appendChild(title);
+    const title = document.createElement("h3");
+    title.textContent = chartData.title;
+    card.appendChild(title);
 
-  if (subDash.type === 'table') {
-    const table = document.createElement('table');
-    table.innerHTML = `<thead></thead><tbody></tbody>`;
-    card.appendChild(table);
-  } else {
-    const canvas = document.createElement('canvas');
-    canvas.id = 'chart-' + subDash.id;
+    const canvas = document.createElement("canvas");
+    canvas.id = `chart-${idx}`;
     card.appendChild(canvas);
-  }
 
-  return card;
-}
+    dashboardContainer.appendChild(card);
 
-function clearDashboard() {
-  dashboardContainer.innerHTML = '';
-  Object.values(charts).forEach(chart => chart.destroy());
-  charts = {};
-}
+    const ctx = canvas.getContext("2d");
 
-function renderTable(id, data) {
-  const card = document.getElementById(id);
-  const table = card.querySelector('table');
-  const thead = table.querySelector('thead');
-  const tbody = table.querySelector('tbody');
-  thead.innerHTML = '';
-  tbody.innerHTML = '';
-
-  if (id === 'topInventory' && data.topInventory) {
-    thead.innerHTML = `<tr><th>Item</th><th>Qty</th></tr>`;
-    data.topInventory.forEach(r => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${r.item}</td><td>${r.qty}</td>`;
-      tbody.appendChild(tr);
-    });
-  } else if (id === 'actionLog' && data.actionLog) {
-    thead.innerHTML = `<tr><th>Date</th><th>Action</th><th>Impact</th></tr>`;
-    data.actionLog.forEach(r => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${r.date}</td><td>${r.action}</td><td>${r.impact}</td>`;
-      tbody.appendChild(tr);
-    });
-  }
-}
-
-function renderChart(id, type, data) {
-  if (charts['chart-' + id]) {
-    charts['chart-' + id].destroy();
-  }
-
-  // ตรวจสอบข้อมูลก่อน
-  if (!data[id]) {
-    console.warn(`No data for chart ${id}`);
-    return;
-  }
-
-  const chartData = data[id];
-
-  const config = {
-    type,
-    data: {
-      labels: chartData.labels,
-      datasets: [{
-        label: chartData.label || id,
-        data: chartData.data,
-        backgroundColor: generateColors(chartData.data.length, id),
-        borderColor: generateBorderColors(chartData.data.length, id),
-        fill: type === 'line' ? false : true,
-        borderWidth: 1,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'bottom' },
-        tooltip: { enabled: true }
+    const config = {
+      type: chartData.type,
+      data: {
+        labels: chartData.labels,
+        datasets: [{
+          label: chartData.title,
+          data: chartData.data,
+          backgroundColor: generateColors(chartData.data.length),
+          borderColor: chartData.type === "line" ? "#003366" : undefined,
+          borderWidth: chartData.type === "line" ? 2 : 0,
+          fill: chartData.type === "line" ? false : true,
+          tension: 0.3
+        }]
       },
-      scales: type === 'bar' || type === 'line' ? {
-        y: { beginAtZero: true }
-      } : {}
-    }
-  };
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true, position: "bottom" },
+          title: { display: false }
+        },
+        scales: chartData.type === "pie" || chartData.type === "doughnut" ? {} : {
+          y: { beginAtZero: true }
+        }
+      }
+    };
 
-  const ctx = document.getElementById('chart-' + id).getContext('2d');
-  charts['chart-' + id] = new Chart(ctx, config);
+    const chart = new Chart(ctx, config);
+    chartInstances.push(chart);
+  });
 }
 
-function generateColors(length, id) {
-  // กำหนดสีพื้นฐานแตกต่างตาม id (เพิ่มเติมถ้าต้องการ)
-  const baseColors = {
-    "abcCategory": ['#28a745', '#ffc107', '#dc3545'],
-    "fsnCategory": ['#20c997', '#fd7e14', '#6c757d'],
-    "fillRate": ['#20c997', '#fd7e14'],
-    "demandRisk": ['#dc3545', '#ffc107', '#28a745'],
-    "accuracyKPI": ['#28a745', '#ffc107']
-  };
-
-  if (baseColors[id]) {
-    return baseColors[id];
+function generateColors(count) {
+  const baseColors = [
+    "#003f5c", "#58508d", "#bc5090", "#ff6361", "#ffa600",
+    "#008080", "#4b0082", "#d2691e", "#20b2aa", "#708090"
+  ];
+  let colors = [];
+  for (let i = 0; i < count; i++) {
+    colors.push(baseColors[i % baseColors.length]);
   }
-
-  // สี fallback แบบสุ่มหรือวนซ้ำ
-  const colors = ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8', '#6f42c1', '#e83e8c'];
-  let result = [];
-  for (let i = 0; i < length; i++) {
-    result.push(colors[i % colors.length]);
-  }
-  return result;
+  return colors;
 }
 
-function generateBorderColors(length, id) {
-  // กำหนดขอบสีคล้ายกัน แต่สำหรับกราฟเส้น
-  if (id === "turnoverRate" || id === "forecastAccuracy" || id === "inventoryValue") {
-    return '#007bff';
-  }
-  return 'transparent';
+// event listener
+dashboardSelect.addEventListener("change", () => {
+  currentDashboard = dashboardSelect.value;
+  createCharts();
+});
+
+dateSelect.addEventListener("change", () => {
+  currentDate = dateSelect.value;
+  createCharts();
+});
+
+refreshBtn.addEventListener("click", () => {
+  createCharts();
+});
+
+// เริ่มทำงาน
+async function init() {
+  await loadData();
+  populateDates();
+  createCharts();
 }
 
-dashboardSelector.addEventListener('change', loadDashboard);
-dateSelector.addEventListener('change', loadDashboard);
-refreshBtn.addEventListener('click', loadDashboard);
-
-// โหลด dashboard เริ่มต้น
-loadDashboard();
+init();
